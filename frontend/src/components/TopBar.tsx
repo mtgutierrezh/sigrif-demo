@@ -64,9 +64,9 @@ export function TopBar() {
               <button
                 type="button"
                 onClick={session.signIn}
-                className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.06em] text-bone hover:text-surveyor"
+                className="inline-flex items-center gap-1.5 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-bone hover:text-surveyor"
               >
-                <LogIn size={14} strokeWidth={1.5} aria-hidden="true" />
+                <LogIn size={12} strokeWidth={1.5} aria-hidden="true" />
                 Ingresar
               </button>
             )
