@@ -50,10 +50,6 @@ export function TopBar() {
         </nav>
 
         <div className="hidden items-center gap-5 md:flex">
-          <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ash">
-            <span className="size-1.5 rounded-full bg-surveyor" aria-hidden="true" />
-            Demo · datos sintéticos
-          </span>
           {isAuthEnabled ? (
             authenticated ? (
               <button
@@ -74,11 +70,7 @@ export function TopBar() {
                 Ingresar
               </button>
             )
-          ) : (
-            <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-ash">
-              Modo local
-            </span>
-          )}
+          ) : null}
         </div>
 
         <button
@@ -110,10 +102,6 @@ export function TopBar() {
               </NavLink>
             ))}
           </nav>
-          <p className="mt-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ash">
-            <span className="size-1.5 rounded-full bg-surveyor" aria-hidden="true" />
-            Demo · datos sintéticos
-          </p>
         </div>
       ) : null}
     </header>
