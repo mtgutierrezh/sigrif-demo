@@ -24,13 +24,28 @@ class FakeScalars:
     def __iter__(self):
         return iter(self.items)
 
+    def all(self):
+        return self.items
+
     def first(self):
         return self.items[0] if self.items else None
 
 
 class FakeSession:
-    def scalars(self, _):
+    def scalars(self, statement):
+        if "readings" in str(statement):
+            return FakeScalars([])
         return FakeScalars([ZONE])
+
+    def scalar(self, statement):
+        text = str(statement)
+        if "ST_AsGeoJSON" in text:
+            return '{"type": "MultiPolygon", "coordinates": []}'
+        if "count" in text:
+            return 1
+        if "max" in text:
+            return ZONE.updated_at
+        return None
 
     def get(self, _, key):
         return ZONE if key == 1 else None
@@ -86,3 +101,20 @@ def test_zones_require_token(monkeypatch):
     response = client.get("/api/v1/zones")
     main.app.dependency_overrides.clear()
     assert response.status_code == 401
+
+
+def test_status():
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.get("/api/v1/status")
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 200
+    assert response.json()["zones"] == 1
+    assert response.json()["model_version"] == "random-forest-0.1"
+
+
+def test_zone_history_empty():
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.get("/api/v1/zones/1/history")
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 200
+    assert response.json() == []

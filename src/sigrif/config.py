@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     cognito_region: str | None = None
     cognito_user_pool_id: str | None = None
     cognito_client_id: str | None = None
+    cors_origins: str = "http://localhost:5173"
 
 
 settings = Settings()

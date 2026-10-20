@@ -25,3 +25,10 @@ def init_db() -> None:
     with engine.begin() as connection:
         connection.execute(text("CREATE EXTENSION IF NOT EXISTS postgis"))
     Base.metadata.create_all(engine)
+    with engine.begin() as connection:
+        connection.execute(
+            text("ALTER TABLE readings ADD COLUMN IF NOT EXISTS risk_level VARCHAR(10)")
+        )
+        connection.execute(
+            text("ALTER TABLE readings ADD COLUMN IF NOT EXISTS risk_score DOUBLE PRECISION")
+        )

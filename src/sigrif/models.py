@@ -31,5 +31,7 @@ class Reading(Base):
     wind_speed: Mapped[float] = mapped_column(Float)
     vegetation: Mapped[float] = mapped_column(Float)
     slope: Mapped[float] = mapped_column(Float)
+    risk_level: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     zone: Mapped[Zone] = relationship()

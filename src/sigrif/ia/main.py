@@ -40,6 +40,8 @@ def apply_reading(session: Session, payload: dict[str, Any]) -> bool:
             wind_speed=payload["wind_speed"],
             vegetation=payload["vegetation"],
             slope=payload["slope"],
+            risk_level=label,
+            risk_score=score,
         )
     )
     session.commit()
