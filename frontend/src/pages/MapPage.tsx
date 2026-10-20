@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { MapLegend } from "../components/MapLegend";
 import { MapView } from "../components/MapView";
 import { PageLoader } from "../components/PageLoader";
+import { RiskSummary } from "../components/RiskSummary";
 import { TelemetryStrip } from "../components/TelemetryStrip";
 import { ZonePanel } from "../components/ZonePanel";
 import { useHistory, useStatus, useZone, useZones } from "../features/zones/useZones";
@@ -71,6 +72,34 @@ export default function MapPage() {
       <div className="relative h-[calc(100dvh-59px)]">
         <MapView zones={zonesQuery.data ?? []} selectedId={selectedId} onSelect={selectZone} />
 
+        <div className="pointer-events-auto absolute left-4 top-4 z-[1000] w-[260px] rounded-[3.6px] border border-iron bg-obsidian/90 p-3 backdrop-blur-sm">
+          <label
+            htmlFor="zone-select"
+            className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash"
+          >
+            Cerro o sector
+          </label>
+          <select
+            id="zone-select"
+            className="input mt-1 w-full font-mono text-[12px] [color-scheme:dark]"
+            value={selectedId ?? ""}
+            onChange={(event) => {
+              if (event.target.value) {
+                selectZone(Number(event.target.value));
+              }
+            }}
+          >
+            <option className="bg-obsidian text-bone" value="">
+              Selecciona…
+            </option>
+            {(zonesQuery.data ?? []).map((zone) => (
+              <option key={zone.id} className="bg-obsidian text-bone" value={zone.id}>
+                {zone.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <MapLegend />
 
         <ZonePanel
@@ -89,7 +118,12 @@ export default function MapPage() {
             }
           }}
           message={message}
-          telemetry={<TelemetryStrip status={statusQuery.data} />}
+          telemetry={
+            <div className="space-y-4">
+              <RiskSummary />
+              <TelemetryStrip status={statusQuery.data} compact />
+            </div>
+          }
         />
       </div>
     </div>

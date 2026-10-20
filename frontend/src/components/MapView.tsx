@@ -5,7 +5,7 @@ import L, { type Path, type PathOptions } from "leaflet";
 import { useEffect, useMemo } from "react";
 import { GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, useMap } from "react-leaflet";
 
-import { CellLayer } from "./CellLayer";
+import { RiskSurface } from "./RiskSurface";
 import { ZoomControl } from "./ZoomControl";
 
 import type { Zone } from "../features/zones/types";
@@ -111,6 +111,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
         maxBounds={REGION_BOUNDS}
         maxBoundsViscosity={1}
         zoomControl={false}
+        preferCanvas
         scrollWheelZoom
         className="h-full w-full"
       >
@@ -138,7 +139,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
             interactive: false,
           }}
         />
-        <CellLayer />
+        <RiskSurface />
 
         <GeoJSON
           key={layerKey}
