@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIGRIF Valparaiso</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 3rem auto; max-width: 760px; line-height: 1.6; color: #1f2933; }
+      h1 { color: #0f4c5c; }
+      code { background: #eef2f5; padding: 0.15rem 0.35rem; border-radius: 4px; }
+      a { color: #0f4c5c; }
+    </style>
+  </head>
+  <body>
+    <h1>SIGRIF Valparaiso</h1>
+    <p>Demo funcional de riesgo de incendios forestales. El frontend definitivo se incorpora en la siguiente etapa.</p>
+    <ul>
+      <li><a href="/api/v1/zones">Zonas y riesgo actual</a></li>
+      <li><a href="/health">Estado del servicio</a></li>
+      <li><a href="/metrics">Metricas Prometheus</a></li>
+    </ul>
+    <p>Para generar una lectura sintetica: <code>curl -X POST http://localhost:8080/api/v1/simulate</code></p>
+  </body>
+</html>
