@@ -2,13 +2,13 @@ services:
   db:
     image: postgis/postgis:16-3.4
     environment:
-      POSTGRES_DB: sigrif
-      POSTGRES_USER: sigrif
-      POSTGRES_PASSWORD: sigrif
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sigrif -d sigrif"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -30,13 +30,13 @@ services:
     build: .
     command: uvicorn sigrif.api.main:app --host 0.0.0.0 --port 8000
     environment:
-      DATABASE_URL: postgresql+psycopg://sigrif:sigrif@db:5432/sigrif
-      AWS_REGION: us-east-1
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
       AWS_ENDPOINT_URL: http://localstack:4566
-      AWS_ACCESS_KEY_ID: test
-      AWS_SECRET_ACCESS_KEY: test
-      LOG_LEVEL: INFO
-      AUTH_ENABLED: "false"
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      AUTH_ENABLED: ${AUTH_ENABLED:-false}
     depends_on:
       db:
         condition: service_healthy
@@ -49,12 +49,12 @@ services:
     build: .
     command: uvicorn sigrif.ia.main:app --host 0.0.0.0 --port 8001
     environment:
-      DATABASE_URL: postgresql+psycopg://sigrif:sigrif@db:5432/sigrif
-      AWS_REGION: us-east-1
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
       AWS_ENDPOINT_URL: http://localstack:4566
-      AWS_ACCESS_KEY_ID: test
-      AWS_SECRET_ACCESS_KEY: test
-      LOG_LEVEL: INFO
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
     depends_on:
       db:
         condition: service_healthy
