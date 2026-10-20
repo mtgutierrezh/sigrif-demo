@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import FastAPI
-from prometheus_client import generate_latest
+from prometheus_client import Counter, generate_latest
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
@@ -15,11 +15,15 @@ from ..ml import risk_model
 from ..models import Reading, Zone
 
 logger = logging.getLogger(__name__)
+MESSAGES = Counter(
+    "sigrif_ia_messages_total", "Mensajes procesados por el servicio de IA", ["status"]
+)
 
 
 def apply_reading(session: Session, payload: dict[str, Any]) -> bool:
     zone = session.get(Zone, payload["zone_id"])
     if zone is None:
+        MESSAGES.labels("missing").inc()
         return False
     label, score = risk_model.predict(
         [
@@ -45,6 +49,7 @@ def apply_reading(session: Session, payload: dict[str, Any]) -> bool:
         )
     )
     session.commit()
+    MESSAGES.labels("processed").inc()
     return True
 
 

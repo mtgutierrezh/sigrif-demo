@@ -10,7 +10,7 @@ import numpy as np
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from geoalchemy2.shape import to_shape
-from prometheus_client import Counter, generate_latest
+from prometheus_client import Counter, Histogram, generate_latest
 from shapely.geometry import mapping
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -25,6 +25,12 @@ from ..schemas import HistoryPoint, ReadingOut, SimulationOut, StatusOut, ZoneOu
 
 logger = logging.getLogger(__name__)
 REQUESTS = Counter("sigrif_api_requests_total", "Total API requests", ["path", "method", "status"])
+LATENCY = Histogram(
+    "sigrif_api_request_duration_seconds",
+    "Latencia de las solicitudes de la API",
+    ["path", "method"],
+    buckets=(0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2, 5),
+)
 LATENCIES: deque[float] = deque(maxlen=500)
 RNG = np.random.default_rng()
 
@@ -62,7 +68,11 @@ async def count_requests(
 ) -> Response:
     started = time.perf_counter()
     response = await call_next(request)
-    LATENCIES.append((time.perf_counter() - started) * 1000)
+    elapsed = time.perf_counter() - started
+    route = request.scope.get("route")
+    path = getattr(route, "path", request.url.path)
+    LATENCIES.append(elapsed * 1000)
+    LATENCY.labels(path, request.method).observe(elapsed)
     REQUESTS.labels(request.url.path, request.method, response.status_code).inc()
     return response
 
