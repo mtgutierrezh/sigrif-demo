@@ -1,4 +1,4 @@
-.PHONY: install up up-host down down-host logs logs-host seed seed-host smoke demo-local test lint fmt security verify check-no-comments demo-up demo-down demo-plan demo-status demo-url infra-fmt
+.PHONY: install up up-host down down-host logs logs-host seed seed-host smoke demo-local test test-e2e lint typecheck fmt security verify check-no-comments demo-up demo-down demo-plan demo-status demo-url infra-fmt
 
 install:
 	uv sync --all-groups
@@ -35,9 +35,15 @@ demo-local: up-host seed-host smoke
 test:
 	uv run pytest
 
+test-e2e:
+	SIGRIF_E2E=1 uv run pytest tests/test_e2e.py -q --no-cov
+
 lint:
 	uv run ruff check src tests
 	uv run ruff format --check src tests
+
+typecheck:
+	uv run mypy src
 
 fmt:
 	uv run ruff format src tests
@@ -49,7 +55,7 @@ security:
 check-no-comments:
 	uv run python scripts/check_no_comments.py
 
-verify: lint test security check-no-comments
+verify: lint typecheck test security check-no-comments
 
 demo-up:
 	bash scripts/deploy.sh
