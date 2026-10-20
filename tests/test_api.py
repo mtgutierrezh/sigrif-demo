@@ -95,10 +95,18 @@ def test_simulate_publishes(monkeypatch):
     assert published[0]["zone_id"] == 1
 
 
-def test_zones_require_token(monkeypatch):
+def test_zones_are_public(monkeypatch):
     monkeypatch.setattr(settings, "auth_enabled", True)
     main.app.dependency_overrides[get_session] = fake_session
     response = client.get("/api/v1/zones")
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 200
+
+
+def test_simulate_requires_token(monkeypatch):
+    monkeypatch.setattr(settings, "auth_enabled", True)
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.post("/api/v1/simulate")
     main.app.dependency_overrides.clear()
     assert response.status_code == 401
 

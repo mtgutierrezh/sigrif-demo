@@ -72,7 +72,7 @@ def _use_real_jwks(monkeypatch, private_key):
 def test_decode_real_access_token(monkeypatch):
     private_key = _private_key()
     _use_real_jwks(monkeypatch, private_key)
-    issuer = "https://cognito-idp.us-east-1.amazonaws.com/pool"
+    issuer = auth._issuer()
     token = _signed(
         private_key,
         {"token_use": "access", "client_id": "client", "iss": issuer, "sub": "u1"},
@@ -83,7 +83,7 @@ def test_decode_real_access_token(monkeypatch):
 def test_decode_real_id_token(monkeypatch):
     private_key = _private_key()
     _use_real_jwks(monkeypatch, private_key)
-    issuer = "https://cognito-idp.us-east-1.amazonaws.com/pool"
+    issuer = auth._issuer()
     token = _signed(
         private_key,
         {"token_use": "id", "aud": "client", "iss": issuer, "sub": "u1"},
@@ -110,7 +110,7 @@ def test_decode_rejects_wrong_issuer(monkeypatch):
 def test_decode_rejects_wrong_access_client(monkeypatch):
     private_key = _private_key()
     _use_real_jwks(monkeypatch, private_key)
-    issuer = "https://cognito-idp.us-east-1.amazonaws.com/pool"
+    issuer = auth._issuer()
     token = _signed(
         private_key,
         {"token_use": "access", "client_id": "other", "iss": issuer, "sub": "u1"},
@@ -122,7 +122,7 @@ def test_decode_rejects_wrong_access_client(monkeypatch):
 def test_decode_rejects_wrong_id_audience(monkeypatch):
     private_key = _private_key()
     _use_real_jwks(monkeypatch, private_key)
-    issuer = "https://cognito-idp.us-east-1.amazonaws.com/pool"
+    issuer = auth._issuer()
     token = _signed(
         private_key,
         {"token_use": "id", "aud": "other", "iss": issuer, "sub": "u1"},
