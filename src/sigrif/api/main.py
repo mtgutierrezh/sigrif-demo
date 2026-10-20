@@ -16,7 +16,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
-from ..auth import CurrentUser, OperatorUser
+from ..auth import OperatorUser
 from ..config import settings
 from ..db import get_session, init_db
 from ..events import ensure_resources, publish_reading
@@ -107,7 +107,6 @@ def metrics() -> Response:
 @app.get("/api/v1/status", response_model=StatusOut)
 def status(
     session: Annotated[Session, Depends(get_session)],
-    _: CurrentUser,
 ) -> StatusOut:
     zones = session.scalar(select(func.count(Zone.id))) or 0
     last_ingest = session.scalar(select(func.max(Reading.created_at)))
@@ -123,7 +122,6 @@ def status(
 @app.get("/api/v1/zones", response_model=list[ZoneOut])
 def list_zones(
     session: Annotated[Session, Depends(get_session)],
-    _: CurrentUser,
 ) -> list[ZoneOut]:
     zones = session.scalars(select(Zone).order_by(Zone.id)).all()
     return [_zone_out(session, zone) for zone in zones]
@@ -132,7 +130,6 @@ def list_zones(
 @app.get("/api/v1/cells")
 def list_cells(
     session: Annotated[Session, Depends(get_session)],
-    _: CurrentUser,
 ) -> dict:
     cells = session.scalars(select(RiskCell).order_by(RiskCell.h3)).all()
     features = []
@@ -164,7 +161,6 @@ def list_cells(
 def get_zone(
     zone_id: int,
     session: Annotated[Session, Depends(get_session)],
-    _: CurrentUser,
 ) -> ZoneOut:
     zone = session.get(Zone, zone_id)
     if zone is None:
@@ -176,7 +172,6 @@ def get_zone(
 def zone_history(
     zone_id: int,
     session: Annotated[Session, Depends(get_session)],
-    _: CurrentUser,
     limit: Annotated[int, Query(ge=1, le=200)] = 30,
 ) -> list[HistoryPoint]:
     zone = session.get(Zone, zone_id)
