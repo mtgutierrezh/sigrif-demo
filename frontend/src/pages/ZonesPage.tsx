@@ -101,7 +101,7 @@ export default function ZonesPage() {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-5 md:grid-cols-[1fr_220px]">
+      <div className="mt-10 grid gap-5 md:grid-cols-[1fr_220px] md:items-end">
         <SearchBox value={search} onChange={setSearch} />
         <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">Ordenar por</span>
