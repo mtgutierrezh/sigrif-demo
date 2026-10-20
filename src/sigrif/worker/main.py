@@ -1,35 +1,57 @@
+import json
+from pathlib import Path
+from typing import Any
+
 from geoalchemy2.elements import WKTElement
-from sqlalchemy import select
+from sqlalchemy import delete, func, select
 
 from ..db import SessionLocal, init_db
-from ..models import Zone
+from ..models import Reading, Zone
+
+DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "cerros_sectores.geojson"
+COMUNA = "Valparaíso"
 
 
-def _polygon(west: float, south: float, east: float, north: float) -> str:
-    return (
-        f"MULTIPOLYGON((({west} {south}, {east} {south}, {east} {north}, "
-        f"{west} {north}, {west} {south})))"
-    )
+def _multipolygon_wkt(geometry: dict[str, Any]) -> str:
+    if geometry["type"] == "Polygon":
+        polygons = [geometry["coordinates"]]
+    elif geometry["type"] == "MultiPolygon":
+        polygons = geometry["coordinates"]
+    else:
+        raise ValueError(f"Geometría no soportada: {geometry['type']}")
+
+    polygons_wkt = []
+    for polygon in polygons:
+        rings = []
+        for ring in polygon:
+            coordinates = ", ".join(f"{point[0]} {point[1]}" for point in ring)
+            rings.append(f"({coordinates})")
+        polygons_wkt.append("(" + ", ".join(rings) + ")")
+    return "MULTIPOLYGON(" + ", ".join(polygons_wkt) + ")"
 
 
-ZONES = [
-    ("Valparaiso", "Valparaiso", _polygon(-71.68, -33.06, -71.60, -33.01)),
-    ("Vina del Mar", "Vina del Mar", _polygon(-71.58, -33.04, -71.50, -32.98)),
-    ("Quilpue", "Quilpue", _polygon(-71.50, -33.08, -71.42, -33.02)),
-    ("Villa Alemana", "Villa Alemana", _polygon(-71.40, -33.06, -71.32, -33.00)),
-    ("Concon", "Concon", _polygon(-71.56, -32.95, -71.50, -32.90)),
-    ("Casablanca", "Casablanca", _polygon(-71.45, -33.35, -71.35, -33.25)),
-]
+def load_zones(path: Path = DATA_FILE) -> list[tuple[str, str, str]]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    zones = []
+    for feature in data["features"]:
+        name = feature["properties"]["Nombre_Cer"].strip()
+        zones.append((name, COMUNA, _multipolygon_wkt(feature["geometry"])))
+    return zones
 
 
 def seed() -> None:
     init_db()
+    zones = load_zones()
     with SessionLocal() as session:
-        existing = session.scalar(select(Zone.id).limit(1))
-        if existing is not None:
+        count = session.scalar(select(func.count(Zone.id))) or 0
+        if count == len(zones):
             print("Las zonas ya existen")
             return
-        for name, comuna, wkt in ZONES:
+        if count:
+            session.execute(delete(Reading))
+            session.execute(delete(Zone))
+            session.commit()
+        for name, comuna, wkt in zones:
             session.add(
                 Zone(
                     name=name,
@@ -40,7 +62,7 @@ def seed() -> None:
                 )
             )
         session.commit()
-    print(f"Zonas cargadas: {len(ZONES)}")
+    print(f"Zonas cargadas: {len(zones)}")
 
 
 if __name__ == "__main__":
