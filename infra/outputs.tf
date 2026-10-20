@@ -46,6 +46,10 @@ output "cognito_client_id" {
   value = aws_cognito_user_pool_client.web.id
 }
 
+output "cognito_authority" {
+  value = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
+}
+
 output "cognito_domain" {
   value = aws_cognito_user_pool_domain.main.domain
 }
