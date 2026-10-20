@@ -6,9 +6,11 @@ from geoalchemy2.elements import WKTElement
 from sqlalchemy import delete, func, select
 
 from ..db import SessionLocal, init_db
-from ..models import Reading, Zone
+from ..models import Reading, RiskCell, Zone
 
-DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "cerros_sectores.geojson"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+ZONES_FILE = DATA_DIR / "cerros_sectores.geojson"
+CELLS_FILE = DATA_DIR / "risk_cells.geojson"
 COMUNA = "Valparaíso"
 
 
@@ -30,7 +32,15 @@ def _multipolygon_wkt(geometry: dict[str, Any]) -> str:
     return "MULTIPOLYGON(" + ", ".join(polygons_wkt) + ")"
 
 
-def load_zones(path: Path = DATA_FILE) -> list[tuple[str, str, str]]:
+def _polygon_wkt(geometry: dict[str, Any]) -> str:
+    rings = []
+    for ring in geometry["coordinates"]:
+        coordinates = ", ".join(f"{point[0]} {point[1]}" for point in ring)
+        rings.append(f"({coordinates})")
+    return "POLYGON(" + ", ".join(rings) + ")"
+
+
+def load_zones(path: Path = ZONES_FILE) -> list[tuple[str, str, str]]:
     data = json.loads(path.read_text(encoding="utf-8"))
     zones = []
     for feature in data["features"]:
@@ -39,8 +49,12 @@ def load_zones(path: Path = DATA_FILE) -> list[tuple[str, str, str]]:
     return zones
 
 
-def seed() -> None:
-    init_db()
+def load_cells(path: Path = CELLS_FILE) -> list[dict[str, Any]]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return data["features"]
+
+
+def seed_zones() -> None:
     zones = load_zones()
     with SessionLocal() as session:
         count = session.scalar(select(func.count(Zone.id))) or 0
@@ -63,6 +77,44 @@ def seed() -> None:
             )
         session.commit()
     print(f"Zonas cargadas: {len(zones)}")
+
+
+def seed_cells() -> None:
+    features = load_cells()
+    with SessionLocal() as session:
+        count = session.scalar(select(func.count(RiskCell.h3))) or 0
+        if count == len(features):
+            print("Las celdas ya existen")
+            return
+        if count:
+            session.execute(delete(RiskCell))
+            session.commit()
+        for feature in features:
+            properties = feature["properties"]
+            session.add(
+                RiskCell(
+                    h3=properties["h3"],
+                    geometry=WKTElement(_polygon_wkt(feature["geometry"]), srid=4326),
+                    dominant_fuel=properties["dominant_fuel"],
+                    fuel_native=properties["fuel_native"],
+                    fuel_plantation=properties["fuel_plantation"],
+                    fuel_shrub=properties["fuel_shrub"],
+                    fuel_grass=properties["fuel_grass"],
+                    fuel_agriculture=properties["fuel_agriculture"],
+                    fuel_urban=properties["fuel_urban"],
+                    wui_distance_m=properties["wui_distance_m"],
+                    risk_level=properties["risk_level"],
+                    risk_score=properties["risk_score"],
+                )
+            )
+        session.commit()
+    print(f"Celdas cargadas: {len(features)}")
+
+
+def seed() -> None:
+    init_db()
+    seed_zones()
+    seed_cells()
 
 
 if __name__ == "__main__":

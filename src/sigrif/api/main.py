@@ -9,7 +9,9 @@ from typing import Annotated
 import numpy as np
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from geoalchemy2.shape import to_shape
 from prometheus_client import Counter, generate_latest
+from shapely.geometry import mapping
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from starlette.responses import Response
@@ -18,7 +20,7 @@ from ..auth import CurrentUser, OperatorUser
 from ..config import settings
 from ..db import get_session, init_db
 from ..events import ensure_resources, publish_reading
-from ..models import Reading, Zone
+from ..models import Reading, RiskCell, Zone
 from ..schemas import HistoryPoint, ReadingOut, SimulationOut, StatusOut, ZoneOut
 
 logger = logging.getLogger(__name__)
@@ -115,6 +117,37 @@ def list_zones(
 ) -> list[ZoneOut]:
     zones = session.scalars(select(Zone).order_by(Zone.id)).all()
     return [_zone_out(session, zone) for zone in zones]
+
+
+@app.get("/api/v1/cells")
+def list_cells(
+    session: Annotated[Session, Depends(get_session)],
+    _: CurrentUser,
+) -> dict:
+    cells = session.scalars(select(RiskCell).order_by(RiskCell.h3)).all()
+    features = []
+    for cell in cells:
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": mapping(to_shape(cell.geometry)),
+                "properties": {
+                    "h3": cell.h3,
+                    "dominant_fuel": cell.dominant_fuel,
+                    "fuel_native": cell.fuel_native,
+                    "fuel_plantation": cell.fuel_plantation,
+                    "fuel_shrub": cell.fuel_shrub,
+                    "fuel_grass": cell.fuel_grass,
+                    "fuel_agriculture": cell.fuel_agriculture,
+                    "fuel_urban": cell.fuel_urban,
+                    "wui_distance_m": cell.wui_distance_m,
+                    "risk_level": cell.risk_level,
+                    "risk_score": cell.risk_score,
+                    "updated_at": cell.updated_at.isoformat(),
+                },
+            }
+        )
+    return {"type": "FeatureCollection", "features": features}
 
 
 @app.get("/api/v1/zones/{zone_id}", response_model=ZoneOut)

@@ -56,3 +56,19 @@ class StatusOut(BaseModel):
 class SimulationOut(BaseModel):
     zone_id: int
     message: str
+
+
+class CellOut(BaseModel):
+    h3: str
+    geometry: dict
+    dominant_fuel: str
+    fuel_native: float
+    fuel_plantation: float
+    fuel_shrub: float
+    fuel_grass: float
+    fuel_agriculture: float
+    fuel_urban: float
+    wui_distance_m: float
+    risk_level: str
+    risk_score: float
+    updated_at: datetime

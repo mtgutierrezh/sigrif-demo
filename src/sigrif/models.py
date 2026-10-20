@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from geoalchemy2 import Geometry
 from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, func
@@ -35,3 +36,23 @@ class Reading(Base):
     risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     zone: Mapped[Zone] = relationship()
+
+
+class RiskCell(Base):
+    __tablename__ = "risk_cells"
+
+    h3: Mapped[str] = mapped_column(String(20), primary_key=True)
+    geometry: Mapped[Any] = mapped_column(Geometry("POLYGON", srid=4326))
+    dominant_fuel: Mapped[str] = mapped_column(String(20))
+    fuel_native: Mapped[float] = mapped_column(Float, default=0.0)
+    fuel_plantation: Mapped[float] = mapped_column(Float, default=0.0)
+    fuel_shrub: Mapped[float] = mapped_column(Float, default=0.0)
+    fuel_grass: Mapped[float] = mapped_column(Float, default=0.0)
+    fuel_agriculture: Mapped[float] = mapped_column(Float, default=0.0)
+    fuel_urban: Mapped[float] = mapped_column(Float, default=0.0)
+    wui_distance_m: Mapped[float] = mapped_column(Float, default=0.0)
+    risk_level: Mapped[str] = mapped_column(String(10), default="Bajo")
+    risk_score: Mapped[float] = mapped_column(Float, default=0.0)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )

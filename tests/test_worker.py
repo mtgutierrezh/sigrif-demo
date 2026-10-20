@@ -57,7 +57,7 @@ def test_seed_inserts_zones(monkeypatch):
     monkeypatch.setattr(main, "init_db", lambda: None)
     monkeypatch.setattr(main, "SessionLocal", lambda: session)
 
-    main.seed()
+    main.seed_zones()
 
     assert len(session.added) == 54
     assert session.committed is True
@@ -68,7 +68,7 @@ def test_seed_replaces_old_zones(monkeypatch):
     monkeypatch.setattr(main, "init_db", lambda: None)
     monkeypatch.setattr(main, "SessionLocal", lambda: session)
 
-    main.seed()
+    main.seed_zones()
 
     assert len(session.added) == 54
     assert len(session.executed) == 2
@@ -79,7 +79,33 @@ def test_seed_skips_existing_zones(monkeypatch):
     monkeypatch.setattr(main, "init_db", lambda: None)
     monkeypatch.setattr(main, "SessionLocal", lambda: session)
 
-    main.seed()
+    main.seed_zones()
+
+    assert session.added == []
+    assert session.committed is False
+
+
+def test_load_cells_reads_geojson():
+    cells = main.load_cells()
+    assert len(cells) == 467
+    assert cells[0]["properties"]["h3"] == "88b2c40825fffff"
+
+
+def test_seed_cells_inserts(monkeypatch):
+    session = FakeSession(existing=0)
+    monkeypatch.setattr(main, "SessionLocal", lambda: session)
+
+    main.seed_cells()
+
+    assert len(session.added) == 467
+    assert session.committed is True
+
+
+def test_seed_cells_skips_existing(monkeypatch):
+    session = FakeSession(existing=467)
+    monkeypatch.setattr(main, "SessionLocal", lambda: session)
+
+    main.seed_cells()
 
     assert session.added == []
     assert session.committed is False
