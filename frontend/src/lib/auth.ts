@@ -10,7 +10,7 @@ export const authConfig = {
   authority: authority ?? "",
   client_id: clientId ?? "",
   redirect_uri: import.meta.env.VITE_COGNITO_REDIRECT_URI ?? `${origin}/auth/callback`,
-  post_logout_redirect_uri: origin,
+  post_logout_redirect_uri: `${origin}/`,
   response_type: "code",
   scope: "openid email profile",
   automaticSilentRenew: true,

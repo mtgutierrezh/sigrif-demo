@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { fetchJson, setAccessToken } from "./api";
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "";
+
 afterEach(() => {
   setAccessToken(null);
   vi.unstubAllGlobals();
@@ -18,7 +20,7 @@ describe("api client", () => {
 
     await fetchJson("/api/v1/zones");
 
-    expect(fetchMock).toHaveBeenCalledWith("/api/v1/zones", {
+    expect(fetchMock).toHaveBeenCalledWith(`${baseUrl}/api/v1/zones`, {
       headers: {
         Accept: "application/json",
         Authorization: "Bearer token-demo",
@@ -35,7 +37,7 @@ describe("api client", () => {
 
     await fetchJson("/health");
 
-    expect(fetchMock).toHaveBeenCalledWith("/health", {
+    expect(fetchMock).toHaveBeenCalledWith(`${baseUrl}/health`, {
       headers: { Accept: "application/json" },
     });
   });
