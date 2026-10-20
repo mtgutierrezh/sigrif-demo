@@ -156,9 +156,15 @@ def zone_history(
 def simulate(
     session: Annotated[Session, Depends(get_session)],
     _: OperatorUser,
+    zone_id: int | None = None,
 ) -> SimulationOut:
-    zone = session.scalars(select(Zone).order_by(Zone.id)).first()
+    if zone_id is not None:
+        zone = session.get(Zone, zone_id)
+    else:
+        zone = session.scalars(select(Zone).order_by(Zone.id)).first()
     if zone is None:
+        if zone_id is not None:
+            raise HTTPException(status_code=404, detail="Zona no encontrada")
         raise HTTPException(status_code=409, detail="No hay zonas cargadas")
     payload = {
         "zone_id": zone.id,
