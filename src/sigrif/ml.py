@@ -33,8 +33,15 @@ class RiskModel:
 
     def predict(self, values: list[float]) -> tuple[str, float]:
         probabilities = self._model.predict_proba([values])[0]
-        index = int(probabilities.argmax())
-        return LABELS[index], round(float(probabilities[index]), 4)
+        classes = list(self._model.classes_)
+        score = round(float(probabilities[classes.index(2)]), 4) if 2 in classes else 0.0
+        if score >= 0.7:
+            label = "Alto"
+        elif score >= 0.4:
+            label = "Medio"
+        else:
+            label = "Bajo"
+        return label, score
 
 
 risk_model = RiskModel()
