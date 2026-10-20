@@ -21,3 +21,7 @@ AGENTS.md
 CLAUDE.md
 .cursor/
 .github/copilot-instructions.md
+node_modules/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
