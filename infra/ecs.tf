@@ -71,6 +71,10 @@ resource "aws_ecs_task_definition" "api" {
         { name = "AWS_REGION", value = var.aws_region },
         { name = "SNS_TOPIC_ARN", value = aws_sns_topic.data.arn },
         { name = "SQS_QUEUE_URL", value = aws_sqs_queue.readings.url },
+        { name = "AUTH_ENABLED", value = "true" },
+        { name = "COGNITO_REGION", value = var.aws_region },
+        { name = "COGNITO_USER_POOL_ID", value = aws_cognito_user_pool.main.id },
+        { name = "COGNITO_CLIENT_ID", value = aws_cognito_user_pool_client.web.id },
         { name = "LOG_LEVEL", value = "INFO" }
       ]
 
