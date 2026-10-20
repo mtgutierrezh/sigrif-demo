@@ -3,6 +3,12 @@ import { Link } from "react-router-dom";
 export default function NotFound() {
   return (
     <div className="mx-auto flex min-h-[60dvh] max-w-[1200px] flex-col justify-center px-5 md:px-8">
+      <img
+        src="/brand/isotype.svg"
+        alt=""
+        aria-hidden="true"
+        className="mb-6 h-12 w-12 opacity-80"
+      />
       <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-surveyor">Error 404</p>
       <h1 className="mt-4 text-[40px] leading-none tracking-[-0.03em] md:text-[58px]">
         Esta zona no existe.

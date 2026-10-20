@@ -18,12 +18,12 @@ export function SearchBox({
       <Search
         size={16}
         strokeWidth={1.5}
-        className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-ash"
+        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ash"
         aria-hidden="true"
       />
       <input
         type="search"
-        className="input pl-7"
+        className="input pl-10"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         aria-label={label}

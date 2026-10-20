@@ -27,10 +27,10 @@ export function TopBar() {
       <div className="mx-auto flex h-[59px] max-w-[1200px] items-center justify-between px-5 md:px-8">
         <Link
           to="/"
-          className="font-sans text-[14px] font-medium tracking-[-0.03em] text-bone"
+          className="flex items-center"
           aria-label="SIGRIF, ir al inicio"
         >
-          SIGRIF
+          <img src="/brand/logotype.svg" alt="SIGRIF" className="h-5 w-auto md:h-6" />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex" aria-label="Navegación principal">

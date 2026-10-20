@@ -10,7 +10,7 @@
   --color-ember: #e2664a;
   --color-bone-muted: #d8d7cc;
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: "Azeret Mono Variable", ui-monospace, SFMono-Regular, monospace;
 }
 
 :root {
@@ -338,4 +338,14 @@ button {
 
 .leaflet-tile-pane {
   filter: grayscale(1) brightness(0.52) contrast(1.18);
+}
+
+select.input {
+  background-color: #13140e;
+  color: #f4f3e8;
+}
+
+select.input option {
+  background-color: #13140e;
+  color: #f4f3e8;
 }

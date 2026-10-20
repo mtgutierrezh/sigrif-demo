@@ -1,6 +1,5 @@
 import "@fontsource-variable/inter";
-import "@fontsource/jetbrains-mono/400.css";
-import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource-variable/azeret-mono";
 import "./styles/globals.css";
 
 import { StrictMode } from "react";
