@@ -56,6 +56,60 @@ make verify
 
 Ejecuta lint, pruebas con cobertura minima de 60 %, analisis de seguridad y la regla de codigo sin comentarios. Las pruebas no requieren AWS ni contenedores.
 
+## Observabilidad
+
+La demo incluye Prometheus y Grafana en el compose local:
+
+- Prometheus: `http://localhost:9090` (targets `sigrif-api` y `sigrif-ia`).
+- Grafana: `http://localhost:3000`, usuario `admin` y contraseña definida en `GRAFANA_ADMIN_PASSWORD` (por defecto `admin`).
+- Dashboard provisionado: **SIGRIF · Operación**, con requests por estado, latencia p95, total de requests, mensajes procesados por la IA y tareas activas.
+
+Para levantarlos: `make up-host` (o `docker compose -f docker-compose.host.yml up -d prometheus grafana`).
+
+## Autenticación con Cognito
+
+Por defecto la demo usa `AUTH_ENABLED=false` y una sesión local de operador. Para probar el flujo real con Cognito:
+
+```bash
+aws login --profile aws-toolkit
+export AWS_PROFILE=aws-toolkit
+cd infra
+terraform apply \
+  -target=random_id.suffix \
+  -target=aws_cognito_user_pool.main \
+  -target=aws_cognito_user_pool_domain.main \
+  -target=aws_cognito_user_pool_client.web \
+  -target=aws_cognito_user_group.users \
+  -target=aws_cognito_user_group.operators
+export COGNITO_USER_POOL_ID=$(terraform output -raw cognito_user_pool_id)
+export COGNITO_CLIENT_ID=$(terraform output -raw cognito_client_id)
+export COGNITO_AUTHORITY=$(terraform output -raw cognito_authority)
+export COGNITO_TEST_PASSWORD='CambiarEstaClave1'
+../scripts/cognito_users.sh
+```
+
+Luego configura `frontend/.env.local`:
+
+```bash
+VITE_COGNITO_AUTHORITY=$COGNITO_AUTHORITY
+VITE_COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID
+VITE_COGNITO_REDIRECT_URI=http://localhost:5173/auth/callback
+```
+
+Y en `.env` de la raíz:
+
+```bash
+AUTH_ENABLED=true
+COGNITO_REGION=us-east-2
+COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
+COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID
+```
+
+Reinicia `docker compose -f docker-compose.host.yml up -d api` y Vite. Usuarios de prueba:
+
+- `usuario@demo.sigrif.cl` → grupo `usuarios` (solo lectura).
+- `operador@demo.sigrif.cl` → grupo `operadores` (puede simular).
+
 ## Despliegue en AWS
 
 Requisitos: Terraform, AWS CLI y credenciales con permisos sobre ECS, ECR, RDS, SNS, SQS, Cognito, CloudWatch e IAM.
