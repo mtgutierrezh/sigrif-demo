@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
+from ..auth import CurrentUser, OperatorUser
 from ..db import get_session, init_db
 from ..events import ensure_resources, publish_reading
 from ..models import Zone
@@ -53,12 +54,19 @@ def metrics() -> Response:
 
 
 @app.get("/api/v1/zones", response_model=list[ZoneOut])
-def list_zones(session: Annotated[Session, Depends(get_session)]) -> list[Zone]:
+def list_zones(
+    session: Annotated[Session, Depends(get_session)],
+    _: CurrentUser,
+) -> list[Zone]:
     return list(session.scalars(select(Zone).order_by(Zone.id)))
 
 
 @app.get("/api/v1/zones/{zone_id}", response_model=ZoneOut)
-def get_zone(zone_id: int, session: Annotated[Session, Depends(get_session)]) -> Zone:
+def get_zone(
+    zone_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    _: CurrentUser,
+) -> Zone:
     zone = session.get(Zone, zone_id)
     if zone is None:
         raise HTTPException(status_code=404, detail="Zona no encontrada")
@@ -66,7 +74,10 @@ def get_zone(zone_id: int, session: Annotated[Session, Depends(get_session)]) ->
 
 
 @app.post("/api/v1/simulate", response_model=SimulationOut, status_code=202)
-def simulate(session: Annotated[Session, Depends(get_session)]) -> SimulationOut:
+def simulate(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> SimulationOut:
     zone = session.scalars(select(Zone).order_by(Zone.id)).first()
     if zone is None:
         raise HTTPException(status_code=409, detail="No hay zonas cargadas")

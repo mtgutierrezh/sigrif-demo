@@ -10,6 +10,10 @@ class Settings(BaseSettings):
     sns_topic_arn: str | None = None
     sqs_queue_url: str | None = None
     log_level: str = "INFO"
+    auth_enabled: bool = False
+    cognito_region: str | None = None
+    cognito_user_pool_id: str | None = None
+    cognito_client_id: str | None = None
 
 
 settings = Settings()
