@@ -24,6 +24,7 @@ export function SearchBox({
       <input
         type="search"
         className="input pl-10"
+        style={{ paddingLeft: "2.5rem" }}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         aria-label={label}

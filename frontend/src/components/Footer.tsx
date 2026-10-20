@@ -12,7 +12,7 @@ const SOURCES = [
 export function Footer() {
   return (
     <footer className="border-t border-iron bg-obsidian px-5 pb-8 pt-14 md:px-8">
-      <div className="mx-auto grid max-w-[1200px] gap-8 font-mono text-[12px] text-ash md:grid-cols-3">
+      <div className="mx-auto grid max-w-[1200px] items-start gap-8 font-mono text-[12px] text-ash md:grid-cols-3 md:gap-12">
         <div>
           <p className="mb-2 text-bone">Fuentes</p>
           <ul className="space-y-1">
@@ -37,7 +37,7 @@ export function Footer() {
         </div>
         <div>
           <p className="mb-2 text-bone">Versión</p>
-          <p>SIGRIF · v0.2.0 · {new Date().getFullYear()}</p>
+          <p>SIGRIF · v0.2.2 · {new Date().getFullYear()}</p>
         </div>
       </div>
     </footer>

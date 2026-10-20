@@ -71,18 +71,6 @@ export default function MapPage() {
       <div className="relative h-[calc(100dvh-59px)]">
         <MapView zones={zonesQuery.data ?? []} selectedId={selectedId} onSelect={selectZone} />
 
-        <div className="pointer-events-none absolute left-0 top-0 z-[1000] p-5 md:p-7">
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-surveyor">
-            Riesgo por zona
-          </p>
-          <h1 className="mt-2 text-[28px] leading-none tracking-[-0.03em] text-bone md:text-[40px]">
-            Valparaíso
-          </h1>
-          <p className="mt-2 font-mono text-[11px] text-bone-muted">
-            {zonesQuery.data?.length ?? 0} zonas · selecciona un polígono
-          </p>
-        </div>
-
         <MapLegend />
 
         <ZonePanel
@@ -101,9 +89,9 @@ export default function MapPage() {
             }
           }}
           message={message}
+          telemetry={<TelemetryStrip status={statusQuery.data} />}
         />
       </div>
-      <TelemetryStrip status={statusQuery.data} />
     </div>
   );
 }

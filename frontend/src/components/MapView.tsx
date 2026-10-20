@@ -3,7 +3,10 @@ import "leaflet/dist/leaflet.css";
 import type { Feature, Geometry } from "geojson";
 import L, { type Path, type PathOptions } from "leaflet";
 import { useEffect, useMemo } from "react";
-import { GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, ZoomControl, useMap } from "react-leaflet";
+import { GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, useMap } from "react-leaflet";
+
+import { CellLayer } from "./CellLayer";
+import { ZoomControl } from "./ZoomControl";
 
 import type { Zone } from "../features/zones/types";
 import { formatScore } from "../lib/format";
@@ -91,11 +94,11 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
     const zone = zones.find((item) => item.id === id);
     const color = riskColor(zone?.risk_level);
     return {
-      color: id === selectedId ? "#ebfc72" : color,
-      weight: id === selectedId ? 2.5 : 1.5,
-      opacity: 1,
+      color: id === selectedId ? "#ebfc72" : "#404040",
+      weight: id === selectedId ? 2.5 : 0.8,
+      opacity: id === selectedId ? 1 : 0.6,
       fillColor: color,
-      fillOpacity: 0.24,
+      fillOpacity: id === selectedId ? 0.12 : 0.02,
     };
   };
 
@@ -115,7 +118,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           attribution='Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics'
         />
-        <ZoomControl position="bottomright" />
+        <ZoomControl />
         <Polygon
           positions={[WORLD_RING, REGION_HOLE]}
           pathOptions={{
@@ -135,6 +138,8 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
             interactive: false,
           }}
         />
+        <CellLayer />
+
         <GeoJSON
           key={layerKey}
           data={collection}

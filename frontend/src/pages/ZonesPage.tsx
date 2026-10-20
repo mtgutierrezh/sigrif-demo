@@ -1,6 +1,5 @@
 import { AlertTriangle, RotateCcw } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 
 import { PageLoader } from "../components/PageLoader";
 import { SearchBox } from "../components/SearchBox";
@@ -12,6 +11,8 @@ import { useDebouncedValue } from "../lib/useDebouncedValue";
 import { riskRank } from "../lib/risk";
 
 type SortKey = "risk" | "score" | "name";
+
+const PAGE_SIZE = 12;
 
 function sortZones(zones: Zone[], key: SortKey): Zone[] {
   return [...zones].sort((a, b) => {
@@ -30,6 +31,7 @@ export default function ZonesPage() {
   const statusQuery = useStatus();
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortKey>("risk");
+  const [page, setPage] = useState(1);
   const debounced = useDebouncedValue(search);
 
   const visible = useMemo(() => {
@@ -42,6 +44,19 @@ export default function ZonesPage() {
     );
     return sortZones(filtered, sort);
   }, [debounced, sort, zonesQuery.data]);
+
+  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const pageZones = visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debounced, sort]);
+
+  useEffect(() => {
+    if (page > pageCount) {
+      setPage(pageCount);
+    }
+  }, [page, pageCount]);
 
   if (zonesQuery.isLoading) {
     return <PageLoader />;
@@ -84,9 +99,6 @@ export default function ZonesPage() {
             variables y el historial.
           </p>
         </div>
-        <Link to="/mapa" className="btn btn-ghost">
-          Ver mapa
-        </Link>
       </div>
 
       <div className="mt-10 grid gap-5 md:grid-cols-[1fr_220px]">
@@ -113,7 +125,7 @@ export default function ZonesPage() {
 
       <div className="mt-8">
         {visible.length > 0 ? (
-          <ZoneTable zones={visible} />
+          <ZoneTable zones={pageZones} />
         ) : (
           <div className="border border-iron p-8">
             <p className="text-[22px] tracking-[-0.02em] text-bone">Sin resultados</p>
@@ -123,6 +135,33 @@ export default function ZonesPage() {
           </div>
         )}
       </div>
+
+      {visible.length > 0 ? (
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 font-mono text-[12px] text-ash">
+          <p>
+            Mostrando {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, visible.length)} de{" "}
+            {visible.length} zonas
+          </p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="btn btn-ghost disabled:opacity-40"
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+              disabled={page <= 1}
+            >
+              Anterior
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost disabled:opacity-40"
+              onClick={() => setPage((current) => Math.min(pageCount, current + 1))}
+              disabled={page >= pageCount}
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       <div className="mt-12">
         <TelemetryStrip status={statusQuery.data} />

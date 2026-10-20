@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import type { ReactNode } from "react";
 
 import type { SimulationStage } from "../features/zones/useSimulate";
 import type { HistoryPoint, Zone } from "../features/zones/types";
@@ -17,6 +18,7 @@ interface ZonePanelProps {
   onClose: () => void;
   onSimulate: () => void;
   message: string | null;
+  telemetry?: ReactNode;
 }
 
 export function ZonePanel({
@@ -28,6 +30,7 @@ export function ZonePanel({
   onClose,
   onSimulate,
   message,
+  telemetry,
 }: ZonePanelProps) {
   const { canSimulate } = useSession();
   const steps = [
@@ -144,11 +147,10 @@ export function ZonePanel({
             Haz clic en un polígono del mapa o elige una zona en la tabla para ver su riesgo, sus
             variables y su historial.
           </p>
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.1em] text-ash">
-            Zonas disponibles: {zone ? "" : "Valparaíso · Viña del Mar · Quilpué · Villa Alemana · Concón · Casablanca"}
-          </p>
         </div>
       )}
+
+      {telemetry ? <div className="mt-6 border-t border-iron pt-4">{telemetry}</div> : null}
     </aside>
   );
 }
