@@ -1,6 +1,7 @@
-import { useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import { AuthProvider, useAuth } from "react-oidc-context";
 
+import { setAccessToken } from "../lib/api";
 import { authConfig, isAuthEnabled } from "../lib/auth";
 import { SessionContext, type Session } from "./session";
 
@@ -15,6 +16,11 @@ function LocalSession({ children }: { children: ReactNode }) {
     }),
     [],
   );
+
+  useEffect(() => {
+    setAccessToken(null);
+  }, []);
+
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
 
@@ -24,6 +30,11 @@ function OidcSession({ children }: { children: ReactNode }) {
     () => (auth.user?.profile["cognito:groups"] as string[] | undefined) ?? [],
     [auth.user],
   );
+
+  useEffect(() => {
+    setAccessToken(auth.user?.access_token);
+  }, [auth.user]);
+
   const value = useMemo<Session>(
     () => ({
       status: auth.isLoading ? "loading" : auth.isAuthenticated ? "authenticated" : "anonymous",

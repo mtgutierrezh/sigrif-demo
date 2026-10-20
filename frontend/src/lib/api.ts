@@ -1,4 +1,9 @@
 const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "";
+let accessToken: string | null = null;
+
+export function setAccessToken(token?: string | null) {
+  accessToken = token ?? null;
+}
 
 export class ApiError extends Error {
   readonly status: number;
@@ -11,9 +16,10 @@ export class ApiError extends Error {
 }
 
 function authHeaders(token?: string): HeadersInit {
+  const bearer = token ?? accessToken;
   return {
     Accept: "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
   };
 }
 
