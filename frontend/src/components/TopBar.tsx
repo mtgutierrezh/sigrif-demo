@@ -64,7 +64,7 @@ export function TopBar() {
               <button
                 type="button"
                 onClick={session.signIn}
-                style={{ fontSize: "11px", lineHeight: 1.2, height: "28px", padding: "0 8px" }}
+                style={{ fontSize: "11px", lineHeight: 1.2, height: "24px", padding: "0 8px" }}
                 className="inline-flex items-center gap-1.5 font-mono uppercase tracking-[0.04em] text-bone hover:text-surveyor"
               >
                 <LogIn size={12} strokeWidth={1.5} aria-hidden="true" />
