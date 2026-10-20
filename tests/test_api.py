@@ -4,6 +4,7 @@ from types import SimpleNamespace
 from fastapi.testclient import TestClient
 
 from sigrif.api import main
+from sigrif.config import settings
 from sigrif.db import get_session
 
 ZONE = SimpleNamespace(
@@ -77,3 +78,11 @@ def test_simulate_publishes(monkeypatch):
     main.app.dependency_overrides.clear()
     assert response.status_code == 202
     assert published[0]["zone_id"] == 1
+
+
+def test_zones_require_token(monkeypatch):
+    monkeypatch.setattr(settings, "auth_enabled", True)
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.get("/api/v1/zones")
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 401
