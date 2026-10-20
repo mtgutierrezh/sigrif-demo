@@ -55,9 +55,10 @@ export function TopBar() {
               <button
                 type="button"
                 onClick={session.signOut}
-                className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.06em] text-bone hover:text-surveyor"
+                className="inline-flex items-center gap-1.5 font-mono uppercase tracking-[0.04em] text-bone hover:text-surveyor"
+                style={{ fontSize: "11px", lineHeight: 1.2, height: "24px", padding: "0 8px" }}
               >
-                <LogOut size={14} strokeWidth={1.5} aria-hidden="true" />
+                <LogOut size={12} strokeWidth={1.5} aria-hidden="true" />
                 Salir
               </button>
             ) : (
