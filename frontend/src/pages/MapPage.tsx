@@ -23,13 +23,18 @@ export default function MapPage() {
   const selectedZone =
     zoneQuery.data ?? zonesQuery.data?.find((zone) => zone.id === selectedId) ?? null;
 
-  const message = simulate.isPending
-    ? "Publicando lectura sintética…"
-    : simulate.isSuccess
-      ? "Lectura publicada. La IA actualizará el riesgo en unos segundos."
-      : simulate.isError
-        ? "No pudimos publicar la lectura. Intenta nuevamente."
-        : null;
+  const message =
+    simulate.stage === "publishing"
+      ? "Publicando lectura sintética…"
+      : simulate.stage === "queued"
+        ? "Lectura en cola SQS…"
+        : simulate.stage === "processing"
+          ? "La IA está procesando la lectura…"
+          : simulate.stage === "done"
+            ? "Riesgo actualizado."
+            : simulate.stage === "error"
+              ? "No pudimos actualizar el riesgo. Intenta nuevamente."
+              : null;
 
   const selectZone = (zoneId: number) => {
     setParams({ zona: String(zoneId) }, { replace: true });
@@ -85,8 +90,16 @@ export default function MapPage() {
           history={historyQuery.data ?? []}
           historyLoading={historyQuery.isLoading}
           simulating={simulate.isPending}
+          simulateStage={simulate.stage}
           onClose={closePanel}
-          onSimulate={() => simulate.mutate()}
+          onSimulate={() => {
+            if (selectedZone) {
+              simulate.mutate({
+                zoneId: selectedZone.id,
+                updatedAt: selectedZone.updated_at,
+              });
+            }
+          }}
           message={message}
         />
       </div>

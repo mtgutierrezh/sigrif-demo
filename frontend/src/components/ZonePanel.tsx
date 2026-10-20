@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 
+import type { SimulationStage } from "../features/zones/useSimulate";
 import type { HistoryPoint, Zone } from "../features/zones/types";
 import { formatDateTime, formatScore } from "../lib/format";
 import { RiskBadge } from "./RiskBadge";
@@ -12,6 +13,7 @@ interface ZonePanelProps {
   history: HistoryPoint[];
   historyLoading: boolean;
   simulating: boolean;
+  simulateStage: SimulationStage;
   onClose: () => void;
   onSimulate: () => void;
   message: string | null;
@@ -22,11 +24,27 @@ export function ZonePanel({
   history,
   historyLoading,
   simulating,
+  simulateStage,
   onClose,
   onSimulate,
   message,
 }: ZonePanelProps) {
   const { canSimulate } = useSession();
+  const steps = [
+    { key: "publishing", label: "Publicada en SNS" },
+    { key: "queued", label: "En cola SQS" },
+    { key: "processing", label: "Procesada por la IA" },
+  ] as const;
+  const activeStep =
+    simulateStage === "publishing"
+      ? 0
+      : simulateStage === "queued"
+        ? 1
+        : simulateStage === "processing"
+          ? 2
+          : simulateStage === "done"
+            ? 3
+            : -1;
 
   return (
     <aside
@@ -94,6 +112,29 @@ export function ZonePanel({
           <p className="mt-3 min-h-5 font-mono text-[11px] text-surveyor" aria-live="polite">
             {message}
           </p>
+
+          {activeStep >= 0 ? (
+            <ol className="mt-3 space-y-2 font-mono text-[11px]" aria-label="Progreso de la simulación">
+              {steps.map((step, index) => {
+                const done = activeStep > index;
+                const active = activeStep === index;
+                return (
+                  <li
+                    key={step.key}
+                    className={done ? "text-surveyor" : active ? "text-bone" : "text-ash"}
+                  >
+                    <span
+                      className={`mr-2 inline-block size-2 rounded-full ${
+                        done || active ? "bg-surveyor" : "bg-iron"
+                      }`}
+                      aria-hidden="true"
+                    />
+                    {step.label}
+                  </li>
+                );
+              })}
+            </ol>
+          ) : null}
 
           <RiskHistory points={history} loading={historyLoading} />
         </>

@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import type { Feature, Geometry } from "geojson";
 import L, { type Path, type PathOptions } from "leaflet";
 import { useEffect, useMemo } from "react";
-import { GeoJSON, MapContainer, TileLayer, ZoomControl, useMap } from "react-leaflet";
+import { GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, ZoomControl, useMap } from "react-leaflet";
 
 import type { Zone } from "../features/zones/types";
 import { formatScore } from "../lib/format";
@@ -15,6 +15,27 @@ interface MapViewProps {
   selectedId: number | null;
   onSelect: (zoneId: number) => void;
 }
+
+const WORLD_RING: [number, number][] = [
+  [-85, -180],
+  [-85, 180],
+  [85, 180],
+  [85, -180],
+  [-85, -180],
+];
+
+const REGION_HOLE: [number, number][] = [
+  [-33.9, -72.4],
+  [-33.9, -69.8],
+  [-31.8, -69.8],
+  [-31.8, -72.4],
+  [-33.9, -72.4],
+];
+
+const REGION_BOUNDS: [[number, number], [number, number]] = [
+  [-33.9, -72.4],
+  [-31.8, -69.8],
+];
 
 function MapFit({ zones, hasSelection }: { zones: Zone[]; hasSelection: boolean }) {
   const map = useMap();
@@ -83,6 +104,9 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
       <MapContainer
         center={[-33.05, -71.5]}
         zoom={11}
+        minZoom={9}
+        maxBounds={REGION_BOUNDS}
+        maxBoundsViscosity={1}
         zoomControl={false}
         scrollWheelZoom
         className="h-full w-full"
@@ -92,6 +116,25 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
           attribution='Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics'
         />
         <ZoomControl position="bottomright" />
+        <Polygon
+          positions={[WORLD_RING, REGION_HOLE]}
+          pathOptions={{
+            color: "transparent",
+            fillColor: "#13140e",
+            fillOpacity: 0.78,
+            interactive: false,
+          }}
+        />
+        <Rectangle
+          bounds={REGION_BOUNDS}
+          pathOptions={{
+            color: "#ebfc72",
+            weight: 1,
+            dashArray: "6 6",
+            fill: false,
+            interactive: false,
+          }}
+        />
         <GeoJSON
           key={layerKey}
           data={collection}
