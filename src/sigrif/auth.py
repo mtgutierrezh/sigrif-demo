@@ -7,6 +7,10 @@ from jwt import PyJWKClient
 
 from .config import settings
 
+ACCESS_USE = "access"
+ID_USE = "id"
+VALID_USES = {ACCESS_USE, ID_USE}
+
 
 def _region() -> str:
     return settings.cognito_region or settings.aws_region
@@ -26,15 +30,26 @@ def _jwks_client() -> PyJWKClient:
 
 
 def decode_token(token: str) -> dict[str, Any]:
+    if not settings.cognito_client_id:
+        raise HTTPException(status_code=503, detail="Autenticación no configurada")
+
     key = _jwks_client().get_signing_key_from_jwt(token)
-    return jwt.decode(
+    payload = jwt.decode(
         token,
         key.key,
         algorithms=["RS256"],
-        audience=settings.cognito_client_id,
         issuer=_issuer(),
-        options={"verify_aud": True},
+        options={"verify_aud": False},
     )
+
+    token_use = payload.get("token_use")
+    if token_use == ACCESS_USE and payload.get("client_id") != settings.cognito_client_id:
+        raise jwt.InvalidAudienceError("client_id inválido")
+    if token_use == ID_USE and payload.get("aud") != settings.cognito_client_id:
+        raise jwt.InvalidAudienceError("aud inválido")
+    if token_use not in VALID_USES:
+        raise jwt.InvalidTokenError("token_use inválido")
+    return payload
 
 
 def get_current_user(request: Request) -> dict[str, Any]:

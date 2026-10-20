@@ -45,3 +45,49 @@ def test_operator_group_is_required():
     with pytest.raises(HTTPException) as exc:
         auth.require_operator({"cognito:groups": ["usuarios"]})
     assert exc.value.status_code == 403
+
+
+class FakeKey:
+    key = "public-key"
+
+
+class FakeJwks:
+    def get_signing_key_from_jwt(self, _):
+        return FakeKey()
+
+
+def configure_cognito(monkeypatch):
+    monkeypatch.setattr(settings, "cognito_user_pool_id", "pool")
+    monkeypatch.setattr(settings, "cognito_client_id", "client")
+    monkeypatch.setattr(auth, "_jwks_client", lambda: FakeJwks())
+
+
+def test_decode_access_token(monkeypatch):
+    configure_cognito(monkeypatch)
+    monkeypatch.setattr(
+        auth.jwt,
+        "decode",
+        lambda *args, **kwargs: {"token_use": "access", "client_id": "client"},
+    )
+    assert auth.decode_token("token")["token_use"] == "access"
+
+
+def test_decode_id_token(monkeypatch):
+    configure_cognito(monkeypatch)
+    monkeypatch.setattr(
+        auth.jwt,
+        "decode",
+        lambda *args, **kwargs: {"token_use": "id", "aud": "client"},
+    )
+    assert auth.decode_token("token")["token_use"] == "id"
+
+
+def test_decode_rejects_wrong_client(monkeypatch):
+    configure_cognito(monkeypatch)
+    monkeypatch.setattr(
+        auth.jwt,
+        "decode",
+        lambda *args, **kwargs: {"token_use": "access", "client_id": "otro"},
+    )
+    with pytest.raises(auth.jwt.InvalidAudienceError):
+        auth.decode_token("token")
