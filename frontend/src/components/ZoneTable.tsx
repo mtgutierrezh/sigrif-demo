@@ -8,17 +8,30 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
   return (
     <>
       <div className="hidden md:block">
-        <table className="w-full border-collapse text-left">
+        <table className="w-full table-fixed border-collapse text-left">
           <caption className="sr-only">Zonas monitoreadas y su nivel de riesgo</caption>
+          <colgroup>
+            <col className="w-[26%]" />
+            <col className="w-[18%]" />
+            <col className="w-[12%]" />
+            <col className="w-[12%]" />
+            <col className="w-[32%]" />
+          </colgroup>
           <thead>
             <tr className="border-b border-iron">
-              {["Zona", "Comuna", "Nivel", "Score", "Actualizado"].map((header) => (
+              {[
+                { label: "Zona", className: "py-3" },
+                { label: "Comuna", className: "py-3" },
+                { label: "Nivel", className: "py-3" },
+                { label: "Score", className: "py-3 pr-6 text-right" },
+                { label: "Actualizado", className: "py-3 pl-6" },
+              ].map((header) => (
                 <th
-                  key={header}
+                  key={header.label}
                   scope="col"
-                  className="py-3 font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-ash"
+                  className={`${header.className} font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-ash`}
                 >
-                  {header}
+                  {header.label}
                 </th>
               ))}
             </tr>
@@ -34,14 +47,14 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
                     {zone.name}
                   </Link>
                 </td>
-                <td className="py-3 font-mono text-[12px] text-ash">{zone.comuna}</td>
+                <td className="truncate py-3 font-mono text-[12px] text-ash">{zone.comuna}</td>
                 <td className="py-3">
                   <RiskBadge level={zone.risk_level} />
                 </td>
-                <td className="py-3 text-right font-mono text-[13px] text-bone">
+                <td className="whitespace-nowrap py-3 pr-6 text-right font-mono text-[13px] tabular-nums text-bone">
                   {formatScore(zone.risk_score)}
                 </td>
-                <td className="py-3 font-mono text-[11px] text-ash">
+                <td className="whitespace-nowrap py-3 pl-6 font-mono text-[11px] text-ash">
                   {formatDateTime(zone.updated_at)}
                 </td>
               </tr>

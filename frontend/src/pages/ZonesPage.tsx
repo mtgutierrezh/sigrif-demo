@@ -94,13 +94,19 @@ export default function ZonesPage() {
         <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">Ordenar por</span>
           <select
-            className="input font-mono text-[12px]"
+            className="input font-mono text-[12px] [color-scheme:dark]"
             value={sort}
             onChange={(event) => setSort(event.target.value as SortKey)}
           >
-            <option value="risk">Riesgo</option>
-            <option value="score">Score</option>
-            <option value="name">Nombre</option>
+            <option className="bg-obsidian text-bone" value="risk">
+              Riesgo
+            </option>
+            <option className="bg-obsidian text-bone" value="score">
+              Score
+            </option>
+            <option className="bg-obsidian text-bone" value="name">
+              Nombre
+            </option>
           </select>
         </label>
       </div>
