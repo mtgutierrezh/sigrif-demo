@@ -20,7 +20,7 @@ export function RiskSurface() {
       color: "transparent",
       weight: 0,
       fillColor: riskColor(level),
-      fillOpacity: 0.55,
+      fillOpacity: 0.18,
     };
   };
 

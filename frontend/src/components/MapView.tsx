@@ -98,7 +98,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
       weight: id === selectedId ? 2.5 : 0.8,
       opacity: id === selectedId ? 1 : 0.6,
       fillColor: color,
-      fillOpacity: id === selectedId ? 0.12 : 0.02,
+      fillOpacity: id === selectedId ? 0.55 : 0.42,
     };
   };
 
