@@ -5,6 +5,7 @@ import type { SimulationStage } from "../features/zones/useSimulate";
 import type { HistoryPoint, Zone } from "../features/zones/types";
 import { formatDateTime, formatScore } from "../lib/format";
 import { RiskBadge } from "./RiskBadge";
+import { RiskEvaluator } from "./RiskEvaluator";
 import { RiskHistory } from "./RiskHistory";
 import { VariableList } from "./VariableList";
 import { useSession } from "./session";
@@ -97,6 +98,8 @@ export function ZonePanel({
             Fuente: datos sintéticos · demo SIGRIF
           </p>
 
+          {canSimulate ? <RiskEvaluator key={zone.id} zone={zone} /> : null}
+
           {canSimulate ? (
             <button
               type="button"
@@ -108,7 +111,7 @@ export function ZonePanel({
             </button>
           ) : (
             <p className="mt-5 border border-iron p-3 font-mono text-[11px] text-ash">
-              La simulación requiere el grupo operadores.
+              La evaluación y la simulación requieren el grupo operadores.
             </p>
           )}
 

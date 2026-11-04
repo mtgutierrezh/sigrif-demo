@@ -10,6 +10,10 @@ QUEUE_NAME = "sigrif-lecturas"
 DLQ_NAME = "sigrif-lecturas-dlq"
 
 
+class MessagingDisabled(RuntimeError):
+    """Se lanza cuando el despliegue no usa la mensajería asíncrona."""
+
+
 def _client(service: str) -> Any:
     return boto3.client(
         service,
@@ -19,6 +23,8 @@ def _client(service: str) -> Any:
 
 
 def ensure_resources() -> tuple[str, str]:
+    if not settings.messaging_enabled:
+        return "", ""
     sns = _client("sns")
     sqs = _client("sqs")
     topic_arn = sns.create_topic(Name=TOPIC_NAME)["TopicArn"]
@@ -40,6 +46,8 @@ def ensure_resources() -> tuple[str, str]:
 
 
 def publish_reading(payload: dict[str, Any]) -> None:
+    if not settings.messaging_enabled:
+        raise MessagingDisabled("La mensajería asíncrona está deshabilitada en este despliegue")
     topic_arn = settings.sns_topic_arn
     if not topic_arn:
         topic_arn, _ = ensure_resources()

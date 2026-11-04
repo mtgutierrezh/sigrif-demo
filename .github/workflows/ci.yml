@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker build -t sigrif-demo:ci .
-      - run: docker build -t sigrif-nginx:ci nginx
+      - run: docker build -f nginx/Dockerfile -t sigrif-nginx:ci .
 
   frontend:
     runs-on: ubuntu-latest

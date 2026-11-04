@@ -10,3 +10,9 @@ htmlcov
 coverage.xml
 infra
 tests
+frontend/node_modules
+frontend/dist
+frontend/.env.local
+artifacts
+data
+ml

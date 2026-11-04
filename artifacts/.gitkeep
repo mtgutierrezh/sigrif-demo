@@ -1,0 +1,1 @@
+# Los artefactos .joblib se generan con `make train` y no se versionan.

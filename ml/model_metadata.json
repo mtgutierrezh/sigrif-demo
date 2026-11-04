@@ -1,0 +1,151 @@
+{
+  "features": [
+    "temperature",
+    "humidity",
+    "wind_speed",
+    "vegetation",
+    "historical_fires",
+    "slope"
+  ],
+  "labels": [
+    "Bajo",
+    "Medio",
+    "Alto"
+  ],
+  "version": "random-forest-0.2.0",
+  "trained_at": "2026-11-04T04:25:07.678086+00:00",
+  "dataset_hash": "48da94a8e80d7fb0aaeced3f1b60f9bafa9f042e06b33e66b8969cb6662a7fdf",
+  "metrics": {
+    "accuracy": 0.875,
+    "macro_f1": 0.8644,
+    "weighted_f1": 0.8761,
+    "precision_per_class": {
+      "Bajo": 0.848,
+      "Medio": 0.9263,
+      "Alto": 0.7721
+    },
+    "recall_per_class": {
+      "Bajo": 0.9138,
+      "Medio": 0.8626,
+      "Alto": 0.875
+    },
+    "f1_per_class": {
+      "Bajo": 0.8797,
+      "Medio": 0.8933,
+      "Alto": 0.8203
+    },
+    "support_per_class": {
+      "Bajo": 116,
+      "Medio": 364,
+      "Alto": 120
+    },
+    "confusion_matrix": [
+      [
+        106,
+        10,
+        0
+      ],
+      [
+        19,
+        314,
+        31
+      ],
+      [
+        0,
+        15,
+        105
+      ]
+    ],
+    "classification_report": {
+      "Bajo": {
+        "precision": 0.848,
+        "recall": 0.9137931034482759,
+        "f1-score": 0.8796680497925311,
+        "support": 116.0
+      },
+      "Medio": {
+        "precision": 0.9262536873156342,
+        "recall": 0.8626373626373627,
+        "f1-score": 0.8933143669985776,
+        "support": 364.0
+      },
+      "Alto": {
+        "precision": 0.7720588235294118,
+        "recall": 0.875,
+        "f1-score": 0.8203125,
+        "support": 120.0
+      },
+      "accuracy": 0.875,
+      "macro avg": {
+        "precision": 0.8487708369483485,
+        "recall": 0.8838101553618795,
+        "f1-score": 0.8644316389303696,
+        "support": 600.0
+      },
+      "weighted avg": {
+        "precision": 0.8802856683440339,
+        "recall": 0.875,
+        "f1-score": 0.876075705605693,
+        "support": 600.0
+      }
+    },
+    "roc_auc_ovr": 0.9729,
+    "train_size": 2400,
+    "test_size": 600,
+    "dataset_size": 3000,
+    "seed": 42,
+    "cross_validation": {
+      "folds": 5,
+      "metric": "f1_macro",
+      "scores": [
+        0.8575,
+        0.8659,
+        0.8916,
+        0.883,
+        0.8822
+      ],
+      "mean": 0.876,
+      "std": 0.0124
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "temperature",
+      "label": "Temperatura",
+      "importance": 0.3705
+    },
+    {
+      "feature": "humidity",
+      "label": "Humedad relativa",
+      "importance": 0.1647
+    },
+    {
+      "feature": "vegetation",
+      "label": "Vegetación combustible",
+      "importance": 0.1498
+    },
+    {
+      "feature": "wind_speed",
+      "label": "Velocidad del viento",
+      "importance": 0.1493
+    },
+    {
+      "feature": "slope",
+      "label": "Pendiente",
+      "importance": 0.0891
+    },
+    {
+      "feature": "historical_fires",
+      "label": "Incendios históricos",
+      "importance": 0.0766
+    }
+  ],
+  "params": {
+    "n_estimators": 160,
+    "max_depth": 10,
+    "min_samples_leaf": 3,
+    "class_weight": "balanced",
+    "random_state": 42,
+    "n_jobs": -1
+  }
+}

@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
-from sigrif.ia.main import apply_reading
+from sigrif.ia.main import apply_reading, predict
+from sigrif.schemas import RiskFeaturesIn
 
 PAYLOAD = {
     "zone_id": 1,
@@ -8,6 +9,7 @@ PAYLOAD = {
     "humidity": 20.0,
     "wind_speed": 60.0,
     "vegetation": 0.9,
+    "historical_fires": 8,
     "slope": 30.0,
 }
 
@@ -37,8 +39,18 @@ def test_apply_reading_updates_zone():
     assert zone.risk_level in ("Bajo", "Medio", "Alto")
     assert session.committed is True
     assert len(session.added) == 1
+    assert session.added[0].historical_fires == 8
 
 
 def test_apply_reading_missing_zone():
     session = FakeSession(None)
     assert apply_reading(session, PAYLOAD) is False
+
+
+def test_predict_endpoint_returns_prediction():
+    features = {key: value for key, value in PAYLOAD.items() if key != "zone_id"}
+    result = predict(RiskFeaturesIn(**features))
+    assert result.risk_level in ("Bajo", "Medio", "Alto")
+    assert 0.0 <= result.risk_score <= 1.0
+    assert result.model_version
+    assert len(result.factors) == 3

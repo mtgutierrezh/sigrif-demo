@@ -5,18 +5,28 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import FastAPI
-from prometheus_client import Counter, generate_latest
+from prometheus_client import Counter, Histogram, generate_latest
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
+from ..config import settings
 from ..db import SessionLocal, init_db
 from ..events import delete_message, ensure_resources, receive_readings
 from ..ml import risk_model
 from ..models import Reading, Zone
+from ..schemas import ModelInfoOut, PredictionOut, RiskFeaturesIn
 
 logger = logging.getLogger(__name__)
 MESSAGES = Counter(
     "sigrif_ia_messages_total", "Mensajes procesados por el servicio de IA", ["status"]
+)
+PREDICTIONS = Counter(
+    "sigrif_ia_predictions_total", "Predicciones solicitadas por nivel de riesgo", ["risk_level"]
+)
+PREDICTION_LATENCY = Histogram(
+    "sigrif_ia_prediction_duration_seconds",
+    "Latencia del endpoint de inferencia",
+    buckets=(0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2),
 )
 
 
@@ -25,15 +35,19 @@ def apply_reading(session: Session, payload: dict[str, Any]) -> bool:
     if zone is None:
         MESSAGES.labels("missing").inc()
         return False
-    label, score = risk_model.predict(
-        [
-            payload["temperature"],
-            payload["humidity"],
-            payload["wind_speed"],
-            payload["vegetation"],
-            payload["slope"],
-        ]
+    historical_fires = int(payload.get("historical_fires", 0))
+    result = risk_model.predict_details(
+        {
+            "temperature": payload["temperature"],
+            "humidity": payload["humidity"],
+            "wind_speed": payload["wind_speed"],
+            "vegetation": payload["vegetation"],
+            "historical_fires": historical_fires,
+            "slope": payload["slope"],
+        }
     )
+    label = str(result["risk_level"])
+    score = float(result["risk_score"])
     zone.risk_level = label
     zone.risk_score = score
     session.add(
@@ -43,6 +57,7 @@ def apply_reading(session: Session, payload: dict[str, Any]) -> bool:
             humidity=payload["humidity"],
             wind_speed=payload["wind_speed"],
             vegetation=payload["vegetation"],
+            historical_fires=historical_fires,
             slope=payload["slope"],
             risk_level=label,
             risk_score=score,
@@ -72,16 +87,33 @@ async def lifespan(_: FastAPI):
         ensure_resources()
     except Exception:
         logger.warning("database or messaging not ready")
-    threading.Thread(target=consume, daemon=True).start()
+    if settings.messaging_enabled:
+        threading.Thread(target=consume, daemon=True).start()
     yield
 
 
-app = FastAPI(title="SIGRIF IA", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="SIGRIF IA", version="0.2.0", lifespan=lifespan)
 
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "model_version": risk_model.model_version}
+
+
+@app.post("/predict", response_model=PredictionOut, tags=["inferencia"])
+def predict(payload: RiskFeaturesIn) -> PredictionOut:
+    """Predicción síncrona con factores explicativos y escenario de vegetación."""
+
+    started = time.perf_counter()
+    result = risk_model.predict_details(payload.model_dump())
+    PREDICTION_LATENCY.observe(time.perf_counter() - started)
+    PREDICTIONS.labels(str(result["risk_level"])).inc()
+    return PredictionOut(**result)
+
+
+@app.get("/model", response_model=ModelInfoOut, tags=["metadatos"])
+def model_info() -> ModelInfoOut:
+    return ModelInfoOut(**risk_model.info())
 
 
 @app.get("/metrics")

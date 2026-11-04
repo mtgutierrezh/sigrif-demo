@@ -17,6 +17,14 @@ infra/terraform.tfstate
 infra/terraform.tfstate.*
 infra/*.tfplan
 infra/terraform.tfvars
+infra/**/.terraform/
+infra/**/terraform.tfstate
+infra/**/terraform.tfstate.*
+infra/**/*.tfplan
+infra/**/terraform.tfvars
+build/deploy-bundle/
+dist/
+
 docs/
 AGENTS.md
 CLAUDE.md
@@ -26,3 +34,5 @@ node_modules/
 frontend/coverage/
 frontend/playwright-report/
 frontend/test-results/
+artifacts/*.joblib
+artifacts/*.pkl

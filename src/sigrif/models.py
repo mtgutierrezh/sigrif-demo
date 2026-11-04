@@ -31,6 +31,9 @@ class Reading(Base):
     humidity: Mapped[float] = mapped_column(Float)
     wind_speed: Mapped[float] = mapped_column(Float)
     vegetation: Mapped[float] = mapped_column(Float)
+    historical_fires: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
     slope: Mapped[float] = mapped_column(Float)
     risk_level: Mapped[str | None] = mapped_column(String(10), nullable=True)
     risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)

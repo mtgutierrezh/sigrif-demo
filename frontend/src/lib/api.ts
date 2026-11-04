@@ -41,14 +41,31 @@ export async function fetchJson<T>(path: string, token?: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-export async function postJson<T>(path: string, token?: string): Promise<T> {
+export async function postJson<T>(path: string, token?: string, body?: unknown): Promise<T> {
+  const hasBody = body !== undefined;
   const response = await fetch(`${baseUrl}${path}`, {
     method: "POST",
-    headers: authHeaders(token),
+    headers: {
+      ...authHeaders(token),
+      ...(hasBody ? { "Content-Type": "application/json" } : {}),
+    },
+    ...(hasBody ? { body: JSON.stringify(body) } : {}),
   });
 
   if (!response.ok) {
-    throw new ApiError(response.status, "No pudimos iniciar la simulación.");
+    let message =
+      response.status === 503
+        ? "El servicio de IA no está disponible. Intenta nuevamente."
+        : "No pudimos completar la operación.";
+    try {
+      const payload = (await response.json()) as { detail?: unknown };
+      if (typeof payload.detail === "string") {
+        message = payload.detail;
+      }
+    } catch {
+      // El cuerpo puede no ser JSON; se conserva el mensaje genérico.
+    }
+    throw new ApiError(response.status, message);
   }
 
   return (await response.json()) as T;

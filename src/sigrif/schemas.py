@@ -11,6 +11,7 @@ class ReadingOut(BaseModel):
     humidity: float
     wind_speed: float
     vegetation: float
+    historical_fires: int
     slope: float
     risk_level: str | None = None
     risk_score: float | None = None
@@ -30,13 +31,19 @@ class ZoneOut(BaseModel):
     latest_reading: ReadingOut | None = None
 
 
-class ReadingIn(BaseModel):
-    zone_id: int
+class RiskFeaturesIn(BaseModel):
+    """Variables de entrada del modelo, con los mismos rangos del dataset."""
+
     temperature: float = Field(ge=-10, le=50)
     humidity: float = Field(ge=0, le=100)
     wind_speed: float = Field(ge=0, le=150)
     vegetation: float = Field(ge=0, le=1)
+    historical_fires: int = Field(ge=0, le=30)
     slope: float = Field(ge=0, le=60)
+
+
+class ReadingIn(RiskFeaturesIn):
+    zone_id: int
 
 
 class HistoryPoint(BaseModel):
@@ -56,6 +63,63 @@ class StatusOut(BaseModel):
 class SimulationOut(BaseModel):
     zone_id: int
     message: str
+
+
+class FactorOut(BaseModel):
+    feature: str
+    label: str
+    value: float
+    unit: str
+    impact: float
+    direction: str
+
+
+class ScenarioOut(BaseModel):
+    description: str
+    risk_level: str
+    risk_score: float
+    delta: float
+
+
+class PredictionOut(BaseModel):
+    risk_level: str
+    risk_score: float
+    probabilities: dict[str, float]
+    model_version: str
+    factors: list[FactorOut]
+    scenario: ScenarioOut | None = None
+
+
+class PrescriptionActionOut(BaseModel):
+    code: str
+    title: str
+    description: str
+    priority: str
+    horizon: str
+    rationale: str
+
+
+class EvaluationOut(BaseModel):
+    zone_id: int
+    risk_level: str
+    risk_score: float
+    probabilities: dict[str, float]
+    model_version: str
+    factors: list[FactorOut]
+    scenario: ScenarioOut | None = None
+    prescription: list[PrescriptionActionOut]
+    evaluated_at: datetime
+
+
+class ModelInfoOut(BaseModel):
+    version: str
+    features: list[str]
+    labels: list[str]
+    trained_at: str | None
+    dataset_hash: str | None
+    metrics: dict[str, Any]
+    feature_importance: list[dict[str, Any]]
+    source: str | None
 
 
 class CellOut(BaseModel):

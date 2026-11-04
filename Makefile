@@ -1,4 +1,4 @@
-.PHONY: install up up-host down down-host logs logs-host seed seed-host smoke demo-local test test-e2e lint typecheck fmt security verify check-no-comments demo-up demo-down demo-plan demo-status demo-url infra-fmt
+.PHONY: install up up-host down down-host logs logs-host seed seed-host smoke demo-local test test-e2e lint typecheck fmt security verify check-no-comments train train-fast demo-up demo-down demo-plan demo-status demo-url infra-fmt free-plan free-up free-down free-fmt publish-model deploy-bundle
 
 install:
 	uv sync --all-groups
@@ -31,6 +31,12 @@ smoke:
 	bash scripts/smoke.sh
 
 demo-local: up-host seed-host smoke
+
+train:
+	uv run python scripts/train_model.py --cross-validate
+
+train-fast:
+	uv run python scripts/train_model.py
 
 test:
 	uv run pytest
@@ -74,3 +80,24 @@ demo-plan:
 
 infra-fmt:
 	terraform fmt -recursive infra
+
+free-plan:
+	cd infra/free-tier && terraform init -input=false && terraform plan
+
+free-up:
+	cd infra/free-tier && terraform init -input=false && terraform apply
+
+free-down:
+	cd infra/free-tier && terraform destroy
+
+free-fmt:
+	terraform fmt -recursive infra/free-tier
+
+publish-model:
+	@test -n "$(BUCKET)" || (echo "Uso: make publish-model BUCKET=mi-bucket" && exit 1)
+	bash scripts/publish_model.sh "$(BUCKET)"
+
+deploy-bundle:
+	@test -n "$(BACKEND_IMAGE)" || (echo "Falta BACKEND_IMAGE" && exit 1)
+	@test -n "$(NGINX_IMAGE)" || (echo "Falta NGINX_IMAGE" && exit 1)
+	bash scripts/package_deploy.sh

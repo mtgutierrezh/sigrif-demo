@@ -10,6 +10,8 @@ pytestmark = pytest.mark.skipif(
 )
 
 BASE_URL = os.getenv("SIGRIF_BASE_URL", "http://localhost:8080")
+TOKEN = os.getenv("SIGRIF_E2E_TOKEN", "")
+HEADERS = {"Authorization": f"Bearer {TOKEN}"} if TOKEN else {}
 
 
 def test_health():
@@ -25,7 +27,9 @@ def test_risk_flow():
         assert zones.status_code == 200
         assert zones.json()
 
-        simulation = client.post("/api/v1/simulate")
+        simulation = client.post("/api/v1/simulate", headers=HEADERS)
+        if simulation.status_code == 401 and not TOKEN:
+            pytest.skip("AUTH_ENABLED=true; define SIGRIF_E2E_TOKEN para probar el flujo")
         assert simulation.status_code == 202
 
         zone_id = simulation.json().get("zone_id", zones.json()[0]["id"])

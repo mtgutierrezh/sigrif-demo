@@ -9,6 +9,11 @@ class Settings(BaseSettings):
     aws_endpoint_url: str | None = None
     sns_topic_arn: str | None = None
     sqs_queue_url: str | None = None
+    messaging_enabled: bool = True
+    app_color: str = "local"
+    ia_url: str = "http://localhost:8001"
+    model_path: str = "artifacts/risk_model.joblib"
+    model_s3_uri: str | None = None
     log_level: str = "INFO"
     auth_enabled: bool = False
     cognito_region: str | None = None

@@ -44,10 +44,13 @@ services:
       COGNITO_REGION: ${COGNITO_REGION:-}
       COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID:-}
       COGNITO_CLIENT_ID: ${COGNITO_CLIENT_ID:-}
+      IA_URL: http://localhost:8001
     depends_on:
       db:
         condition: service_healthy
       localstack:
+        condition: service_healthy
+      ia:
         condition: service_healthy
 
   ia:
@@ -63,6 +66,9 @@ services:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      SIGRIF_MODEL_PATH: /app/artifacts/risk_model.joblib
+    volumes:
+      - ./artifacts:/app/artifacts:ro
     depends_on:
       db:
         condition: service_healthy
@@ -76,8 +82,14 @@ services:
 
   nginx:
     build:
-      context: nginx
+      context: .
+      dockerfile: nginx/Dockerfile
       network: host
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+        VITE_COGNITO_AUTHORITY: ${VITE_COGNITO_AUTHORITY:-}
+        VITE_COGNITO_CLIENT_ID: ${VITE_COGNITO_CLIENT_ID:-}
+        VITE_COGNITO_REDIRECT_URI: ${VITE_COGNITO_REDIRECT_URI:-}
     network_mode: host
     environment:
       API_HOST: localhost:8000

@@ -6,6 +6,8 @@ from fastapi.testclient import TestClient
 from sigrif.api import main
 from sigrif.config import settings
 from sigrif.db import get_session
+from sigrif.events import MessagingDisabled
+from sigrif.ia.client import IAUnavailable
 
 ZONE = SimpleNamespace(
     id=1,
@@ -15,6 +17,38 @@ ZONE = SimpleNamespace(
     risk_score=0.12,
     updated_at=datetime.now(UTC),
 )
+
+FEATURES = {
+    "temperature": 35.0,
+    "humidity": 20.0,
+    "wind_speed": 60.0,
+    "vegetation": 0.9,
+    "historical_fires": 8,
+    "slope": 30.0,
+}
+
+PREDICTION = {
+    "risk_level": "Alto",
+    "risk_score": 0.91,
+    "probabilities": {"Bajo": 0.01, "Medio": 0.08, "Alto": 0.91},
+    "model_version": "random-forest-0.2.0",
+    "factors": [
+        {
+            "feature": "temperature",
+            "label": "Temperatura",
+            "value": 35.0,
+            "unit": "°C",
+            "impact": 0.3,
+            "direction": "aumenta",
+        }
+    ],
+    "scenario": {
+        "description": "Escenario de reducción de vegetación",
+        "risk_level": "Medio",
+        "risk_score": 0.55,
+        "delta": -0.36,
+    },
+}
 
 
 class FakeScalars:
@@ -32,6 +66,10 @@ class FakeScalars:
 
 
 class FakeSession:
+    def __init__(self):
+        self.added = []
+        self.committed = False
+
     def scalars(self, statement):
         if "readings" in str(statement):
             return FakeScalars([])
@@ -49,6 +87,12 @@ class FakeSession:
 
     def get(self, _, key):
         return ZONE if key == 1 else None
+
+    def add(self, item):
+        self.added.append(item)
+
+    def commit(self):
+        self.committed = True
 
 
 def fake_session():
@@ -68,6 +112,13 @@ def test_metrics():
     response = client.get("/metrics")
     assert response.status_code == 200
     assert "sigrif_api_requests_total" in response.text
+
+
+def test_version():
+    response = client.get("/api/v1/version")
+    assert response.status_code == 200
+    assert response.json()["model_version"] == "random-forest-0.2.0"
+    assert response.headers["X-Model-Version"] == "random-forest-0.2.0"
 
 
 def test_list_zones():
@@ -93,6 +144,19 @@ def test_simulate_publishes(monkeypatch):
     main.app.dependency_overrides.clear()
     assert response.status_code == 202
     assert published[0]["zone_id"] == 1
+    assert "historical_fires" in published[0]
+
+
+def test_simulate_without_messaging(monkeypatch):
+    def disabled(_payload):
+        raise MessagingDisabled("sin mensajería")
+
+    monkeypatch.setattr(main, "publish_reading", disabled)
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.post("/api/v1/simulate")
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 503
+    assert "no está habilitada" in response.json()["detail"]
 
 
 def test_zones_are_public(monkeypatch):
@@ -117,7 +181,7 @@ def test_status():
     main.app.dependency_overrides.clear()
     assert response.status_code == 200
     assert response.json()["zones"] == 1
-    assert response.json()["model_version"] == "random-forest-0.1"
+    assert response.json()["model_version"] == "random-forest-0.2.0"
 
 
 def test_zone_history_empty():
@@ -126,3 +190,48 @@ def test_zone_history_empty():
     main.app.dependency_overrides.clear()
     assert response.status_code == 200
     assert response.json() == []
+
+
+def test_evaluate_zone_persists_reading(monkeypatch):
+    session = FakeSession()
+    monkeypatch.setattr(main, "predict_risk", lambda features: PREDICTION)
+    main.app.dependency_overrides[get_session] = lambda: session
+    response = client.post("/api/v1/zones/1/evaluate", json=FEATURES)
+    main.app.dependency_overrides.clear()
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["risk_level"] == "Alto"
+    assert body["prescription"]
+    assert body["model_version"] == "random-forest-0.2.0"
+    assert session.committed is True
+    assert session.added[0].historical_fires == 8
+
+
+def test_evaluate_zone_returns_503_when_ia_is_down(monkeypatch):
+    def unavailable(_features):
+        raise IAUnavailable("sin conexión")
+
+    monkeypatch.setattr(main, "predict_risk", unavailable)
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.post("/api/v1/zones/1/evaluate", json=FEATURES)
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 503
+    assert response.headers["Retry-After"] == "5"
+
+
+def test_evaluate_zone_validates_features(monkeypatch):
+    monkeypatch.setattr(main, "predict_risk", lambda features: PREDICTION)
+    main.app.dependency_overrides[get_session] = fake_session
+    invalid = {**FEATURES, "humidity": 140}
+    response = client.post("/api/v1/zones/1/evaluate", json=invalid)
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 422
+
+
+def test_evaluate_zone_requires_token(monkeypatch):
+    monkeypatch.setattr(settings, "auth_enabled", True)
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.post("/api/v1/zones/1/evaluate", json=FEATURES)
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 401

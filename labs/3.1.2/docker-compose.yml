@@ -1,0 +1,13 @@
+services:
+  predictor-api:
+    build:
+      context: .
+    container_name: student_predictor_cpu
+    ports:
+      - "${LAB_PORT:-8000}:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+    # Límites equivalentes al anexo: 1 CPU y 512 MB para un taller sin GPU.
+    cpus: 1.0
+    mem_limit: 512m
+    restart: unless-stopped

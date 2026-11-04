@@ -4,6 +4,7 @@ import time
 from collections import deque
 from collections.abc import Awaitable, Callable
 from contextlib import asynccontextmanager
+from datetime import UTC, datetime
 from typing import Annotated
 
 import numpy as np
@@ -19,9 +20,21 @@ from starlette.responses import Response
 from ..auth import OperatorUser
 from ..config import settings
 from ..db import get_session, init_db
-from ..events import ensure_resources, publish_reading
+from ..events import MessagingDisabled, ensure_resources, publish_reading
+from ..ia.client import IAUnavailable, predict_risk
+from ..model_spec import LABELS, MODEL_VERSION
 from ..models import Reading, RiskCell, Zone
-from ..schemas import HistoryPoint, ReadingOut, SimulationOut, StatusOut, ZoneOut
+from ..prescription import build_prescription
+from ..schemas import (
+    EvaluationOut,
+    HistoryPoint,
+    PrescriptionActionOut,
+    ReadingOut,
+    RiskFeaturesIn,
+    SimulationOut,
+    StatusOut,
+    ZoneOut,
+)
 
 logger = logging.getLogger(__name__)
 REQUESTS = Counter("sigrif_api_requests_total", "Total API requests", ["path", "method", "status"])
@@ -52,7 +65,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="SIGRIF API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="SIGRIF API", version="0.2.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
@@ -74,6 +87,8 @@ async def count_requests(
     LATENCIES.append(elapsed * 1000)
     LATENCY.labels(path, request.method).observe(elapsed)
     REQUESTS.labels(request.url.path, request.method, response.status_code).inc()
+    response.headers["X-App-Color"] = settings.app_color
+    response.headers["X-Model-Version"] = MODEL_VERSION
     return response
 
 
@@ -99,6 +114,15 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get("/api/v1/version")
+def version() -> dict[str, str]:
+    return {
+        "api_version": app.version,
+        "model_version": MODEL_VERSION,
+        "app_color": settings.app_color,
+    }
+
+
 @app.get("/metrics")
 def metrics() -> Response:
     return Response(generate_latest(), media_type="text/plain")
@@ -113,7 +137,7 @@ def status(
     return StatusOut(
         zones=zones,
         last_ingest=last_ingest,
-        model_version="random-forest-0.1",
+        model_version=MODEL_VERSION,
         p95_ms=_p95(),
         window=len(LATENCIES),
     )
@@ -210,9 +234,74 @@ def simulate(
         "humidity": round(float(RNG.uniform(15, 85)), 2),
         "wind_speed": round(float(RNG.uniform(0, 70)), 2),
         "vegetation": round(float(RNG.uniform(0, 1)), 3),
+        "historical_fires": int(RNG.integers(0, 16)),
         "slope": round(float(RNG.uniform(0, 40)), 2),
     }
-    publish_reading(payload)
+    try:
+        publish_reading(payload)
+    except MessagingDisabled as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="La simulación asíncrona no está habilitada; usa /evaluate.",
+        ) from exc
     return SimulationOut(
         zone_id=zone.id, message="Lectura sintética publicada en el evento lectura.creada"
+    )
+
+
+@app.post("/api/v1/zones/{zone_id}/evaluate", response_model=EvaluationOut)
+def evaluate_zone(
+    zone_id: int,
+    payload: RiskFeaturesIn,
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> EvaluationOut:
+    """Inferencia síncrona + prescripción operativa para una zona."""
+
+    zone = session.get(Zone, zone_id)
+    if zone is None:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+
+    features = payload.model_dump()
+    try:
+        prediction = predict_risk(features)
+    except IAUnavailable as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="El servicio de IA no está disponible. Intenta nuevamente.",
+            headers={"Retry-After": "5"},
+        ) from exc
+
+    risk_level = str(prediction.get("risk_level", ""))
+    if risk_level not in LABELS:
+        raise HTTPException(status_code=502, detail="El servicio de IA devolvió un nivel inválido")
+
+    risk_score = float(prediction.get("risk_score", 0.0))
+    evaluated_at = datetime.now(UTC)
+    session.add(
+        Reading(
+            zone_id=zone.id,
+            **features,
+            risk_level=risk_level,
+            risk_score=risk_score,
+            created_at=evaluated_at,
+        )
+    )
+    zone.risk_level = risk_level
+    zone.risk_score = risk_score
+    session.commit()
+
+    prescription = [
+        PrescriptionActionOut(**action) for action in build_prescription(features, prediction)
+    ]
+    return EvaluationOut(
+        zone_id=zone.id,
+        risk_level=risk_level,
+        risk_score=risk_score,
+        probabilities=prediction.get("probabilities", {}),
+        model_version=str(prediction.get("model_version", MODEL_VERSION)),
+        factors=prediction.get("factors", []),
+        scenario=prediction.get("scenario"),
+        prescription=prescription,
+        evaluated_at=evaluated_at,
     )

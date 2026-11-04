@@ -32,3 +32,9 @@ def init_db() -> None:
         connection.execute(
             text("ALTER TABLE readings ADD COLUMN IF NOT EXISTS risk_score DOUBLE PRECISION")
         )
+        connection.execute(
+            text(
+                "ALTER TABLE readings ADD COLUMN IF NOT EXISTS historical_fires "
+                "INTEGER NOT NULL DEFAULT 0"
+            )
+        )
