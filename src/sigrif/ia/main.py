@@ -1,10 +1,12 @@
 import logging
 import threading
 import time
+import uuid
+from collections.abc import Awaitable, Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from prometheus_client import Counter, Histogram, generate_latest
 from sqlalchemy.orm import Session
 from starlette.responses import Response
@@ -93,6 +95,27 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="SIGRIF IA", version="0.2.0", lifespan=lifespan)
+
+
+@app.middleware("http")
+async def request_context(
+    request: Request, call_next: Callable[[Request], Awaitable[Response]]
+) -> Response:
+    request_id = request.headers.get("X-Request-ID") or uuid.uuid4().hex
+    request.state.request_id = request_id
+    started = time.perf_counter()
+    response = await call_next(request)
+    elapsed = time.perf_counter() - started
+    response.headers["X-Request-ID"] = request_id
+    logger.info(
+        "request_id=%s method=%s path=%s status=%s duration_ms=%.1f",
+        request_id,
+        request.method,
+        request.url.path,
+        response.status_code,
+        elapsed * 1000,
+    )
+    return response
 
 
 @app.get("/health")

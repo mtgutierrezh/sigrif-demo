@@ -1,7 +1,7 @@
 import httpx
 import pytest
 
-from sigrif.ia.client import IAUnavailable, predict_risk
+from sigrif.ia.client import CircuitBreaker, IAUnavailable, predict_risk, reset_circuit_breaker
 
 FEATURES = {
     "temperature": 31.0,
@@ -11,6 +11,13 @@ FEATURES = {
     "historical_fires": 6,
     "slope": 30.0,
 }
+
+
+@pytest.fixture(autouse=True)
+def _reset_breaker():
+    reset_circuit_breaker()
+
+
 PREDICTION = {
     "risk_level": "Alto",
     "risk_score": 0.91,
@@ -70,3 +77,52 @@ def test_predict_risk_raises_after_transport_failures(monkeypatch) -> None:
     monkeypatch.setattr("sigrif.ia.client.time.sleep", lambda _: None)
     with _client(handler) as client, pytest.raises(IAUnavailable):
         predict_risk(FEATURES, client=client, attempts=2)
+
+
+def test_predict_risk_sends_request_id() -> None:
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["request_id"] = request.headers.get("X-Request-ID")
+        return httpx.Response(200, json=PREDICTION)
+
+    with _client(handler) as client:
+        predict_risk(FEATURES, client=client, request_id="req-ia-123")
+
+    assert seen["request_id"] == "req-ia-123"
+
+
+def test_circuit_breaker_opens_and_short_circuits(monkeypatch) -> None:
+    monkeypatch.setattr("sigrif.ia.client.time.sleep", lambda _: None)
+    breaker = CircuitBreaker(failure_threshold=2, recovery_timeout=30)
+    calls = {"count": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["count"] += 1
+        raise httpx.ConnectError("sin conexión", request=request)
+
+    with _client(handler) as client:
+        for _ in range(2):
+            with pytest.raises(IAUnavailable):
+                predict_risk(FEATURES, client=client, attempts=1, breaker=breaker)
+        with pytest.raises(IAUnavailable, match="Circuito"):
+            predict_risk(FEATURES, client=client, attempts=1, breaker=breaker)
+
+    assert calls["count"] == 2
+    assert breaker.snapshot()["state"] == "open"
+
+
+def test_circuit_breaker_allows_one_probe_after_timeout(monkeypatch) -> None:
+    clock = {"now": 100.0}
+    monkeypatch.setattr("sigrif.ia.client.time.monotonic", lambda: clock["now"])
+    breaker = CircuitBreaker(failure_threshold=1, recovery_timeout=10)
+    breaker.record_failure()
+    assert breaker.allow_request() is False
+
+    clock["now"] = 111.0
+    assert breaker.allow_request() is True
+    assert breaker.allow_request() is False
+
+    breaker.record_success()
+    assert breaker.allow_request() is True
+    assert breaker.snapshot()["state"] == "closed"

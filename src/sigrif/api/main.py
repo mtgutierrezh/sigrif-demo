@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+import uuid
 from collections import deque
 from collections.abc import Awaitable, Callable
 from contextlib import asynccontextmanager
@@ -79,6 +80,8 @@ app.add_middleware(
 async def count_requests(
     request: Request, call_next: Callable[[Request], Awaitable[Response]]
 ) -> Response:
+    request_id = request.headers.get("X-Request-ID") or uuid.uuid4().hex
+    request.state.request_id = request_id
     started = time.perf_counter()
     response = await call_next(request)
     elapsed = time.perf_counter() - started
@@ -87,8 +90,17 @@ async def count_requests(
     LATENCIES.append(elapsed * 1000)
     LATENCY.labels(path, request.method).observe(elapsed)
     REQUESTS.labels(request.url.path, request.method, response.status_code).inc()
+    response.headers["X-Request-ID"] = request_id
     response.headers["X-App-Color"] = settings.app_color
     response.headers["X-Model-Version"] = MODEL_VERSION
+    logger.info(
+        "request_id=%s method=%s path=%s status=%s duration_ms=%.1f",
+        request_id,
+        request.method,
+        request.url.path,
+        response.status_code,
+        elapsed * 1000,
+    )
     return response
 
 
@@ -253,6 +265,7 @@ def simulate(
 def evaluate_zone(
     zone_id: int,
     payload: RiskFeaturesIn,
+    request: Request,
     session: Annotated[Session, Depends(get_session)],
     _: OperatorUser,
 ) -> EvaluationOut:
@@ -264,7 +277,10 @@ def evaluate_zone(
 
     features = payload.model_dump()
     try:
-        prediction = predict_risk(features)
+        prediction = predict_risk(
+            features,
+            request_id=getattr(request.state, "request_id", None),
+        )
     except IAUnavailable as exc:
         raise HTTPException(
             status_code=503,

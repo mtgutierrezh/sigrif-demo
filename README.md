@@ -144,6 +144,13 @@ El servicio de IA expone además `POST /predict` y `GET /model` en el puerto
 8001. La API pública es la que orquesta: autentica, valida, llama a la IA,
 construye la prescripción y persiste la lectura.
 
+La API también actúa como AI Gateway. Genera o hereda `X-Request-ID`, lo
+devuelve en la respuesta y lo reenvía al servicio IA. Si la inferencia falla por
+un error 5xx o timeout, realiza hasta tres intentos con backoff exponencial y
+jitter; un error 4xx no se reintenta. Después de tres fallos consecutivos abre un
+circuit breaker durante 30 segundos y responde `503` con `Retry-After: 5` en
+lugar de inventar una predicción. Los detalles están en `src/sigrif/ia/client.py`.
+
 Con `AUTH_ENABLED=true`, la lectura de zonas, estado, celdas e historial es pública. `POST /simulate` y `POST /api/v1/zones/{id}/evaluate` requieren un token de Cognito y el grupo `operadores`.
 
 Ejemplo de evaluación:

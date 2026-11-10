@@ -194,7 +194,7 @@ def test_zone_history_empty():
 
 def test_evaluate_zone_persists_reading(monkeypatch):
     session = FakeSession()
-    monkeypatch.setattr(main, "predict_risk", lambda features: PREDICTION)
+    monkeypatch.setattr(main, "predict_risk", lambda features, **_: PREDICTION)
     main.app.dependency_overrides[get_session] = lambda: session
     response = client.post("/api/v1/zones/1/evaluate", json=FEATURES)
     main.app.dependency_overrides.clear()
@@ -208,8 +208,30 @@ def test_evaluate_zone_persists_reading(monkeypatch):
     assert session.added[0].historical_fires == 8
 
 
+def test_evaluate_zone_forwards_request_id(monkeypatch):
+    session = FakeSession()
+    captured = {}
+
+    def capture(features, **kwargs):
+        captured.update(kwargs)
+        return PREDICTION
+
+    monkeypatch.setattr(main, "predict_risk", capture)
+    main.app.dependency_overrides[get_session] = lambda: session
+    response = client.post(
+        "/api/v1/zones/1/evaluate",
+        json=FEATURES,
+        headers={"X-Request-ID": "req-api-123"},
+    )
+    main.app.dependency_overrides.clear()
+
+    assert response.status_code == 200
+    assert response.headers["X-Request-ID"] == "req-api-123"
+    assert captured["request_id"] == "req-api-123"
+
+
 def test_evaluate_zone_returns_503_when_ia_is_down(monkeypatch):
-    def unavailable(_features):
+    def unavailable(_features, **_):
         raise IAUnavailable("sin conexión")
 
     monkeypatch.setattr(main, "predict_risk", unavailable)
@@ -221,7 +243,7 @@ def test_evaluate_zone_returns_503_when_ia_is_down(monkeypatch):
 
 
 def test_evaluate_zone_validates_features(monkeypatch):
-    monkeypatch.setattr(main, "predict_risk", lambda features: PREDICTION)
+    monkeypatch.setattr(main, "predict_risk", lambda features, **_: PREDICTION)
     main.app.dependency_overrides[get_session] = fake_session
     invalid = {**FEATURES, "humidity": 140}
     response = client.post("/api/v1/zones/1/evaluate", json=invalid)
