@@ -28,6 +28,10 @@ services:
     environment:
       APP_COLOR: shared
       SIGRIF_MODEL_PATH: /app/artifacts/risk_model.joblib
+      BEDROCK_ENABLED: ${BEDROCK_ENABLED:-false}
+      BEDROCK_MODEL_ID: ${BEDROCK_MODEL_ID:-amazon.nova-lite-v1:0}
+      OCR_MAX_BYTES: ${OCR_MAX_BYTES:-5242880}
+      OCR_MAX_TOKENS: ${OCR_MAX_TOKENS:-1500}
     volumes:
       - /opt/sigrif/artifacts:/app/artifacts:ro
     depends_on:

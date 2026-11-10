@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any
 
 from geoalchemy2 import Geometry
-from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, func
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .db import Base
@@ -37,6 +37,23 @@ class Reading(Base):
     slope: Mapped[float] = mapped_column(Float)
     risk_level: Mapped[str | None] = mapped_column(String(10), nullable=True)
     risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    zone: Mapped[Zone] = relationship()
+
+
+class FieldReport(Base):
+    __tablename__ = "field_reports"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    zone_id: Mapped[int] = mapped_column(ForeignKey("zones.id", ondelete="CASCADE"))
+    extracted_text: Mapped[str] = mapped_column(Text)
+    confirmed_text: Mapped[str] = mapped_column(Text)
+    model_id: Mapped[str] = mapped_column(String(80))
+    source_filename: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    content_type: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    size_bytes: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_by: Mapped[str] = mapped_column(String(120), default="local")
+    status: Mapped[str] = mapped_column(String(20), default="confirmed")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     zone: Mapped[Zone] = relationship()
 

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { fetchJson, postJson, setAccessToken } from "./api";
+import { fetchJson, postForm, postJson, setAccessToken } from "./api";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "";
 
@@ -60,6 +60,28 @@ describe("api client", () => {
         historical_fires: 6,
         slope: 28,
       }),
+    });
+  });
+
+  it("sends form data for OCR without forcing a content type", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ text: "PTCL-23" }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    setAccessToken("token-demo");
+    const form = new FormData();
+    form.append("file", new Blob(["ficha"], { type: "image/png" }), "ficha.png");
+
+    await postForm("/api/v1/field-reports/ocr", undefined, form);
+
+    expect(fetchMock).toHaveBeenCalledWith(`${baseUrl}/api/v1/field-reports/ocr`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer token-demo",
+      },
+      body: form,
     });
   });
 

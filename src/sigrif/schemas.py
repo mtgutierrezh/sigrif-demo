@@ -136,3 +136,41 @@ class CellOut(BaseModel):
     risk_level: str
     risk_score: float
     updated_at: datetime
+
+
+class OcrOut(BaseModel):
+    filename: str
+    content_type: str
+    size_bytes: int
+    text: str
+    model_id: str
+    latency_ms: float
+    usage: dict[str, int]
+    truncated: bool
+    cached: bool
+    image_sha256: str
+
+
+class FieldReportCreate(BaseModel):
+    extracted_text: str = Field(min_length=1, max_length=20000)
+    confirmed_text: str = Field(min_length=1, max_length=20000)
+    model_id: str = Field(max_length=80)
+    source_filename: str | None = Field(default=None, max_length=255)
+    content_type: str | None = Field(default=None, max_length=80)
+    size_bytes: int | None = Field(default=None, ge=0, le=20 * 1024 * 1024)
+
+
+class FieldReportOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    zone_id: int
+    extracted_text: str
+    confirmed_text: str
+    model_id: str
+    source_filename: str | None
+    content_type: str | None
+    size_bytes: int | None
+    created_by: str
+    status: str
+    created_at: datetime

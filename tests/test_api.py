@@ -51,6 +51,19 @@ PREDICTION = {
 }
 
 
+OCR_RESULT = {
+    "text": "PTCL-23\nCHILE",
+    "model_id": "amazon.nova-lite-v1:0",
+    "latency_ms": 850.0,
+    "usage": {"input_tokens": 1200, "output_tokens": 18},
+    "truncated": False,
+    "cached": False,
+    "image_sha256": "a" * 64,
+}
+
+PNG = b"\x89PNG\r\n\x1a\n" + b"ficha" * 8
+
+
 class FakeScalars:
     def __init__(self, items):
         self.items = items
@@ -71,7 +84,7 @@ class FakeSession:
         self.committed = False
 
     def scalars(self, statement):
-        if "readings" in str(statement):
+        if "readings" in str(statement) or "field_reports" in str(statement):
             return FakeScalars([])
         return FakeScalars([ZONE])
 
@@ -93,6 +106,11 @@ class FakeSession:
 
     def commit(self):
         self.committed = True
+        for item in self.added:
+            if getattr(item, "id", None) is None:
+                item.id = 1
+            if getattr(item, "created_at", None) is None:
+                item.created_at = datetime.now(UTC)
 
 
 def fake_session():
@@ -257,3 +275,81 @@ def test_evaluate_zone_requires_token(monkeypatch):
     response = client.post("/api/v1/zones/1/evaluate", json=FEATURES)
     main.app.dependency_overrides.clear()
     assert response.status_code == 401
+
+
+def test_ocr_field_report_success(monkeypatch):
+    captured = {}
+
+    def fake_ocr(image_bytes, filename, content_type, **kwargs):
+        captured.update(
+            {
+                "size": len(image_bytes),
+                "filename": filename,
+                "content_type": content_type,
+                "request_id": kwargs.get("request_id"),
+            }
+        )
+        return OCR_RESULT
+
+    monkeypatch.setattr(main, "ocr_image", fake_ocr)
+    response = client.post(
+        "/api/v1/field-reports/ocr",
+        files={"file": ("ficha.png", PNG, "image/png")},
+        headers={"X-Request-ID": "req-ocr-123"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["text"] == "PTCL-23\nCHILE"
+    assert body["filename"] == "ficha.png"
+    assert captured == {
+        "size": len(PNG),
+        "filename": "ficha.png",
+        "content_type": "image/png",
+        "request_id": "req-ocr-123",
+    }
+
+
+def test_ocr_field_report_returns_503(monkeypatch):
+    def unavailable(*args, **kwargs):
+        raise IAUnavailable("sin bedrock")
+
+    monkeypatch.setattr(main, "ocr_image", unavailable)
+    response = client.post(
+        "/api/v1/field-reports/ocr",
+        files={"file": ("ficha.png", PNG, "image/png")},
+    )
+    assert response.status_code == 503
+    assert response.headers["Retry-After"] == "5"
+
+
+def test_create_field_report():
+    session = FakeSession()
+    main.app.dependency_overrides[get_session] = lambda: session
+    response = client.post(
+        "/api/v1/zones/1/field-reports",
+        json={
+            "extracted_text": "PTCL-23\nCHILE",
+            "confirmed_text": "PTCL-23\nCHILE",
+            "model_id": "amazon.nova-lite-v1:0",
+            "source_filename": "ficha.png",
+            "content_type": "image/png",
+            "size_bytes": len(PNG),
+        },
+    )
+    main.app.dependency_overrides.clear()
+
+    assert response.status_code == 201
+    body = response.json()
+    assert body["zone_id"] == 1
+    assert body["confirmed_text"] == "PTCL-23\nCHILE"
+    assert body["status"] == "confirmed"
+    assert session.committed is True
+
+
+def test_list_field_reports_empty():
+    main.app.dependency_overrides[get_session] = fake_session
+    response = client.get("/api/v1/zones/1/field-reports")
+    main.app.dependency_overrides.clear()
+    assert response.status_code == 200
+    assert response.json() == []

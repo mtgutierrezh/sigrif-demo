@@ -114,7 +114,7 @@ bash scripts/cognito_users.sh
 Grupos:
 
 - `usuarios`: consulta de zonas, riesgo e historial.
-- `operadores`: además puede ejecutar simulaciones.
+- `operadores`: además puede simular lecturas, evaluar escenarios y digitalizar fichas de terreno.
 
 Credenciales de prueba:
 
@@ -139,10 +139,13 @@ Solo para la demo. Cambiar en un despliegue real.
 | GET | `/api/v1/version` | Versión de API, modelo y color activo |
 | POST | `/api/v1/simulate?zone_id={id}` | Genera una lectura sintética |
 | POST | `/api/v1/zones/{id}/evaluate` | Inferencia síncrona, explicación y prescripción |
+| POST | `/api/v1/field-reports/ocr` | Extrae texto de una ficha de terreno (multipart) |
+| POST | `/api/v1/zones/{id}/field-reports` | Guarda el texto revisado por el operador |
+| GET | `/api/v1/zones/{id}/field-reports` | Lista los reportes confirmados de la zona |
 
-El servicio de IA expone además `POST /predict` y `GET /model` en el puerto
-8001. La API pública es la que orquesta: autentica, valida, llama a la IA,
-construye la prescripción y persiste la lectura.
+El servicio de IA expone además `POST /predict`, `GET /model` y `POST /ocr` en
+el puerto 8001. La API pública es la que orquesta: autentica, valida, llama a la
+IA, construye la prescripción y persiste la lectura o el reporte confirmado.
 
 La API también actúa como AI Gateway. Genera o hereda `X-Request-ID`, lo
 devuelve en la respuesta y lo reenvía al servicio IA. Si la inferencia falla por
@@ -151,7 +154,7 @@ jitter; un error 4xx no se reintenta. Después de tres fallos consecutivos abre 
 circuit breaker durante 30 segundos y responde `503` con `Retry-After: 5` en
 lugar de inventar una predicción. Los detalles están en `src/sigrif/ia/client.py`.
 
-Con `AUTH_ENABLED=true`, la lectura de zonas, estado, celdas e historial es pública. `POST /simulate` y `POST /api/v1/zones/{id}/evaluate` requieren un token de Cognito y el grupo `operadores`.
+Con `AUTH_ENABLED=true`, la lectura de zonas, estado, celdas e historial es pública. `POST /simulate`, `POST /api/v1/zones/{id}/evaluate`, el OCR y el guardado de reportes requieren un token de Cognito y el grupo `operadores`.
 
 Ejemplo de evaluación:
 
@@ -164,6 +167,28 @@ curl -X POST http://localhost:8080/api/v1/zones/1/evaluate \
 El `id` debe ser uno real de `GET /api/v1/zones`; en la demo cargada suele
 empezar en 7. La respuesta incluye nivel, probabilidad, factores, escenario y
 las acciones prescriptivas.
+
+### OCR de fichas de terreno
+
+La guía 3.2.4 pedía OCR con Bedrock y Claude 3 Haiku. Como ese modelo alcanzó
+su fin de vida el 10/09/2026 y no está disponible en `us-east-2`, usamos
+`amazon.nova-lite-v1:0` con la API Converse. El flujo es: el operador sube una
+foto JPEG, PNG o WebP; el servicio IA extrae el texto; el operador lo corrige y
+lo guarda asociado a la zona. La imagen no se almacena.
+
+```bash
+curl -X POST http://localhost:8080/api/v1/field-reports/ocr \
+  -F 'file=@ficha.png;type=image/png'
+
+curl -X POST http://localhost:8080/api/v1/zones/7/field-reports \
+  -H 'Content-Type: application/json' \
+  -d '{"extracted_text":"PTCL-23\nCHILE","confirmed_text":"PTCL-23\nCHILE","model_id":"amazon.nova-lite-v1:0","source_filename":"ficha.png","content_type":"image/png","size_bytes":1234}'
+```
+
+En local `BEDROCK_ENABLED=false` para no exigir credenciales AWS. En EC2 se
+habilita con el rol IAM de la instancia; no se usan claves en `.env`. El OCR
+rechaza archivos de más de 5 MB, valida la firma real de la imagen y responde
+`503` con `Retry-After` si Bedrock no está disponible.
 
 ## Datos de la demo
 

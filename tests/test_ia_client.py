@@ -1,7 +1,13 @@
 import httpx
 import pytest
 
-from sigrif.ia.client import CircuitBreaker, IAUnavailable, predict_risk, reset_circuit_breaker
+from sigrif.ia.client import (
+    CircuitBreaker,
+    IAUnavailable,
+    ocr_image,
+    predict_risk,
+    reset_circuit_breaker,
+)
 
 FEATURES = {
     "temperature": 31.0,
@@ -126,3 +132,69 @@ def test_circuit_breaker_allows_one_probe_after_timeout(monkeypatch) -> None:
     breaker.record_success()
     assert breaker.allow_request() is True
     assert breaker.snapshot()["state"] == "closed"
+
+
+OCR_RESULT = {
+    "text": "PTCL-23\nCHILE",
+    "model_id": "amazon.nova-lite-v1:0",
+    "latency_ms": 850.0,
+    "usage": {"input_tokens": 1200, "output_tokens": 18},
+    "truncated": False,
+    "cached": False,
+    "image_sha256": "a" * 64,
+}
+PNG = b"\x89PNG\r\n\x1a\n" + b"ficha" * 8
+
+
+def test_ocr_image_sends_multipart_and_request_id() -> None:
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["content_type"] = request.headers.get("content-type", "")
+        seen["body"] = request.content
+        seen["request_id"] = request.headers.get("X-Request-ID")
+        return httpx.Response(200, json=OCR_RESULT)
+
+    with _client(handler) as client:
+        result = ocr_image(
+            PNG,
+            "ficha.png",
+            "image/png",
+            client=client,
+            request_id="req-ocr-123",
+        )
+
+    assert result["text"] == "PTCL-23\nCHILE"
+    assert seen["content_type"].startswith("multipart/form-data")
+    assert b"ficha.png" in seen["body"]
+    assert seen["request_id"] == "req-ocr-123"
+
+
+def test_ocr_image_retries_server_errors(monkeypatch) -> None:
+    calls = {"count": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["count"] += 1
+        if calls["count"] == 1:
+            return httpx.Response(500, json={"detail": "temporal"})
+        return httpx.Response(200, json=OCR_RESULT)
+
+    monkeypatch.setattr("sigrif.ia.client.time.sleep", lambda _: None)
+    with _client(handler) as client:
+        result = ocr_image(PNG, "ficha.png", "image/png", client=client, attempts=2)
+
+    assert calls["count"] == 2
+    assert result["model_id"] == "amazon.nova-lite-v1:0"
+
+
+def test_ocr_image_does_not_retry_client_errors() -> None:
+    calls = {"count": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["count"] += 1
+        return httpx.Response(415, json={"detail": "formato"})
+
+    with _client(handler) as client, pytest.raises(IAUnavailable):
+        ocr_image(PNG, "ficha.png", "image/png", client=client, attempts=3)
+
+    assert calls["count"] == 1

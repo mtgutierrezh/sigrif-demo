@@ -89,12 +89,14 @@ class CircuitBreaker:
 
 
 _BREAKER = CircuitBreaker()
+_OCR_BREAKER = CircuitBreaker()
 
 
 def reset_circuit_breaker() -> None:
-    """Reinicia el circuito global entre ejecuciones de prueba."""
+    """Reinicia los circuitos globales entre ejecuciones de prueba."""
 
     _BREAKER.reset()
+    _OCR_BREAKER.reset()
 
 
 def predict_risk(
@@ -147,6 +149,63 @@ def predict_risk(
             active_breaker.snapshot()["state"],
         )
         raise IAUnavailable("No se pudo contactar al servicio de IA") from last_error
+    finally:
+        if owns_client:
+            http_client.close()
+
+
+def ocr_image(
+    image_bytes: bytes,
+    filename: str,
+    content_type: str,
+    client: httpx.Client | None = None,
+    attempts: int = 2,
+    request_id: str | None = None,
+    breaker: CircuitBreaker | None = None,
+) -> dict[str, Any]:
+    """Envía una imagen al servicio IA con reintentos y circuito propio."""
+
+    active_breaker = breaker or _OCR_BREAKER
+    if not active_breaker.allow_request():
+        raise IAUnavailable("Circuito de OCR abierto; intenta nuevamente en unos segundos.")
+
+    owns_client = client is None
+    http_client = client or httpx.Client(base_url=settings.ia_url, timeout=45.0)
+    headers = {"X-Request-ID": request_id} if request_id else {}
+    last_error: Exception | None = None
+
+    try:
+        for attempt in range(attempts):
+            try:
+                response = http_client.post(
+                    "/ocr",
+                    files={"file": (filename, image_bytes, content_type)},
+                    headers=headers,
+                )
+                response.raise_for_status()
+                active_breaker.record_success()
+                return response.json()
+            except httpx.HTTPStatusError as exc:
+                if exc.response.status_code < 500:
+                    active_breaker.record_success()
+                    raise IAUnavailable(
+                        f"El servicio de OCR rechazó la imagen ({exc.response.status_code})"
+                    ) from exc
+                last_error = exc
+            except (httpx.TimeoutException, httpx.TransportError) as exc:
+                last_error = exc
+
+            if attempt < attempts - 1:
+                delay = (0.3 * (2**attempt)) + (secrets.randbelow(100) / 1000)
+                time.sleep(delay)
+
+        active_breaker.record_failure()
+        logger.warning(
+            "request_id=%s ocr_unavailable state=%s",
+            request_id or "sin-id",
+            active_breaker.snapshot()["state"],
+        )
+        raise IAUnavailable("No se pudo contactar al servicio de OCR") from last_error
     finally:
         if owns_client:
             http_client.close()

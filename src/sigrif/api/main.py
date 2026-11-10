@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from typing import Annotated
 
 import numpy as np
-from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from geoalchemy2.shape import to_shape
 from prometheus_client import Counter, Histogram, generate_latest
@@ -22,13 +22,17 @@ from ..auth import OperatorUser
 from ..config import settings
 from ..db import get_session, init_db
 from ..events import MessagingDisabled, ensure_resources, publish_reading
-from ..ia.client import IAUnavailable, predict_risk
+from ..ia.bedrock_ocr import ALLOWED_CONTENT_TYPES, detect_content_type
+from ..ia.client import IAUnavailable, ocr_image, predict_risk
 from ..model_spec import LABELS, MODEL_VERSION
-from ..models import Reading, RiskCell, Zone
+from ..models import FieldReport, Reading, RiskCell, Zone
 from ..prescription import build_prescription
 from ..schemas import (
     EvaluationOut,
+    FieldReportCreate,
+    FieldReportOut,
     HistoryPoint,
+    OcrOut,
     PrescriptionActionOut,
     ReadingOut,
     RiskFeaturesIn,
@@ -321,3 +325,96 @@ def evaluate_zone(
         prescription=prescription,
         evaluated_at=evaluated_at,
     )
+
+
+@app.post("/api/v1/field-reports/ocr", response_model=OcrOut)
+async def ocr_field_report(
+    request: Request,
+    _: OperatorUser,
+    file: Annotated[UploadFile, File()],
+) -> OcrOut:
+    """Extrae texto de una ficha; la imagen no se persiste en esta etapa."""
+
+    content_type = (file.content_type or "").lower()
+    if content_type not in ALLOWED_CONTENT_TYPES:
+        raise HTTPException(status_code=415, detail="Formato no permitido. Usa JPEG, PNG o WebP.")
+
+    image_bytes = await file.read(settings.ocr_max_bytes + 1)
+    if len(image_bytes) > settings.ocr_max_bytes:
+        raise HTTPException(status_code=413, detail="La imagen supera el tamaño máximo de 5 MB")
+    if detect_content_type(image_bytes) != content_type:
+        raise HTTPException(
+            status_code=415,
+            detail="El contenido no coincide con el tipo declarado",
+        )
+
+    try:
+        result = ocr_image(
+            image_bytes,
+            file.filename or "ficha",
+            content_type,
+            request_id=getattr(request.state, "request_id", None),
+        )
+    except IAUnavailable as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="El servicio de OCR no está disponible. Intenta nuevamente.",
+            headers={"Retry-After": "5"},
+        ) from exc
+
+    return OcrOut(
+        filename=file.filename or "ficha",
+        content_type=content_type,
+        size_bytes=len(image_bytes),
+        **result,
+    )
+
+
+@app.post(
+    "/api/v1/zones/{zone_id}/field-reports",
+    response_model=FieldReportOut,
+    status_code=201,
+)
+def create_field_report(
+    zone_id: int,
+    payload: FieldReportCreate,
+    session: Annotated[Session, Depends(get_session)],
+    user: OperatorUser,
+) -> FieldReportOut:
+    """Guarda el texto que el operador revisó y confirmó."""
+
+    zone = session.get(Zone, zone_id)
+    if zone is None:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    report = FieldReport(
+        zone_id=zone.id,
+        extracted_text=payload.extracted_text,
+        confirmed_text=payload.confirmed_text,
+        model_id=payload.model_id,
+        source_filename=payload.source_filename,
+        content_type=payload.content_type,
+        size_bytes=payload.size_bytes,
+        created_by=str(user.get("sub", "local")),
+        status="confirmed",
+    )
+    session.add(report)
+    session.commit()
+    return FieldReportOut.model_validate(report)
+
+
+@app.get("/api/v1/zones/{zone_id}/field-reports", response_model=list[FieldReportOut])
+def list_field_reports(
+    zone_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+) -> list[FieldReportOut]:
+    zone = session.get(Zone, zone_id)
+    if zone is None:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    reports = session.scalars(
+        select(FieldReport)
+        .where(FieldReport.zone_id == zone_id)
+        .order_by(FieldReport.id.desc())
+        .limit(limit)
+    ).all()
+    return [FieldReportOut.model_validate(report) for report in reports]

@@ -70,3 +70,33 @@ export async function postJson<T>(path: string, token?: string, body?: unknown):
 
   return (await response.json()) as T;
 }
+
+export async function postForm<T>(
+  path: string,
+  token: string | undefined,
+  body: FormData,
+): Promise<T> {
+  const response = await fetch(`${baseUrl}${path}`, {
+    method: "POST",
+    headers: authHeaders(token),
+    body,
+  });
+
+  if (!response.ok) {
+    let message =
+      response.status === 503
+        ? "El servicio de OCR no está disponible. Intenta nuevamente."
+        : "No pudimos procesar la imagen.";
+    try {
+      const payload = (await response.json()) as { detail?: unknown };
+      if (typeof payload.detail === "string") {
+        message = payload.detail;
+      }
+    } catch {
+      // El cuerpo puede no ser JSON; se conserva el mensaje genérico.
+    }
+    throw new ApiError(response.status, message);
+  }
+
+  return (await response.json()) as T;
+}

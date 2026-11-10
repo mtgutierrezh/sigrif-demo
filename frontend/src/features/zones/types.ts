@@ -60,6 +60,36 @@ export interface Evaluation {
   evaluated_at: string;
 }
 
+export interface OcrResult {
+  filename: string;
+  content_type: string;
+  size_bytes: number;
+  text: string;
+  model_id: string;
+  latency_ms: number;
+  usage: {
+    input_tokens: number;
+    output_tokens: number;
+  };
+  truncated: boolean;
+  cached: boolean;
+  image_sha256: string;
+}
+
+export interface FieldReport {
+  id: number;
+  zone_id: number;
+  extracted_text: string;
+  confirmed_text: string;
+  model_id: string;
+  source_filename: string | null;
+  content_type: string | null;
+  size_bytes: number | null;
+  created_by: string;
+  status: string;
+  created_at: string;
+}
+
 export interface Zone {
   id: number;
   name: string;

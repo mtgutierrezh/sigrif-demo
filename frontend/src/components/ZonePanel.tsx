@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import type { SimulationStage } from "../features/zones/useSimulate";
 import type { HistoryPoint, Zone } from "../features/zones/types";
 import { formatDateTime, formatScore } from "../lib/format";
+import { FieldReportOCR } from "./FieldReportOCR";
 import { RiskBadge } from "./RiskBadge";
 import { RiskEvaluator } from "./RiskEvaluator";
 import { RiskHistory } from "./RiskHistory";
@@ -99,6 +100,7 @@ export function ZonePanel({
           </p>
 
           {canSimulate ? <RiskEvaluator key={zone.id} zone={zone} /> : null}
+          {canSimulate ? <FieldReportOCR key={`ocr-${zone.id}`} zone={zone} /> : null}
 
           {canSimulate ? (
             <button

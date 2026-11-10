@@ -12,6 +12,7 @@ todavía no necesita.
 | EC2 `t3.micro` | Ejecuta Nginx, API, IA, PostGIS y el job de seed. |
 | Security group | Abre 80 y 443; no abre SSH. |
 | Rol IAM + SSM | Acceso administrativo por Session Manager, sin llave SSH. |
+| Permiso Bedrock | La instancia invoca `amazon.nova-lite-v1:0` para el OCR, sin claves estáticas. |
 | S3 | Dataset, artefacto del modelo y bundles de despliegue. |
 | Cognito | User pool, client y grupos `usuarios`/`operadores`. |
 | CloudWatch | Log groups, alarma de CPU y de status check. |
@@ -72,6 +73,9 @@ terraform destroy
    configuran las variables `AWS_DEPLOY_ROLE_ARN`, `AWS_REGION`,
    `INSTANCE_ID`, `S3_BUCKET`, `DEPLOY_ENABLED=true` y las `VITE_*` del
    frontend. El workflow no usa claves estáticas: asume el rol por OIDC.
+   Verificar que `amazon.nova-lite-v1:0` esté habilitado en Bedrock para la
+   cuenta y la región. Si no lo está, el OCR responde `503` y el operador puede
+   escribir el texto manualmente; no se inventa una transcripción.
 5. Emitir el certificado TLS una vez que Nginx esté arriba:
 
    ```bash
