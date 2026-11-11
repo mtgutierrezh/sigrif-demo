@@ -1,10 +1,10 @@
 #!/bin/bash
-set -euxo pipefail
+set -euo pipefail
 
 exec > >(tee /var/log/sigrif-bootstrap.log | logger -t sigrif-bootstrap -s 2>/dev/console) 2>&1
 
 dnf update -y
-dnf install -y docker unzip curl
+dnf install -y docker unzip
 
 systemctl enable --now docker
 usermod -aG docker ec2-user

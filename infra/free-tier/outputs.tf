@@ -1,11 +1,11 @@
 output "app_url" {
   description = "URL pública esperada del sistema."
-  value       = local.fqdn != "" ? "https://${local.fqdn}" : "http://${aws_instance.app.public_ip}"
+  value       = local.fqdn != "" ? "https://${local.fqdn}" : "http://${aws_eip.app.public_ip}"
 }
 
 output "public_ip" {
-  description = "IP pública de la instancia; DuckDNS la actualiza cada cinco minutos."
-  value       = aws_instance.app.public_ip
+  description = "IP pública estable de la instancia; DuckDNS la actualiza cada cinco minutos."
+  value       = aws_eip.app.public_ip
 }
 
 output "instance_id" {
@@ -34,8 +34,8 @@ output "cognito_domain" {
 }
 
 output "github_deploy_role_arn" {
-  description = "Rol que asume GitHub Actions por OIDC."
-  value       = aws_iam_role.github_deploy.arn
+  description = "Rol que asume GitHub Actions por OIDC, si enable_github_oidc está activo."
+  value       = var.enable_github_oidc ? aws_iam_role.github_deploy[0].arn : null
 }
 
 output "ssm_session_command" {

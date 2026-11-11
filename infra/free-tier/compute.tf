@@ -73,3 +73,18 @@ resource "aws_instance" "app" {
     aws_ssm_parameter.db_password,
   ]
 }
+
+resource "aws_eip" "app" {
+  domain = "vpc"
+
+  tags = {
+    Name = "${var.project}-${var.environment}-eip"
+  }
+
+  depends_on = [aws_instance.app]
+}
+
+resource "aws_eip_association" "app" {
+  instance_id   = aws_instance.app.id
+  allocation_id = aws_eip.app.id
+}

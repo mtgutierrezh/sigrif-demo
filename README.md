@@ -212,7 +212,10 @@ make test-e2e
 ## Despliegue en AWS
 
 El despliegue vigente es EC2 `t3.micro` + Docker Compose, pensado para el plan
-gratuito. La infraestructura está en `infra/free-tier/` y usa `us-east-2`:
+gratuito. Está aplicado en `us-east-2` y responde en
+<https://18-224-211-162.sslip.io> con certificado Let's Encrypt.
+
+La infraestructura está en `infra/free-tier/`:
 
 ```bash
 cd infra/free-tier
@@ -223,8 +226,9 @@ terraform apply
 ```
 
 El servidor ejecuta Nginx + Certbot, API blue/green, servicio IA, PostGIS y un
-job de seed. No usa ECS, ALB, RDS, ECR ni NAT. El acceso administrativo es por
-SSM Session Manager, sin abrir SSH.
+job de seed. La instancia usa una Elastic IP para mantener el DNS estable. No
+usa ECS, ALB, RDS, ECR ni NAT. El acceso administrativo es por SSM Session
+Manager, sin abrir SSH.
 
 Los atajos del `Makefile` son:
 
@@ -236,10 +240,11 @@ make free-down
 ```
 
 El pipeline `.github/workflows/deploy.yml` construye las imágenes, las publica
-en GHCR y envía el bundle por SSM. Si los paquetes quedan privados, Terraform
-recibe `ghcr_username` y `ghcr_token` para que la instancia pueda descargarlos. Requiere las variables `AWS_DEPLOY_ROLE_ARN`,
-`AWS_REGION`, `INSTANCE_ID`, `S3_BUCKET` y las `VITE_*` del frontend. El detalle
-está en `infra/free-tier/README.md`.
+en GHCR y envía el bundle por SSM. En esta cuenta el tramo automático por OIDC
+quedó bloqueado por una política SCP de la organización; por eso el despliegue
+de la entrega se ejecutó por SSM con la sesión autenticada. El CI de calidad y
+build sigue funcionando. El detalle está en `infra/free-tier/README.md` y en
+`EA3/Evidencias_3.1/3.1.5/deploy_aws/README.md`.
 
 El stack anterior de ECS en `infra/` queda como arquitectura objetivo para
 cuando haya usuarios concurrentes o presupuesto para alta disponibilidad. Para

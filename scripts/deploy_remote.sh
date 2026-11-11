@@ -25,7 +25,9 @@ aws s3 cp "s3://$S3_BUCKET/models/model_metadata.json" \
 aws s3 cp "s3://$S3_BUCKET/models/metrics.json" \
   /opt/sigrif/artifacts/metrics.json || true
 
-"${COMPOSE[@]}" pull
+if [ "${SKIP_PULL:-0}" != "1" ]; then
+  "${COMPOSE[@]}" pull
+fi
 "${COMPOSE[@]}" up -d db ia
 
 if [ ! -f "$ACTIVE_FILE" ]; then

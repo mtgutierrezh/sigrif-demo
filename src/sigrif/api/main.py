@@ -362,12 +362,7 @@ async def ocr_field_report(
             headers={"Retry-After": "5"},
         ) from exc
 
-    return OcrOut(
-        filename=file.filename or "ficha",
-        content_type=content_type,
-        size_bytes=len(image_bytes),
-        **result,
-    )
+    return OcrOut(**result)
 
 
 @app.post(

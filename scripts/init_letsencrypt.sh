@@ -6,6 +6,10 @@ cd "$(dirname "$0")/.."
 set -a
 # shellcheck disable=SC1091
 source /opt/sigrif/.env
+# shellcheck disable=SC1091
+if [ -f ./images.env ]; then
+  source ./images.env
+fi
 set +a
 
 if [ -z "${DOMAIN:-}" ]; then

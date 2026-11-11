@@ -15,6 +15,9 @@ budget_email      = "equipo7@example.com"
 
 github_repository = "mtgutierrezh/sigrif-demo"
 
+# Mantener false si la organización bloquea iam:CreateOpenIDConnectProvider.
+enable_github_oidc = false
+
 # Solo si los paquetes GHCR son privados. El token necesita read:packages.
 ghcr_username = ""
 ghcr_token    = ""

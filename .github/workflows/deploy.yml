@@ -52,7 +52,10 @@ jobs:
 
   deploy:
     needs: quality
-    if: github.event_name == 'workflow_dispatch' || vars.DEPLOY_ENABLED == 'true'
+    # La cuenta actual bloquea iam:CreateOpenIDConnectProvider por SCP.
+    # El despliegue de la entrega se hace por SSM; activar esta variable
+    # cuando la organización permita OIDC o exista otro mecanismo.
+    if: vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment: production
     steps:

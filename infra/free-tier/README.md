@@ -10,6 +10,7 @@ todavía no necesita.
 | Recurso | Uso |
 |---|---|
 | EC2 `t3.micro` | Ejecuta Nginx, API, IA, PostGIS y el job de seed. |
+| Elastic IP | Mantiene estable la IP pública usada por el DNS y TLS. |
 | Security group | Abre 80 y 443; no abre SSH. |
 | Rol IAM + SSM | Acceso administrativo por Session Manager, sin llave SSH. |
 | Permiso Bedrock | La instancia invoca `amazon.nova-lite-v1:0` para el OCR, sin claves estáticas. |
@@ -17,7 +18,7 @@ todavía no necesita.
 | Cognito | User pool, client y grupos `usuarios`/`operadores`. |
 | CloudWatch | Log groups, alarma de CPU y de status check. |
 | AWS Budgets | Aviso opcional al 80% y 100% del límite mensual. |
-| Rol OIDC GitHub | GitHub Actions puede desplegar sin claves estáticas. |
+| Rol OIDC GitHub | Opcional con `enable_github_oidc=true`; esta organización bloquea la creación del proveedor por SCP. |
 
 La instancia usa la VPC por defecto y una subred pública. No se crea NAT,
 ALB, RDS, ECR, CloudFront ni Route 53.
@@ -39,6 +40,33 @@ terraform apply
 
 El estado queda local en `terraform.tfstate`. Para trabajo en equipo conviene
 moverlo a un backend S3 con bloqueo en DynamoDB; el archivo no se versiona.
+
+## Estado del despliegue
+
+El stack está aplicado en la cuenta `434661699063`, región `us-east-2`:
+
+| Dato | Valor |
+|---|---|
+| URL | <https://18-224-211-162.sslip.io> |
+| Instancia | `i-0a17768ef560ac55d` |
+| Elastic IP | `18.224.211.162` |
+| Certificado | Let's Encrypt, vence el 9 de febrero de 2027 |
+| Color activo | `blue` |
+
+El certificado se emitió con `scripts/init_letsencrypt.sh`; el script ahora
+carga `images.env` para no intentar descargar una etiqueta inexistente. La
+instancia arranca con `user_data` corregido: instala Docker y `unzip` sin
+reemplazar `curl-minimal` y no imprime secretos en los logs.
+
+La política SCP de la organización niega `iam:CreateOpenIDConnectProvider`; por
+eso `enable_github_oidc=false` y el despliegue automático de GitHub no está
+activo. El workflow de CI/CD queda preparado, pero el despliegue de esta
+entrega se ejecutó por SSM con la sesión autenticada.
+
+El dominio `sslip.io` es temporal. Cuando el equipo entregue el subdominio y el
+token DuckDNS, se actualiza `duckdns_subdomain`/`duckdns_token` en
+`terraform.tfvars`, se aplica Terraform y se emite el certificado para el nuevo
+nombre.
 
 Al terminar:
 

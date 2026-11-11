@@ -1,5 +1,5 @@
 resource "aws_iam_openid_connect_provider" "github" {
-  count = var.create_github_oidc_provider ? 1 : 0
+  count = var.enable_github_oidc ? 1 : 0
 
   url = "https://token.actions.githubusercontent.com"
 
@@ -11,24 +11,16 @@ resource "aws_iam_openid_connect_provider" "github" {
   ]
 }
 
-data "aws_iam_openid_connect_provider" "github" {
-  count = var.create_github_oidc_provider ? 0 : 1
-
-  url = "https://token.actions.githubusercontent.com"
-}
-
-locals {
-  github_oidc_arn = var.create_github_oidc_provider ? aws_iam_openid_connect_provider.github[0].arn : data.aws_iam_openid_connect_provider.github[0].arn
-}
-
 data "aws_iam_policy_document" "github_assume" {
+  count = var.enable_github_oidc ? 1 : 0
+
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
 
     principals {
       type        = "Federated"
-      identifiers = [local.github_oidc_arn]
+      identifiers = [aws_iam_openid_connect_provider.github[0].arn]
     }
 
     condition {
@@ -46,11 +38,15 @@ data "aws_iam_policy_document" "github_assume" {
 }
 
 resource "aws_iam_role" "github_deploy" {
+  count = var.enable_github_oidc ? 1 : 0
+
   name               = "${var.project}-${var.environment}-github-deploy"
-  assume_role_policy = data.aws_iam_policy_document.github_assume.json
+  assume_role_policy = data.aws_iam_policy_document.github_assume[0].json
 }
 
 data "aws_iam_policy_document" "github_deploy" {
+  count = var.enable_github_oidc ? 1 : 0
+
   statement {
     sid    = "SendDeployCommand"
     effect = "Allow"
@@ -97,7 +93,9 @@ data "aws_iam_policy_document" "github_deploy" {
 }
 
 resource "aws_iam_role_policy" "github_deploy" {
+  count = var.enable_github_oidc ? 1 : 0
+
   name   = "${var.project}-${var.environment}-github-deploy"
-  role   = aws_iam_role.github_deploy.id
-  policy = data.aws_iam_policy_document.github_deploy.json
+  role   = aws_iam_role.github_deploy[0].id
+  policy = data.aws_iam_policy_document.github_deploy[0].json
 }

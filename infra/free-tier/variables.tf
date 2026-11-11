@@ -102,8 +102,8 @@ variable "ghcr_token" {
   sensitive   = true
 }
 
-variable "create_github_oidc_provider" {
-  description = "Crear el proveedor OIDC de GitHub. Si ya existe en la cuenta, dejarlo en false."
+variable "enable_github_oidc" {
+  description = "Crear el proveedor OIDC y el rol de despliegue de GitHub. Algunas organizaciones bloquean iam:CreateOpenIDConnectProvider por SCP."
   type        = bool
-  default     = true
+  default     = false
 }

@@ -52,6 +52,9 @@ PREDICTION = {
 
 
 OCR_RESULT = {
+    "filename": "ficha.png",
+    "content_type": "image/png",
+    "size_bytes": 40,
     "text": "PTCL-23\nCHILE",
     "model_id": "amazon.nova-lite-v1:0",
     "latency_ms": 850.0,
