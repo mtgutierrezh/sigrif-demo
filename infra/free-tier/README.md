@@ -60,8 +60,9 @@ reemplazar `curl-minimal` y no imprime secretos en los logs.
 
 La política SCP de la organización niega `iam:CreateOpenIDConnectProvider`; por
 eso `enable_github_oidc=false` y el despliegue automático de GitHub no está
-activo. El workflow de CI/CD queda preparado, pero el despliegue de esta
-entrega se ejecutó por SSM con la sesión autenticada.
+activo. Por decisión del equipo no se insistirá en esta entrega: el workflow de
+CI/CD queda preparado, el despliegue se ejecuta por SSM con la sesión
+autenticada y el tema se retomará solo si el proyecto avanza a producción.
 
 El dominio `sslip.io` es temporal. Cuando el equipo entregue el subdominio y el
 token DuckDNS, se actualiza `duckdns_subdomain`/`duckdns_token` en
@@ -97,13 +98,14 @@ terraform destroy
      s3://<artifact_bucket>/models/metrics.json
    ```
 
-4. Ejecutar el workflow `deploy` de GitHub Actions. En el repositorio se
-   configuran las variables `AWS_DEPLOY_ROLE_ARN`, `AWS_REGION`,
-   `INSTANCE_ID`, `S3_BUCKET`, `DEPLOY_ENABLED=true` y las `VITE_*` del
-   frontend. El workflow no usa claves estáticas: asume el rol por OIDC.
-   Verificar que `amazon.nova-lite-v1:0` esté habilitado en Bedrock para la
-   cuenta y la región. Si no lo está, el OCR responde `503` y el operador puede
-   escribir el texto manualmente; no se inventa una transcripción.
+4. Desplegar por SSM con la sesión autenticada: empaquetar el bundle con
+   `scripts/package_deploy.sh`, subirlo a S3 y ejecutar
+   `scripts/ssm_deploy.sh`. El workflow de GitHub Actions queda preparado, pero
+   su tramo OIDC está fuera de esta entrega por decisión del equipo, porque la
+   organización bloquea la creación del proveedor. Verificar que
+   `amazon.nova-lite-v1:0` esté habilitado en Bedrock para la cuenta y la
+   región. Si no lo está, el OCR responde `503` y el operador puede escribir el
+   texto manualmente; no se inventa una transcripción.
 5. Emitir el certificado TLS una vez que Nginx esté arriba:
 
    ```bash

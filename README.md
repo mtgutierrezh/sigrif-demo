@@ -241,9 +241,11 @@ make free-down
 
 El pipeline `.github/workflows/deploy.yml` construye las imágenes, las publica
 en GHCR y envía el bundle por SSM. En esta cuenta el tramo automático por OIDC
-quedó bloqueado por una política SCP de la organización; por eso el despliegue
-de la entrega se ejecutó por SSM con la sesión autenticada. El CI de calidad y
-build sigue funcionando. El detalle está en `infra/free-tier/README.md` y en
+está bloqueado por una política SCP de la organización. Por decisión del equipo
+no se insistirá en esta entrega: el CI de calidad y build sigue funcionando y
+el despliegue se ejecuta por SSM con la sesión autenticada. El tema se retomará
+solo si el proyecto avanza a producción. El detalle está en
+`infra/free-tier/README.md` y en
 `EA3/Evidencias_3.1/3.1.5/deploy_aws/README.md`.
 
 El stack anterior de ECS en `infra/` queda como arquitectura objetivo para
