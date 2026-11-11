@@ -28,16 +28,17 @@ aws s3 cp "s3://$S3_BUCKET/models/metrics.json" \
 if [ "${SKIP_PULL:-0}" != "1" ]; then
   "${COMPOSE[@]}" pull
 fi
-"${COMPOSE[@]}" up -d db ia
+"${COMPOSE[@]}" up -d db ia prometheus grafana node-exporter
 
 if [ ! -f "$ACTIVE_FILE" ]; then
   echo blue > "$ACTIVE_FILE"
   "${COMPOSE[@]}" up -d api-blue
   for _ in $(seq 1 30); do
     if "${COMPOSE[@]}" exec -T api-blue python -c \
-      "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"; then
+      "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)" >/dev/null 2>&1; then
       "${COMPOSE[@]}" up -d nginx
       "${COMPOSE[@]}" --profile tools run --rm seed
+      "${COMPOSE[@]}" up -d ingest
       echo "Primer despliegue: color activo blue"
       exit 0
     fi
@@ -54,4 +55,5 @@ fi
 
 "${COMPOSE[@]}" up -d nginx
 "${COMPOSE[@]}" --profile tools run --rm seed
+"${COMPOSE[@]}" up -d ingest
 bash scripts/bluegreen_deploy.sh

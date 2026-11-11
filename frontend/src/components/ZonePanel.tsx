@@ -23,6 +23,19 @@ interface ZonePanelProps {
   telemetry?: ReactNode;
 }
 
+function sourceLabel(zone: Zone): string {
+  const source = zone.latest_reading?.source ?? zone.last_source;
+  return (
+    {
+      dmc: "DMC",
+      open_meteo: "Open-Meteo",
+      synthetic: "Sintético (pruebas)",
+      manual: "Manual",
+      simulacion: "Simulación",
+    }[source ?? ""] ?? "Sin dato"
+  );
+}
+
 export function ZonePanel({
   zone,
   history,
@@ -96,7 +109,7 @@ export function ZonePanel({
           </div>
 
           <p className="mt-4 font-mono text-[11px] text-ash">
-            Fuente: datos sintéticos · demo SIGRIF
+            Fuente: {sourceLabel(zone)} · {formatDateTime(zone.latest_reading?.observed_at ?? zone.latest_reading?.created_at)}
           </p>
 
           {canSimulate ? <RiskEvaluator key={zone.id} zone={zone} /> : null}

@@ -1,15 +1,31 @@
 {
-  "annotations": { "list": [] },
+  "annotations": {
+    "list": []
+  },
   "editable": true,
   "graphTooltip": 1,
   "panels": [
     {
       "type": "timeseries",
       "title": "Requests por estado",
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
       "fieldConfig": {
-        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "lineWidth": 1 } },
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1
+          }
+        },
         "overrides": []
       },
       "targets": [
@@ -23,10 +39,24 @@
     {
       "type": "timeseries",
       "title": "Latencia p95",
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
       "fieldConfig": {
-        "defaults": { "unit": "s", "custom": { "drawStyle": "line", "lineWidth": 1 } },
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1
+          }
+        },
         "overrides": []
       },
       "targets": [
@@ -40,9 +70,22 @@
     {
       "type": "stat",
       "title": "Requests totales",
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 8 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
       "targets": [
         {
           "refId": "A",
@@ -53,9 +96,22 @@
     {
       "type": "stat",
       "title": "Mensajes IA procesados",
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 8 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
       "targets": [
         {
           "refId": "A",
@@ -65,24 +121,194 @@
     },
     {
       "type": "stat",
-      "title": "Tareas ECS activas",
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 8 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "title": "Servicios monitoreados",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(up{job=~\"sigrif-.*\"})"
+          "expr": "sum(up)",
+          "legendFormat": "servicios activos"
         }
-      ]
+      ],
+      "description": "Jobs de Prometheus que responden; incluye API, IA y node-exporter."
+    },
+    {
+      "type": "stat",
+      "title": "Cola SQS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sigrif_queue_depth",
+          "legendFormat": "Cola SQS"
+        }
+      ],
+      "id": 1,
+      "description": "Mensajes pendientes en la cola de lecturas."
+    },
+    {
+      "type": "stat",
+      "title": "Frescura de datos",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 14,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sigrif_data_freshness_minutes",
+          "legendFormat": "Frescura de datos"
+        }
+      ],
+      "id": 2,
+      "description": "Minutos desde la última lectura aceptada."
+    },
+    {
+      "type": "stat",
+      "title": "Alertas activas",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 14,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sigrif_active_alerts",
+          "legendFormat": "Alertas activas"
+        }
+      ],
+      "id": 3,
+      "description": "Zonas en nivel Alto."
+    },
+    {
+      "type": "stat",
+      "title": "Drift máximo",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 14,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(sigrif_drift_psi)",
+          "legendFormat": "Drift máximo"
+        }
+      ],
+      "id": 4,
+      "description": "PSI máximo de las variables monitoreadas."
+    },
+    {
+      "type": "timeseries",
+      "title": "Drift PSI por variable",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 24,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sigrif_drift_psi",
+          "legendFormat": "{{feature}}"
+        }
+      ],
+      "id": 5,
+      "description": "Population Stability Index de las últimas 200 lecturas frente al dataset de entrenamiento."
     }
   ],
   "refresh": "30s",
   "schemaVersion": 39,
-  "tags": ["sigrif", "demo"],
-  "time": { "from": "now-1h", "to": "now" },
+  "tags": [
+    "sigrif",
+    "demo"
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
   "timezone": "browser",
   "title": "SIGRIF · Operación",
   "uid": "sigrif-ops",
-  "version": 1
+  "version": 2
 }

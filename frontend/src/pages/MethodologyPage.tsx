@@ -6,6 +6,7 @@ const variables = [
   ["Humedad relativa", "%", "Contenido de vapor en el aire."],
   ["Viento", "km/h", "Velocidad que propaga el fuego."],
   ["Vegetación", "0–1", "Cobertura y continuidad del combustible."],
+  ["Incendios históricos", "n.º", "Eventos previos registrados en la zona."],
   ["Pendiente", "°", "Inclinación que acelera la propagación."],
 ];
 
@@ -17,8 +18,8 @@ export default function MethodologyPage() {
         Cómo se calcula el riesgo.
       </h1>
       <p className="mt-6 max-w-2xl text-bone-muted">
-        Usamos un modelo Random Forest de cinco variables para clasificar cada zona en Bajo, Medio o
-        Alto. El resultado se acompaña de su score y de la fecha de la última lectura.
+        Usamos un modelo Random Forest de seis variables para clasificar cada zona en Bajo, Medio o
+        Alto. El resultado se acompaña de su score, su fuente y la fecha de la última lectura.
       </p>
 
       <section className="mt-14 grid gap-10 md:grid-cols-2">
@@ -59,8 +60,9 @@ export default function MethodologyPage() {
         <div>
           <h2 className="text-[29px] leading-tight tracking-[-0.03em]">Fuentes y límites</h2>
           <p className="mt-4 text-bone-muted">
-            Las fuentes previstas son IDE Chile, CONAF, DMC y BCN SIIT. La demo usa datos sintéticos
-            para mostrar el flujo completo; no reemplaza las alertas oficiales de CONAF ni SENAPRED.
+            La fuente principal es la Red EMA de la DMC, con Open-Meteo como respaldo. Los datos
+            sintéticos se reservan para pruebas y demos controladas. El sistema no reemplaza las
+            alertas oficiales de CONAF ni SENAPRED.
           </p>
         </div>
         <div>

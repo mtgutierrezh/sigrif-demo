@@ -39,7 +39,7 @@ dev = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-"sigrif.data" = ["*.geojson"]
+"sigrif.data" = ["*.geojson", "*.json"]
 
 [tool.ruff]
 line-length = 100

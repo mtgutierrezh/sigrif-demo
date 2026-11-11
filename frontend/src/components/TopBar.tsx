@@ -21,6 +21,9 @@ export function TopBar() {
   }, [location.pathname]);
 
   const authenticated = session.status === "authenticated";
+  const navLinks = session.canSimulate
+    ? [...links, { to: "/operaciones", label: "Operaciones" }]
+    : links;
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-iron/40 bg-obsidian/85 backdrop-blur-md">
@@ -34,7 +37,7 @@ export function TopBar() {
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex" aria-label="Navegación principal">
-          {links.map((link) => (
+          {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
@@ -90,7 +93,7 @@ export function TopBar() {
       {open ? (
         <div id="menu-movil" className="border-t border-iron bg-obsidian px-5 py-4 md:hidden">
           <nav className="flex flex-col gap-4" aria-label="Navegación móvil">
-            {links.map((link) => (
+            {navLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}

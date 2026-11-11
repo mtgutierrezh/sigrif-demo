@@ -35,3 +35,41 @@ resource "aws_ssm_parameter" "ghcr_token" {
     Name = "${var.project}-${var.environment}-ghcr-token"
   }
 }
+
+resource "aws_ssm_parameter" "dmc_user" {
+  name        = "/${var.project}/${var.environment}/dmc_user"
+  description = "Usuario del servicio DMC para la ingesta meteorologica"
+  type        = "SecureString"
+  value       = var.dmc_user != "" ? var.dmc_user : "unused"
+
+  tags = {
+    Name = "${var.project}-${var.environment}-dmc-user"
+  }
+}
+
+resource "aws_ssm_parameter" "dmc_token" {
+  name        = "/${var.project}/${var.environment}/dmc_token"
+  description = "Token del servicio DMC para la ingesta meteorologica"
+  type        = "SecureString"
+  value       = var.dmc_token != "" ? var.dmc_token : "unused"
+
+  tags = {
+    Name = "${var.project}-${var.environment}-dmc-token"
+  }
+}
+
+resource "random_password" "grafana" {
+  length  = 24
+  special = false
+}
+
+resource "aws_ssm_parameter" "grafana_password" {
+  name        = "/${var.project}/${var.environment}/grafana_password"
+  description = "Clave inicial del administrador de Grafana"
+  type        = "SecureString"
+  value       = random_password.grafana.result
+
+  tags = {
+    Name = "${var.project}-${var.environment}-grafana-password"
+  }
+}

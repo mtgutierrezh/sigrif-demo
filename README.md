@@ -1,8 +1,8 @@
 # SIGRIF
 
-Demo funcional de riesgo de incendios forestales para Valparaíso. Incluye API en FastAPI, PostgreSQL/PostGIS, mensajería SNS/SQS, un servicio de IA con Random Forest, Nginx y un frontend en React.
+Demo funcional de riesgo de incendios forestales para Valparaíso. Incluye API en FastAPI, PostgreSQL/PostGIS, mensajería SNS/SQS, ingesta meteorológica DMC con respaldo Open-Meteo, un servicio de IA con Random Forest, Nginx, Prometheus/Grafana y un frontend en React.
 
-Los datos de riesgo son sintéticos para la demo. Los polígonos forestales provienen del catastro de uso de suelo y vegetación de CONAF.
+Las etiquetas de entrenamiento son académicas y el modelo no reemplaza a CONAF ni SENAPRED. Los polígonos forestales provienen del catastro de uso de suelo y vegetación de CONAF; las lecturas meteorológicas de producción se obtienen de la Red EMA de la DMC.
 
 ## Requisitos
 
@@ -137,6 +137,14 @@ Solo para la demo. Cambiar en un despliegue real.
 | GET | `/api/v1/cells` | Celdas H3 de combustible |
 | GET | `/api/v1/status` | Estado operativo |
 | GET | `/api/v1/version` | Versión de API, modelo y color activo |
+| GET | `/api/v1/model` | Model card en vivo (operadores) |
+| GET | `/api/v1/evaluations` | Evaluaciones recientes (operadores) |
+| GET | `/api/v1/zones/{id}/evaluations` | Evaluaciones de una zona (operadores) |
+| GET | `/api/v1/ops/overview` | Resumen operativo, frescura, cola y drift (operadores) |
+| GET | `/api/v1/ops/alerts` | Zonas en nivel Alto (operadores) |
+| GET | `/api/v1/ops/ingestion` | Últimas corridas de ingesta (operadores) |
+| GET | `/api/v1/ops/drift` | PSI por variable (operadores) |
+| POST | `/api/v1/ops/ingest?provider=auto` | Dispara una ingesta manual (operadores) |
 | POST | `/api/v1/simulate?zone_id={id}` | Genera una lectura sintética |
 | POST | `/api/v1/zones/{id}/evaluate` | Inferencia síncrona, explicación y prescripción |
 | POST | `/api/v1/field-reports/ocr` | Extrae texto de una ficha de terreno (multipart) |
@@ -190,12 +198,21 @@ habilita con el rol IAM de la instancia; no se usan claves en `.env`. El OCR
 rechaza archivos de más de 5 MB, valida la firma real de la imagen y responde
 `503` con `Retry-After` si Bedrock no está disponible.
 
+## Operaciones y monitoreo
+
+El panel `/operaciones` está disponible solo para el grupo `operadores`. Muestra la frescura de los datos, la fuente de la última lectura, la distribución de riesgo, la profundidad de la cola SQS, el drift PSI por variable, las últimas corridas de ingesta y las zonas en alerta. El usuario final del grupo `usuarios` no ve este panel ni puede llamar a los endpoints `/ops`.
+
+La ingesta se ejecuta cada 15 minutos con DMC como fuente principal y Open-Meteo como respaldo. Si no hay datos nuevos, no se reprocesa la misma observación. En producción el bus es SNS + SQS: la ingesta publica `lectura.creada`, el consumidor del servicio IA evalúa y persiste la lectura y su `Evaluation`. Las alertas de nivel Alto se publican en el tópico SNS confirmado, con un cooldown de seis horas por zona.
+
+Grafana se publica en `https://<dominio>/grafana/` y usa Prometheus para las métricas de API, IA, ingesta, cola, frescura, alertas y drift. Prometheus y Grafana también están disponibles en local en los puertos 9090 y 3000.
+
 ## Datos de la demo
 
 - 54 cerros y sectores de Valparaíso.
 - 467 celdas H3 con combustible derivado de CONAF.
 - 1.978 polígonos forestales: bosque nativo, plantación, matorral y pradera.
-- Riesgo sintético para demostración. No reemplaza las alertas de CONAF ni SENAPRED.
+- Variables meteorológicas reales de la Red EMA de la DMC, actualizadas cada 15 minutos; Open-Meteo queda como respaldo.
+- Las etiquetas del modelo son académicas: validan la regla de entrenamiento, no el riesgo real. El sistema no reemplaza las alertas de CONAF ni SENAPRED.
 
 ## Calidad
 
@@ -211,9 +228,11 @@ make test-e2e
 
 ## Despliegue en AWS
 
-El despliegue vigente es EC2 `t3.micro` + Docker Compose, pensado para el plan
-gratuito. Está aplicado en `us-east-2` y responde en
-<https://18-224-211-162.sslip.io> con certificado Let's Encrypt.
+El despliegue vigente es EC2 `t3.small` + Docker Compose durante la evaluación,
+pensado para el plan gratuito. Está aplicado en `us-east-2` y responde en
+<https://18-224-211-162.sslip.io> con certificado Let's Encrypt. La memoria
+extra permite ejecutar ingesta, Prometheus, Grafana y node-exporter junto al
+stack principal; al terminar la evaluación se puede volver a `t3.micro`.
 
 La infraestructura está en `infra/free-tier/`:
 
@@ -225,10 +244,11 @@ terraform plan
 terraform apply
 ```
 
-El servidor ejecuta Nginx + Certbot, API blue/green, servicio IA, PostGIS y un
-job de seed. La instancia usa una Elastic IP para mantener el DNS estable. No
-usa ECS, ALB, RDS, ECR ni NAT. El acceso administrativo es por SSM Session
-Manager, sin abrir SSH.
+El servidor ejecuta Nginx + Certbot, API blue/green, servicio IA, PostGIS, un
+job de seed, la ingesta DMC/Open-Meteo, Prometheus, Grafana y node-exporter. La
+cola SNS/SQS de lecturas vive en AWS, fuera de la instancia. La instancia usa
+una Elastic IP para mantener el DNS estable. No usa ECS, ALB, RDS, ECR ni NAT.
+El acceso administrativo es por SSM Session Manager, sin abrir SSH.
 
 Los atajos del `Makefile` son:
 

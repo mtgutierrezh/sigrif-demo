@@ -107,3 +107,16 @@ variable "enable_github_oidc" {
   type        = bool
   default     = false
 }
+
+variable "dmc_user" {
+  description = "Usuario del servicio DMC para la red EMA."
+  type        = string
+  default     = ""
+}
+
+variable "dmc_token" {
+  description = "Token del servicio DMC. Se guarda en SSM; nunca en el repositorio."
+  type        = string
+  default     = ""
+  sensitive   = true
+}

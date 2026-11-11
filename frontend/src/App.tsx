@@ -11,6 +11,7 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const MapPage = lazy(() => import("./pages/MapPage"));
 const ZonesPage = lazy(() => import("./pages/ZonesPage"));
 const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
+const OperationsPage = lazy(() => import("./pages/OperationsPage"));
 const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -26,6 +27,7 @@ export function App() {
                 <Route path="/mapa" element={<MapPage />} />
                 <Route path="/zonas" element={<ZonesPage />} />
                 <Route path="/metodologia" element={<MethodologyPage />} />
+                <Route path="/operaciones" element={<OperationsPage />} />
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

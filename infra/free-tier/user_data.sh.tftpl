@@ -61,6 +61,25 @@ GHCR_TOKEN=$(aws ssm get-parameter \
   --output text \
   --region "${aws_region}")
 
+DMC_USER=$(aws ssm get-parameter \
+  --name "${dmc_user_parameter}" \
+  --with-decryption \
+  --query Parameter.Value \
+  --output text \
+  --region "${aws_region}")
+DMC_TOKEN=$(aws ssm get-parameter \
+  --name "${dmc_token_parameter}" \
+  --with-decryption \
+  --query Parameter.Value \
+  --output text \
+  --region "${aws_region}")
+GRAFANA_PASSWORD=$(aws ssm get-parameter \
+  --name "${grafana_password_parameter}" \
+  --with-decryption \
+  --query Parameter.Value \
+  --output text \
+  --region "${aws_region}")
+
 if [ "${ghcr_username}" != "" ] && [ "$GHCR_TOKEN" != "unused" ]; then
   printf '%s' "$GHCR_TOKEN" > /opt/sigrif/ghcr_token
   chmod 600 /opt/sigrif/ghcr_token
@@ -79,7 +98,15 @@ POSTGRES_PASSWORD=$DB_PASSWORD
 DATABASE_URL=postgresql+psycopg://${db_user}:$DB_PASSWORD@db:5432/${db_name}
 AWS_REGION=${aws_region}
 AWS_ENDPOINT_URL=
-MESSAGING_ENABLED=false
+MESSAGING_ENABLED=true
+SNS_TOPIC_ARN=${data_topic_arn}
+SQS_QUEUE_URL=${data_queue_url}
+ALERT_TOPIC_ARN=${alert_topic_arn}
+INGEST_ENABLED=true
+INGEST_PROVIDER=auto
+DMC_USER=$DMC_USER
+DMC_TOKEN=$DMC_TOKEN
+GRAFANA_ADMIN_PASSWORD=$GRAFANA_PASSWORD
 APP_COLOR=blue
 AUTH_ENABLED=true
 COGNITO_REGION=${cognito_region}

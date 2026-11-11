@@ -53,6 +53,7 @@ data "aws_iam_policy_document" "app" {
       "${aws_cloudwatch_log_group.ia.arn}:*",
       "${aws_cloudwatch_log_group.nginx.arn}:*",
       "${aws_cloudwatch_log_group.db.arn}:*",
+      "${aws_cloudwatch_log_group.ingest.arn}:*",
     ]
   }
 
@@ -69,6 +70,9 @@ data "aws_iam_policy_document" "app" {
       aws_ssm_parameter.db_password.arn,
       aws_ssm_parameter.duckdns_token.arn,
       aws_ssm_parameter.ghcr_token.arn,
+      aws_ssm_parameter.dmc_user.arn,
+      aws_ssm_parameter.dmc_token.arn,
+      aws_ssm_parameter.grafana_password.arn,
     ]
   }
 
@@ -95,6 +99,36 @@ data "aws_iam_policy_document" "app" {
     resources = [
       "arn:aws:bedrock:${var.aws_region}::foundation-model/amazon.nova-lite-v1:0",
     ]
+  }
+
+  statement {
+    sid    = "DataBus"
+    effect = "Allow"
+
+    actions = [
+      "sns:Publish",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:ChangeMessageVisibility",
+    ]
+
+    resources = [
+      aws_sns_topic.data.arn,
+      aws_sqs_queue.readings.arn,
+      aws_sqs_queue.readings_dlq.arn,
+    ]
+  }
+
+  dynamic "statement" {
+    for_each = local.alert_topic_arn != "" ? [local.alert_topic_arn] : []
+
+    content {
+      sid       = "AlertPublish"
+      effect    = "Allow"
+      actions   = ["sns:Publish"]
+      resources = [statement.value]
+    }
   }
 }
 

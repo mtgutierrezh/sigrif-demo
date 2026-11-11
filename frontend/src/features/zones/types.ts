@@ -11,6 +11,8 @@ export interface Reading {
   slope: number;
   risk_level: RiskLevel | null;
   risk_score: number | null;
+  source: string;
+  observed_at: string | null;
   created_at: string;
 }
 
@@ -49,6 +51,7 @@ export interface PrescriptionAction {
 }
 
 export interface Evaluation {
+  id?: number;
   zone_id: number;
   risk_level: RiskLevel;
   risk_score: number;
@@ -58,6 +61,9 @@ export interface Evaluation {
   scenario: Scenario | null;
   prescription: PrescriptionAction[];
   evaluated_at: string;
+  source: string;
+  observed_at: string | null;
+  created_by: string;
 }
 
 export interface OcrResult {
@@ -96,6 +102,11 @@ export interface Zone {
   comuna: string;
   risk_level: RiskLevel;
   risk_score: number;
+  vegetation: number;
+  historical_fires: number;
+  slope: number;
+  last_source: string | null;
+  last_alert_at: string | null;
   updated_at: string;
   geometry: MultiPolygon | null;
   latest_reading: Reading | null;
@@ -104,6 +115,7 @@ export interface Zone {
 export interface HistoryPoint {
   risk_level: RiskLevel | null;
   risk_score: number | null;
+  source: string;
   created_at: string;
 }
 
@@ -113,4 +125,68 @@ export interface Status {
   model_version: string;
   p95_ms: number | null;
   window: number;
+  last_source: string | null;
+  freshness_minutes: number | null;
+  stale: boolean;
+  active_alerts: number;
+}
+
+export interface DriftFeature {
+  feature: string;
+  psi: number;
+  status: string;
+  baseline_mean: number;
+  current_mean: number;
+  samples: number;
+}
+
+export interface IngestionRun {
+  id: number;
+  provider: string;
+  status: string;
+  started_at: string;
+  finished_at: string | null;
+  zones_total: number;
+  zones_ok: number;
+  zones_failed: number;
+  message: string | null;
+  duration_ms: number | null;
+}
+
+export interface OpsOverview {
+  zones: number;
+  risk_counts: Record<string, number>;
+  sources: Record<string, number>;
+  last_ingest: string | null;
+  last_source: string | null;
+  freshness_minutes: number | null;
+  stale: boolean;
+  active_alerts: number;
+  queue_depth: number | null;
+  model_version: string;
+  p95_ms: number | null;
+  drift: DriftFeature[];
+  last_ingestion: IngestionRun | null;
+}
+
+export interface ZoneAlert {
+  id: number;
+  name: string;
+  comuna: string;
+  risk_level: RiskLevel;
+  risk_score: number;
+  last_source: string | null;
+  last_alert_at: string | null;
+  updated_at: string;
+}
+
+export interface ModelInfo {
+  version: string;
+  features: string[];
+  labels: string[];
+  trained_at: string | null;
+  dataset_hash: string | null;
+  metrics: Record<string, unknown>;
+  feature_importance: Array<Record<string, unknown>>;
+  source: string | null;
 }

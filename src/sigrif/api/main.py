@@ -5,7 +5,6 @@ import uuid
 from collections import deque
 from collections.abc import Awaitable, Callable
 from contextlib import asynccontextmanager
-from datetime import UTC, datetime
 from typing import Annotated
 
 import numpy as np
@@ -21,23 +20,40 @@ from starlette.responses import Response
 from ..auth import OperatorUser
 from ..config import settings
 from ..db import get_session, init_db
-from ..events import MessagingDisabled, ensure_resources, publish_reading
+from ..evaluation import store_evaluation
+from ..events import MessagingDisabled, ensure_resources, publish_reading, queue_depth
 from ..ia.bedrock_ocr import ALLOWED_CONTENT_TYPES, detect_content_type
-from ..ia.client import IAUnavailable, ocr_image, predict_risk
+from ..ia.client import IAUnavailable, model_info, ocr_image, predict_risk
+from ..ingest.service import run_ingestion
 from ..model_spec import LABELS, MODEL_VERSION
-from ..models import FieldReport, Reading, RiskCell, Zone
+from ..models import Evaluation, FieldReport, IngestionRun, Reading, RiskCell, Zone
+from ..monitoring import (
+    data_timestamps,
+    drift_report,
+    freshness_minutes,
+    refresh_metrics,
+    risk_counts,
+)
 from ..prescription import build_prescription
 from ..schemas import (
+    DriftFeatureOut,
     EvaluationOut,
+    EvaluationSummaryOut,
+    FactorOut,
     FieldReportCreate,
     FieldReportOut,
     HistoryPoint,
+    IngestionRunOut,
+    ModelInfoOut,
     OcrOut,
+    OpsOverviewOut,
     PrescriptionActionOut,
     ReadingOut,
     RiskFeaturesIn,
+    ScenarioOut,
     SimulationOut,
     StatusOut,
+    ZoneAlertOut,
     ZoneOut,
 )
 
@@ -119,9 +135,27 @@ def _zone_out(session: Session, zone: Zone) -> ZoneOut:
         comuna=zone.comuna,
         risk_level=zone.risk_level,
         risk_score=zone.risk_score,
+        vegetation=zone.vegetation,
+        historical_fires=zone.historical_fires,
+        slope=zone.slope,
+        last_source=zone.last_source,
+        last_alert_at=zone.last_alert_at,
         updated_at=zone.updated_at,
         geometry=json.loads(geojson) if geojson else None,
         latest_reading=ReadingOut.model_validate(latest) if latest else None,
+    )
+
+
+def _evaluation_summary(evaluation: Evaluation) -> EvaluationSummaryOut:
+    return EvaluationSummaryOut(
+        id=evaluation.id,
+        zone_id=evaluation.zone_id,
+        risk_level=evaluation.risk_level,
+        risk_score=evaluation.risk_score,
+        model_version=evaluation.model_version,
+        source=evaluation.source,
+        created_at=evaluation.created_at,
+        prescription_count=len(evaluation.prescription or []),
     )
 
 
@@ -140,7 +174,11 @@ def version() -> dict[str, str]:
 
 
 @app.get("/metrics")
-def metrics() -> Response:
+def metrics(session: Annotated[Session, Depends(get_session)]) -> Response:
+    try:
+        refresh_metrics(session)
+    except Exception:
+        logger.exception("no se pudieron refrescar las métricas operativas")
     return Response(generate_latest(), media_type="text/plain")
 
 
@@ -149,13 +187,21 @@ def status(
     session: Annotated[Session, Depends(get_session)],
 ) -> StatusOut:
     zones = session.scalar(select(func.count(Zone.id))) or 0
-    last_ingest = session.scalar(select(func.max(Reading.created_at)))
+    last_ingest, last_source = data_timestamps(session)
+    freshness = freshness_minutes(last_ingest)
+    active_alerts = (
+        session.scalar(select(func.count(Zone.id)).where(Zone.risk_level == "Alto")) or 0
+    )
     return StatusOut(
         zones=zones,
         last_ingest=last_ingest,
         model_version=MODEL_VERSION,
         p95_ms=_p95(),
         window=len(LATENCIES),
+        last_source=last_source,
+        freshness_minutes=freshness,
+        stale=freshness is None or freshness > 45,
+        active_alerts=int(active_alerts),
     )
 
 
@@ -225,9 +271,152 @@ def zone_history(
             risk_level=reading.risk_level,
             risk_score=reading.risk_score,
             created_at=reading.created_at,
+            source=reading.source,
         )
         for reading in readings
     ]
+
+
+@app.get("/api/v1/model", response_model=ModelInfoOut)
+def get_model_info(
+    request: Request,
+    _: OperatorUser,
+) -> ModelInfoOut:
+    """Model card en vivo, solo para operadores."""
+
+    try:
+        info = model_info(request_id=getattr(request.state, "request_id", None))
+    except IAUnavailable as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="El servicio de IA no está disponible.",
+            headers={"Retry-After": "5"},
+        ) from exc
+    return ModelInfoOut(**info)
+
+
+@app.get("/api/v1/evaluations", response_model=list[EvaluationSummaryOut])
+def list_evaluations(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    zone_id: int | None = None,
+    risk_level: str | None = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 50,
+) -> list[EvaluationSummaryOut]:
+    stmt = select(Evaluation).order_by(Evaluation.id.desc()).limit(limit)
+    if zone_id is not None:
+        stmt = stmt.where(Evaluation.zone_id == zone_id)
+    if risk_level is not None:
+        if risk_level not in LABELS:
+            raise HTTPException(status_code=422, detail="Nivel de riesgo inválido")
+        stmt = stmt.where(Evaluation.risk_level == risk_level)
+    evaluations = session.scalars(stmt).all()
+    return [_evaluation_summary(evaluation) for evaluation in evaluations]
+
+
+@app.get(
+    "/api/v1/zones/{zone_id}/evaluations",
+    response_model=list[EvaluationSummaryOut],
+)
+def zone_evaluations(
+    zone_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    limit: Annotated[int, Query(ge=1, le=200)] = 20,
+) -> list[EvaluationSummaryOut]:
+    zone = session.get(Zone, zone_id)
+    if zone is None:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    evaluations = session.scalars(
+        select(Evaluation)
+        .where(Evaluation.zone_id == zone_id)
+        .order_by(Evaluation.id.desc())
+        .limit(limit)
+    ).all()
+    return [_evaluation_summary(evaluation) for evaluation in evaluations]
+
+
+@app.get("/api/v1/ops/overview", response_model=OpsOverviewOut)
+def ops_overview(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> OpsOverviewOut:
+    counts = risk_counts(session)
+    sources = {
+        str(source): int(count)
+        for source, count in session.execute(
+            select(Reading.source, func.count(Reading.id)).group_by(Reading.source)
+        )
+    }
+    last_ingest, last_source = data_timestamps(session)
+    freshness = freshness_minutes(last_ingest)
+    last_run = session.scalars(
+        select(IngestionRun).order_by(IngestionRun.id.desc()).limit(1)
+    ).first()
+    try:
+        depth = queue_depth()
+    except Exception:
+        depth = None
+    return OpsOverviewOut(
+        zones=sum(counts.values()),
+        risk_counts=counts,
+        sources=sources,
+        last_ingest=last_ingest,
+        last_source=last_source,
+        freshness_minutes=freshness,
+        stale=freshness is None or freshness > 45,
+        active_alerts=counts.get("Alto", 0),
+        queue_depth=depth,
+        model_version=MODEL_VERSION,
+        p95_ms=_p95(),
+        drift=[DriftFeatureOut(**item) for item in drift_report(session)],
+        last_ingestion=IngestionRunOut.model_validate(last_run) if last_run else None,
+    )
+
+
+@app.get("/api/v1/ops/alerts", response_model=list[ZoneAlertOut])
+def ops_alerts(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+) -> list[ZoneAlertOut]:
+    zones = session.scalars(
+        select(Zone).where(Zone.risk_level == "Alto").order_by(Zone.updated_at.desc()).limit(limit)
+    ).all()
+    return [ZoneAlertOut.model_validate(zone) for zone in zones]
+
+
+@app.get("/api/v1/ops/ingestion", response_model=list[IngestionRunOut])
+def ops_ingestion(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+) -> list[IngestionRunOut]:
+    runs = session.scalars(select(IngestionRun).order_by(IngestionRun.id.desc()).limit(limit)).all()
+    return [IngestionRunOut.model_validate(run) for run in runs]
+
+
+@app.get("/api/v1/ops/drift", response_model=list[DriftFeatureOut])
+def ops_drift(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> list[DriftFeatureOut]:
+    return [DriftFeatureOut(**item) for item in drift_report(session)]
+
+
+@app.post("/api/v1/ops/ingest", response_model=IngestionRunOut)
+def ops_ingest(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    provider: str | None = Query(default=None, pattern="^(auto|dmc|open_meteo|synthetic)$"),
+) -> IngestionRunOut:
+    """Dispara una ingesta manual desde el panel operativo."""
+
+    try:
+        run = run_ingestion(session, provider=provider)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return IngestionRunOut.model_validate(run)
 
 
 @app.post("/api/v1/simulate", response_model=SimulationOut, status_code=202)
@@ -271,9 +460,9 @@ def evaluate_zone(
     payload: RiskFeaturesIn,
     request: Request,
     session: Annotated[Session, Depends(get_session)],
-    _: OperatorUser,
+    user: OperatorUser,
 ) -> EvaluationOut:
-    """Inferencia síncrona + prescripción operativa para una zona."""
+    """Inferencia síncrona, prescripción y registro auditable de la evaluación."""
 
     zone = session.get(Zone, zone_id)
     if zone is None:
@@ -296,34 +485,33 @@ def evaluate_zone(
     if risk_level not in LABELS:
         raise HTTPException(status_code=502, detail="El servicio de IA devolvió un nivel inválido")
 
-    risk_score = float(prediction.get("risk_score", 0.0))
-    evaluated_at = datetime.now(UTC)
-    session.add(
-        Reading(
-            zone_id=zone.id,
-            **features,
-            risk_level=risk_level,
-            risk_score=risk_score,
-            created_at=evaluated_at,
-        )
-    )
-    zone.risk_level = risk_level
-    zone.risk_score = risk_score
-    session.commit()
-
-    prescription = [
+    actions = [
         PrescriptionActionOut(**action) for action in build_prescription(features, prediction)
     ]
+    evaluation = store_evaluation(
+        session,
+        zone,
+        features,
+        prediction,
+        source="manual",
+        request_id=getattr(request.state, "request_id", None),
+        created_by=str(user.get("sub", "local")),
+        prescription_actions=[action.model_dump() for action in actions],
+    )
     return EvaluationOut(
-        zone_id=zone.id,
-        risk_level=risk_level,
-        risk_score=risk_score,
-        probabilities=prediction.get("probabilities", {}),
-        model_version=str(prediction.get("model_version", MODEL_VERSION)),
-        factors=prediction.get("factors", []),
-        scenario=prediction.get("scenario"),
-        prescription=prescription,
-        evaluated_at=evaluated_at,
+        id=evaluation.id,
+        zone_id=evaluation.zone_id,
+        risk_level=evaluation.risk_level,
+        risk_score=evaluation.risk_score,
+        probabilities=evaluation.probabilities,
+        model_version=evaluation.model_version,
+        factors=[FactorOut(**item) for item in evaluation.factors],
+        scenario=ScenarioOut(**evaluation.scenario) if evaluation.scenario else None,
+        prescription=actions,
+        source=evaluation.source,
+        observed_at=None,
+        evaluated_at=evaluation.created_at,
+        created_by=evaluation.created_by,
     )
 
 

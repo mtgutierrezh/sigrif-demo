@@ -127,3 +127,25 @@ Configurar `budget_email` y destruir al final de la demostración.
 - El blue-green protege el despliegue de la API, no la caída de la máquina.
 - La base de datos vive en el mismo host; los respaldos se copian a S3.
 - `t3.micro` tiene 1 GB de RAM; el `user_data` crea 2 GB de swap.
+
+## Actualización EP3 (11/11/2026)
+
+El despliegue pasó de `t3.micro` a `t3.small` durante la evaluación para
+alojar ingesta, Prometheus, Grafana y node-exporter. La instancia conserva la
+Elastic IP y el certificado Let's Encrypt.
+
+La infraestructura ahora incluye:
+
+| Recurso | Uso |
+|---|---|
+| SNS `sigrif-prod-datos` | Evento `lectura.creada` publicado por la ingesta. |
+| SQS `sigrif-prod-lecturas` + DLQ | Cola de inferencia asíncrona consumida por el servicio IA. |
+| SSM `dmc_user`, `dmc_token` | Credenciales DMC fuera del repositorio. |
+| SSM `grafana_password` | Contraseña inicial de Grafana. |
+| Log group `/sigrif/prod/ingest` | Logs de la ingesta en CloudWatch. |
+
+La ingesta corre cada 15 minutos con DMC como fuente principal y Open-Meteo
+como respaldo. El panel `/operaciones` y Grafana `/grafana/` son solo para el
+grupo `operadores`. Para volver a `t3.micro`, cambiar `instance_type`, aplicar
+Terraform y volver a desplegar; el certificado se reemite si la instancia se
+reemplaza.

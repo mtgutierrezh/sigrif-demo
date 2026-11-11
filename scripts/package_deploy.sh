@@ -13,6 +13,7 @@ rm -rf "$BUNDLE"
 mkdir -p "$BUNDLE/scripts" "$(dirname "$OUT")"
 
 cp docker-compose.prod.yml "$BUNDLE/"
+cp -R observability "$BUNDLE/"
 cp scripts/deploy_remote.sh scripts/bluegreen_deploy.sh scripts/init_letsencrypt.sh "$BUNDLE/scripts/"
 
 cat > "$BUNDLE/images.env" <<EOF

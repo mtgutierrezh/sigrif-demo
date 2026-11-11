@@ -36,3 +36,5 @@ frontend/playwright-report/
 frontend/test-results/
 artifacts/*.joblib
 artifacts/*.pkl
+
+ACCESOS.local.md

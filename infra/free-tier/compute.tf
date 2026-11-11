@@ -30,6 +30,7 @@ resource "aws_instance" "app" {
   vpc_security_group_ids      = [aws_security_group.app.id]
   iam_instance_profile        = aws_iam_instance_profile.app.name
   associate_public_ip_address = true
+  user_data_replace_on_change = true
 
   metadata_options {
     http_endpoint               = "enabled"
@@ -45,21 +46,27 @@ resource "aws_instance" "app" {
   }
 
   user_data = templatefile("${path.module}/user_data.sh.tftpl", {
-    aws_region              = var.aws_region
-    db_name                 = "sigrif"
-    db_user                 = "sigrif"
-    db_password_parameter   = aws_ssm_parameter.db_password.name
-    duckdns_token_parameter = aws_ssm_parameter.duckdns_token.name
-    duckdns_subdomain       = var.duckdns_subdomain
-    fqdn                    = local.fqdn
-    app_origin              = local.app_origin
-    cognito_region          = var.aws_region
-    cognito_user_pool_id    = aws_cognito_user_pool.main.id
-    cognito_client_id       = aws_cognito_user_pool_client.web.id
-    s3_bucket               = aws_s3_bucket.artifacts.bucket
-    letsencrypt_email       = var.letsencrypt_email
-    ghcr_username           = var.ghcr_username
-    ghcr_token_parameter    = aws_ssm_parameter.ghcr_token.name
+    aws_region                 = var.aws_region
+    db_name                    = "sigrif"
+    db_user                    = "sigrif"
+    db_password_parameter      = aws_ssm_parameter.db_password.name
+    duckdns_token_parameter    = aws_ssm_parameter.duckdns_token.name
+    duckdns_subdomain          = var.duckdns_subdomain
+    fqdn                       = local.fqdn
+    app_origin                 = local.app_origin
+    cognito_region             = var.aws_region
+    cognito_user_pool_id       = aws_cognito_user_pool.main.id
+    cognito_client_id          = aws_cognito_user_pool_client.web.id
+    s3_bucket                  = aws_s3_bucket.artifacts.bucket
+    letsencrypt_email          = var.letsencrypt_email
+    ghcr_username              = var.ghcr_username
+    ghcr_token_parameter       = aws_ssm_parameter.ghcr_token.name
+    dmc_user_parameter         = aws_ssm_parameter.dmc_user.name
+    dmc_token_parameter        = aws_ssm_parameter.dmc_token.name
+    grafana_password_parameter = aws_ssm_parameter.grafana_password.name
+    data_topic_arn             = aws_sns_topic.data.arn
+    data_queue_url             = aws_sqs_queue.readings.id
+    alert_topic_arn            = local.alert_topic_arn
   })
 
   tags = {
@@ -71,6 +78,11 @@ resource "aws_instance" "app" {
     aws_iam_role_policy.app,
     aws_iam_role_policy_attachment.ssm_core,
     aws_ssm_parameter.db_password,
+    aws_ssm_parameter.dmc_user,
+    aws_ssm_parameter.dmc_token,
+    aws_ssm_parameter.grafana_password,
+    aws_sqs_queue_policy.readings,
+    aws_sns_topic_subscription.readings,
   ]
 }
 

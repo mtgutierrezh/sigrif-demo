@@ -15,6 +15,11 @@ ZONE = SimpleNamespace(
     comuna="Valparaiso",
     risk_level="Bajo",
     risk_score=0.12,
+    vegetation=0.3,
+    historical_fires=0,
+    slope=15.0,
+    last_source=None,
+    last_alert_at=None,
     updated_at=datetime.now(UTC),
 )
 
@@ -106,6 +111,14 @@ class FakeSession:
 
     def add(self, item):
         self.added.append(item)
+
+    def flush(self):
+        for item in self.added:
+            if getattr(item, "id", None) is None:
+                item.id = 1
+
+    def refresh(self, _item):
+        return None
 
     def commit(self):
         self.committed = True

@@ -15,6 +15,8 @@ class ReadingOut(BaseModel):
     slope: float
     risk_level: str | None = None
     risk_score: float | None = None
+    source: str = "manual"
+    observed_at: datetime | None = None
     created_at: datetime
 
 
@@ -26,6 +28,11 @@ class ZoneOut(BaseModel):
     comuna: str
     risk_level: str
     risk_score: float
+    vegetation: float = 0.3
+    historical_fires: int = 0
+    slope: float = 15.0
+    last_source: str | None = None
+    last_alert_at: datetime | None = None
     updated_at: datetime
     geometry: dict[str, Any] | None = None
     latest_reading: ReadingOut | None = None
@@ -50,6 +57,7 @@ class HistoryPoint(BaseModel):
     risk_level: str | None
     risk_score: float | None
     created_at: datetime
+    source: str = "manual"
 
 
 class StatusOut(BaseModel):
@@ -58,6 +66,10 @@ class StatusOut(BaseModel):
     model_version: str
     p95_ms: float | None
     window: int
+    last_source: str | None = None
+    freshness_minutes: float | None = None
+    stale: bool | None = None
+    active_alerts: int | None = None
 
 
 class SimulationOut(BaseModel):
@@ -100,6 +112,7 @@ class PrescriptionActionOut(BaseModel):
 
 
 class EvaluationOut(BaseModel):
+    id: int | None = None
     zone_id: int
     risk_level: str
     risk_score: float
@@ -108,7 +121,76 @@ class EvaluationOut(BaseModel):
     factors: list[FactorOut]
     scenario: ScenarioOut | None = None
     prescription: list[PrescriptionActionOut]
+    source: str = "manual"
+    observed_at: datetime | None = None
     evaluated_at: datetime
+    created_by: str = "local"
+
+
+class EvaluationSummaryOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    zone_id: int
+    risk_level: str
+    risk_score: float
+    model_version: str
+    source: str
+    created_at: datetime
+    prescription_count: int = 0
+
+
+class ZoneAlertOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    comuna: str
+    risk_level: str
+    risk_score: float
+    last_source: str | None = None
+    last_alert_at: datetime | None = None
+    updated_at: datetime
+
+
+class IngestionRunOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    provider: str
+    status: str
+    started_at: datetime
+    finished_at: datetime | None = None
+    zones_total: int
+    zones_ok: int
+    zones_failed: int
+    message: str | None = None
+    duration_ms: int | None = None
+
+
+class DriftFeatureOut(BaseModel):
+    feature: str
+    psi: float
+    status: str
+    baseline_mean: float
+    current_mean: float
+    samples: int
+
+
+class OpsOverviewOut(BaseModel):
+    zones: int
+    risk_counts: dict[str, int]
+    sources: dict[str, int]
+    last_ingest: datetime | None = None
+    last_source: str | None = None
+    freshness_minutes: float | None = None
+    stale: bool = False
+    active_alerts: int = 0
+    queue_depth: int | None = None
+    model_version: str
+    p95_ms: float | None = None
+    drift: list[DriftFeatureOut] = Field(default_factory=list)
+    last_ingestion: IngestionRunOut | None = None
 
 
 class ModelInfoOut(BaseModel):

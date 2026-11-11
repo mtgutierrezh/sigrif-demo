@@ -11,6 +11,13 @@ export function TelemetryStrip({
   const metrics: Array<[string, string]> = [
     ["Zonas", status ? String(status.zones) : "—"],
     ["Última ingesta", formatDateTime(status?.last_ingest)],
+    [
+      "Frescura",
+      status?.freshness_minutes === null || status?.freshness_minutes === undefined
+        ? "—"
+        : `${formatNumber(status.freshness_minutes, 0)} min`,
+    ],
+    ["Fuente", status?.last_source ?? "—"],
     ["Modelo", status?.model_version ?? "—"],
     ["p95 API", status?.p95_ms ? `${formatNumber(status.p95_ms, 0)} ms` : "—"],
   ];

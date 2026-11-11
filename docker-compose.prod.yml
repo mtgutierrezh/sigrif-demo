@@ -75,6 +75,9 @@ services:
         awslogs-region: ${AWS_REGION}
         awslogs-group: /sigrif/prod/api
         awslogs-stream: api-blue
+    networks:
+      default:
+        aliases: [api]
 
   api-green:
     image: ${BACKEND_IMAGE:-sigrif-backend:latest}
@@ -101,6 +104,29 @@ services:
         awslogs-region: ${AWS_REGION}
         awslogs-group: /sigrif/prod/api
         awslogs-stream: api-green
+    networks:
+      default:
+        aliases: [api]
+
+  ingest:
+    image: ${BACKEND_IMAGE:-sigrif-backend:latest}
+    command: python -m sigrif.ingest.main
+    env_file:
+      - /opt/sigrif/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      ia:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION}
+        awslogs-group: /sigrif/prod/ingest
+        awslogs-stream: ingest
 
   seed:
     image: ${BACKEND_IMAGE:-sigrif-backend:latest}
@@ -124,6 +150,45 @@ services:
       - /opt/sigrif/certbot/conf:/etc/letsencrypt
       - /opt/sigrif/certbot/www:/var/www/certbot
     profiles: ["tools"]
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=7d
+    volumes:
+      - ./observability/prometheus/prometheus.prod.yml:/etc/prometheus/prometheus.yml:ro
+      - promdata:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    env_file:
+      - /opt/sigrif/.env
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_SERVER_ROOT_URL: https://${DOMAIN}/grafana/
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafanadata:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    command:
+      - --path.rootfs=/host
+    pid: host
+    volumes:
+      - /:/host:ro,rslave
+    restart: unless-stopped
 
   nginx:
     image: ${NGINX_IMAGE:-sigrif-nginx:latest}
@@ -150,3 +215,5 @@ services:
 
 volumes:
   pgdata:
+  promdata:
+  grafanadata:

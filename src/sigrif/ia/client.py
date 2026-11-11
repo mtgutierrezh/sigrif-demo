@@ -209,3 +209,23 @@ def ocr_image(
     finally:
         if owns_client:
             http_client.close()
+
+
+def model_info(
+    client: httpx.Client | None = None,
+    request_id: str | None = None,
+) -> dict[str, Any]:
+    """Obtiene la model card desde el servicio de IA (sin reintentos largos)."""
+
+    owns_client = client is None
+    http_client = client or httpx.Client(base_url=settings.ia_url, timeout=5.0)
+    headers = {"X-Request-ID": request_id} if request_id else {}
+    try:
+        response = http_client.get("/model", headers=headers)
+        response.raise_for_status()
+        return response.json()
+    except httpx.HTTPError as exc:
+        raise IAUnavailable("No se pudo leer la información del modelo") from exc
+    finally:
+        if owns_client:
+            http_client.close()

@@ -18,6 +18,11 @@ resource "aws_cloudwatch_log_group" "db" {
   retention_in_days = var.log_retention_days
 }
 
+resource "aws_cloudwatch_log_group" "ingest" {
+  name              = "/${var.project}/${var.environment}/ingest"
+  retention_in_days = var.log_retention_days
+}
+
 resource "aws_sns_topic" "alerts" {
   count = var.alert_email != "" ? 1 : 0
 

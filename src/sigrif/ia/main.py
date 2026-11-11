@@ -14,9 +14,10 @@ from starlette.responses import Response
 
 from ..config import settings
 from ..db import SessionLocal, init_db
+from ..evaluation import evaluate_and_store
 from ..events import delete_message, ensure_resources, receive_readings
 from ..ml import risk_model
-from ..models import Reading, Zone
+from ..models import Zone
 from ..schemas import ModelInfoOut, OcrOut, PredictionOut, RiskFeaturesIn
 from .bedrock_ocr import (
     ALLOWED_CONTENT_TYPES,
@@ -50,35 +51,22 @@ def apply_reading(session: Session, payload: dict[str, Any]) -> bool:
     if zone is None:
         MESSAGES.labels("missing").inc()
         return False
-    historical_fires = int(payload.get("historical_fires", 0))
-    result = risk_model.predict_details(
-        {
-            "temperature": payload["temperature"],
-            "humidity": payload["humidity"],
-            "wind_speed": payload["wind_speed"],
-            "vegetation": payload["vegetation"],
-            "historical_fires": historical_fires,
-            "slope": payload["slope"],
-        }
+    features = {
+        "temperature": float(payload["temperature"]),
+        "humidity": float(payload["humidity"]),
+        "wind_speed": float(payload["wind_speed"]),
+        "vegetation": float(payload["vegetation"]),
+        "historical_fires": int(payload.get("historical_fires", 0)),
+        "slope": float(payload["slope"]),
+    }
+    evaluate_and_store(
+        session,
+        zone,
+        features,
+        source=str(payload.get("source", "manual")),
+        observed_at=payload.get("observed_at"),
+        created_by="ingest",
     )
-    label = str(result["risk_level"])
-    score = float(result["risk_score"])
-    zone.risk_level = label
-    zone.risk_score = score
-    session.add(
-        Reading(
-            zone_id=zone.id,
-            temperature=payload["temperature"],
-            humidity=payload["humidity"],
-            wind_speed=payload["wind_speed"],
-            vegetation=payload["vegetation"],
-            historical_fires=historical_fires,
-            slope=payload["slope"],
-            risk_level=label,
-            risk_score=score,
-        )
-    )
-    session.commit()
     MESSAGES.labels("processed").inc()
     return True
 

@@ -52,3 +52,19 @@ output "logs" {
     db    = aws_cloudwatch_log_group.db.name
   }
 }
+
+output "data_topic_arn" {
+  description = "Topic SNS de lecturas meteorológicas."
+  value       = aws_sns_topic.data.arn
+}
+
+output "data_queue_url" {
+  description = "Cola SQS consumida por el servicio de IA."
+  value       = aws_sqs_queue.readings.id
+}
+
+output "grafana_admin_password" {
+  description = "Clave inicial del administrador de Grafana."
+  value       = random_password.grafana.result
+  sensitive   = true
+}

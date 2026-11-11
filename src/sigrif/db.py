@@ -38,3 +38,51 @@ def init_db() -> None:
                 "INTEGER NOT NULL DEFAULT 0"
             )
         )
+        connection.execute(
+            text(
+                "ALTER TABLE readings ADD COLUMN IF NOT EXISTS source "
+                "VARCHAR(20) NOT NULL DEFAULT 'manual'"
+            )
+        )
+        connection.execute(
+            text("ALTER TABLE readings ADD COLUMN IF NOT EXISTS observed_at TIMESTAMPTZ")
+        )
+        connection.execute(
+            text(
+                "CREATE UNIQUE INDEX IF NOT EXISTS ix_readings_zone_observed "
+                "ON readings (zone_id, observed_at) WHERE observed_at IS NOT NULL"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS vegetation "
+                "DOUBLE PRECISION NOT NULL DEFAULT 0.3"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS historical_fires "
+                "INTEGER NOT NULL DEFAULT 0"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS slope "
+                "DOUBLE PRECISION NOT NULL DEFAULT 15"
+            )
+        )
+        connection.execute(
+            text("ALTER TABLE zones ADD COLUMN IF NOT EXISTS last_source VARCHAR(20)")
+        )
+        connection.execute(
+            text("ALTER TABLE zones ADD COLUMN IF NOT EXISTS last_alert_at TIMESTAMPTZ")
+        )
+        connection.execute(
+            text(
+                "UPDATE zones SET "
+                "vegetation = round((0.15 + ((id * 37) % 70) / 100.0)::numeric, 2), "
+                "historical_fires = (id * 7) % 12, "
+                "slope = 5 + ((id * 13) % 35) "
+                "WHERE last_source IS NULL"
+            )
+        )
