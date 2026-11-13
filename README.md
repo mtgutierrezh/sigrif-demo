@@ -150,6 +150,11 @@ Solo para la demo. Cambiar en un despliegue real.
 | POST | `/api/v1/field-reports/ocr` | Extrae texto de una ficha de terreno (multipart) |
 | POST | `/api/v1/zones/{id}/field-reports` | Guarda el texto revisado por el operador |
 | GET | `/api/v1/zones/{id}/field-reports` | Lista los reportes confirmados de la zona |
+| GET | `/api/v1/alerts` | Lista alertas operativas (operador) |
+| PATCH | `/api/v1/alerts/{id}` | Actualiza estado, responsable o comentario (operador) |
+| GET | `/api/v1/zones/{id}/report.csv` | Reporte CSV de la zona (operador) |
+| GET | `/api/v1/zones/{id}/report.pdf` | Reporte PDF de la zona (operador) |
+| GET | `/api/v1/reports/zones.csv` | Reporte CSV consolidado de zonas (operador) |
 
 El servicio de IA expone además `POST /predict`, `GET /model` y `POST /ocr` en
 el puerto 8001. La API pública es la que orquesta: autentica, valida, llama a la
@@ -206,11 +211,16 @@ La ingesta se ejecuta cada 15 minutos con DMC como fuente principal y Open-Meteo
 
 Grafana se publica en `https://<dominio>/grafana/` y usa Prometheus para las métricas de API, IA, ingesta, cola, frescura, alertas y drift. Prometheus y Grafana también están disponibles en local en los puertos 9090 y 3000.
 
+El **centro de alertas** vive en `/alertas` y en `/operaciones`. Cada evaluación de nivel Alto crea o actualiza una alerta abierta; el operador puede asignarle responsable, cambiar su estado (`nueva`, `en_revision`, `cerrada`), agregar comentarios y revisar el historial de eventos. La alerta SNS se mantiene como notificación externa.
+
+Los reportes PDF y CSV incluyen nivel, score, fuente, fecha, factores, escenario y prescripción. Se descargan desde el panel de zona y desde `/operaciones`; el CSV consolidado usa BOM para abrirlo directamente en Excel.
+
 ## Datos de la demo
 
 - 54 sectores urbanos de Valparaíso y 506 zonas censales de 35 comunas continentales (560 zonas).
 - 467 celdas H3 con combustible derivado de CONAF para la capa urbana de Valparaíso.
 - 1.978 polígonos forestales: bosque nativo, plantación, matorral y pradera.
+- Variables estáticas por zona: CONAF 2019 (uso de suelo y vegetación), incendios históricos 2010–2025 y pendiente SRTM 30 m.
 - Variables meteorológicas reales de la Red EMA de la DMC, actualizadas cada 15 minutos; Open-Meteo queda como respaldo.
 - Las etiquetas del modelo son académicas: validan la regla de entrenamiento, no el riesgo real. El sistema no reemplaza las alertas de CONAF ni SENAPRED.
 
