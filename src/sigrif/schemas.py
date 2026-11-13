@@ -25,6 +25,7 @@ class ZoneOut(BaseModel):
 
     id: int
     name: str
+    display_name: str = ""
     comuna: str
     provincia: str = "Valparaíso"
     region: str = "Valparaíso"
@@ -150,6 +151,7 @@ class ZoneAlertOut(BaseModel):
 
     id: int
     name: str
+    display_name: str = ""
     comuna: str
     provincia: str = "Valparaíso"
     region: str = "Valparaíso"

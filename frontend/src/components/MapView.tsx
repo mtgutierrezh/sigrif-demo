@@ -10,6 +10,7 @@ import { ZoomControl } from "./ZoomControl";
 
 import type { Zone } from "../features/zones/types";
 import { formatScore } from "../lib/format";
+import { zoneLabel } from "../lib/names";
 import { zonesToFeatureCollection } from "../lib/geo";
 import { riskColor } from "../lib/risk";
 
@@ -149,7 +150,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
             }
             const path = layer as Path;
             path.bindTooltip(
-              `${zone.name} · ${zone.risk_level} · ${formatScore(zone.risk_score)}`,
+              `${zoneLabel(zone.name, zone.display_name)} · ${zone.risk_level} · ${formatScore(zone.risk_score)}`,
               { sticky: true, direction: "top", className: "sigrif-tooltip" },
             );
             path.on("click", () => onSelect(zone.id));

@@ -6,6 +6,7 @@ import { SearchBox } from "../components/SearchBox";
 import { TelemetryStrip } from "../components/TelemetryStrip";
 import { ZoneTable } from "../components/ZoneTable";
 import { useStatus, useZones } from "../features/zones/useZones";
+import { zoneLabel } from "../lib/names";
 import type { Zone } from "../features/zones/types";
 import { useDebouncedValue } from "../lib/useDebouncedValue";
 import { riskRank } from "../lib/risk";
@@ -39,7 +40,7 @@ export default function ZonesPage() {
     const filtered = (zonesQuery.data ?? []).filter(
       (zone) =>
         term.length === 0 ||
-        zone.name.toLowerCase().includes(term) ||
+        zoneLabel(zone.name, zone.display_name).toLowerCase().includes(term) ||
         zone.comuna.toLowerCase().includes(term),
     );
     return sortZones(filtered, sort);

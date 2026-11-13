@@ -13,6 +13,7 @@ import {
 } from "../features/zones/useAlerts";
 import type { AlertStatus } from "../features/zones/types";
 import { formatDateTime, formatScore } from "../lib/format";
+import { zoneLabel } from "../lib/names";
 
 const STATUS_LABELS: Record<AlertStatus, string> = {
   nueva: "Nueva",
@@ -254,7 +255,7 @@ export default function AlertsPage() {
                         className="text-left text-bone hover:text-surveyor"
                         onClick={() => setSelectedId(alert.id)}
                       >
-                        {alert.zone_name}
+                        {zoneLabel(alert.zone_name)}
                       </button>
                     </td>
                     <td className="py-2 text-ash">{alert.comuna}</td>
@@ -296,7 +297,7 @@ export default function AlertsPage() {
                     {active.comuna}
                   </p>
                   <h2 className="mt-2 text-[26px] leading-tight tracking-[-0.03em] text-bone">
-                    {active.zone_name}
+                    {zoneLabel(active.zone_name)}
                   </h2>
                 </div>
                 <StatusBadge status={active.status} />

@@ -99,6 +99,7 @@ export interface FieldReport {
 export interface Zone {
   id: number;
   name: string;
+  display_name: string;
   comuna: string;
   provincia: string;
   region: string;
@@ -177,6 +178,7 @@ export interface OpsOverview {
 export interface ZoneAlert {
   id: number;
   name: string;
+  display_name: string;
   comuna: string;
   risk_level: RiskLevel;
   risk_score: number;

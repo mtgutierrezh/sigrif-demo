@@ -152,7 +152,7 @@ def zone_csv_bytes(
 
     actions = prescription or evaluation.prescription or []
     row = [
-        zone.name,
+        getattr(zone, "display_name", zone.name),
         zone.comuna,
         evaluation.risk_level,
         _float_text(evaluation.risk_score),
@@ -173,11 +173,22 @@ def zones_summary_csv_bytes(rows: Sequence[tuple[Zone, Evaluation | None]]) -> b
     output = []
     for zone, evaluation in rows:
         if evaluation is None:
-            output.append([zone.name, zone.comuna, "Sin evaluación", "", "", "", "", ""])
+            output.append(
+                [
+                    getattr(zone, "display_name", zone.name),
+                    zone.comuna,
+                    "Sin evaluación",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                ]
+            )
             continue
         output.append(
             [
-                zone.name,
+                getattr(zone, "display_name", zone.name),
                 zone.comuna,
                 evaluation.risk_level,
                 _float_text(evaluation.risk_score),
@@ -199,7 +210,7 @@ def _slug(value: str) -> str:
 def report_filename(zone: Zone | None, extension: str, *, prefix: str = "sigrif") -> str:
     if zone is None:
         return f"{prefix}-zonas.{extension}"
-    slug = _slug(zone.name) or f"zona-{zone.id}"
+    slug = _slug(getattr(zone, "display_name", zone.name)) or f"zona-{zone.id}"
     return f"{prefix}-{slug}.{extension}"
 
 
@@ -223,7 +234,7 @@ def zone_pdf_bytes(
         rightMargin=18 * mm,
         topMargin=16 * mm,
         bottomMargin=16 * mm,
-        title=f"SIGRIF · {zone.name}",
+        title=f"SIGRIF · {getattr(zone, 'display_name', zone.name)}",
         author="SIGRIF",
         subject="Reporte de riesgo de incendio",
     )
@@ -281,7 +292,7 @@ def zone_pdf_bytes(
 
     info_rows = [
         ["Comuna", _text(zone.comuna)],
-        ["Zona", _text(zone.name)],
+        ["Zona", _text(getattr(zone, "display_name", zone.name))],
         ["Nivel de riesgo", _text(evaluation.risk_level)],
         ["Score", _float_text(evaluation.risk_score)],
         ["Fecha de evaluación", _date_text(evaluation, reading)],

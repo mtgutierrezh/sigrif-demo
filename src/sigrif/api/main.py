@@ -149,6 +149,7 @@ def _zone_out(session: Session, zone: Zone) -> ZoneOut:
     return ZoneOut(
         id=zone.id,
         name=zone.name,
+        display_name=zone.display_name,
         comuna=zone.comuna,
         provincia=zone.provincia,
         region=zone.region,

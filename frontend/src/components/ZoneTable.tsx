@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import type { Zone } from "../features/zones/types";
 import { formatDateTime, formatScore } from "../lib/format";
+import { zoneLabel } from "../lib/names";
 import { RiskBadge } from "./RiskBadge";
 
 export function ZoneTable({ zones }: { zones: Zone[] }) {
@@ -44,7 +45,7 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
                     to={`/mapa?zona=${zone.id}`}
                     className="text-[16px] tracking-[-0.02em] text-bone hover:text-surveyor"
                   >
-                    {zone.name}
+                    {zoneLabel(zone.name, zone.display_name)}
                   </Link>
                 </td>
                 <td className="truncate py-3 font-mono text-[12px] text-ash">{zone.comuna}</td>
@@ -72,7 +73,7 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-[18px] tracking-[-0.02em] text-bone">{zone.name}</p>
+                  <p className="text-[18px] tracking-[-0.02em] text-bone">{zoneLabel(zone.name, zone.display_name)}</p>
                   <p className="mt-1 font-mono text-[11px] text-ash">{zone.comuna}</p>
                 </div>
                 <RiskBadge level={zone.risk_level} />

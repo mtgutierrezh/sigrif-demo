@@ -5,6 +5,7 @@ import type { SimulationStage } from "../features/zones/useSimulate";
 import type { HistoryPoint, Zone } from "../features/zones/types";
 import { downloadFile } from "../lib/api";
 import { formatDateTime, formatScore } from "../lib/format";
+import { zoneLabel } from "../lib/names";
 import { FieldReportOCR } from "./FieldReportOCR";
 import { RiskBadge } from "./RiskBadge";
 import { RiskEvaluator } from "./RiskEvaluator";
@@ -97,7 +98,7 @@ export function ZonePanel({
             {zone ? zone.comuna : "Sin selección"}
           </p>
           <h2 className="mt-2 text-[29px] leading-tight tracking-[-0.03em] text-bone">
-            {zone ? zone.name : "Selecciona una zona"}
+            {zone ? zoneLabel(zone.name, zone.display_name) : "Selecciona una zona"}
           </h2>
         </div>
         <button

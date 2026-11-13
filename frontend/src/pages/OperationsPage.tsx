@@ -22,6 +22,7 @@ import {
 } from "../features/zones/useOps";
 import { downloadFile } from "../lib/api";
 import { formatDateTime, formatNumber, formatScore } from "../lib/format";
+import { zoneLabel } from "../lib/names";
 
 function metricValue(metrics: Record<string, unknown>, key: string): number | null {
   const value = metrics[key];
@@ -339,7 +340,7 @@ export default function OperationsPage() {
             <tbody>
               {(alerts.data ?? []).map((zone) => (
                 <tr key={zone.id} className="border-t border-iron">
-                  <td className="py-2 text-bone">{zone.name}</td>
+                  <td className="py-2 text-bone">{zoneLabel(zone.name, zone.display_name)}</td>
                   <td className="py-2 text-ash">{zone.comuna}</td>
                   <td className="py-2"><RiskBadge level={zone.risk_level} /></td>
                   <td className="py-2 text-bone">{formatScore(zone.risk_score)}</td>

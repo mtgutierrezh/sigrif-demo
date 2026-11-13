@@ -10,6 +10,7 @@ import { TelemetryStrip } from "../components/TelemetryStrip";
 import { ZonePanel } from "../components/ZonePanel";
 import { useHistory, useStatus, useZone, useZones } from "../features/zones/useZones";
 import { useSimulate } from "../features/zones/useSimulate";
+import { zoneLabel } from "../lib/names";
 
 export default function MapPage() {
   const [params, setParams] = useSearchParams();
@@ -108,7 +109,7 @@ export default function MapPage() {
               <optgroup key={label} label={label}>
                 {(group ?? []).map((zone) => (
                   <option key={zone.id} className="bg-obsidian text-bone" value={zone.id}>
-                    {zone.name}
+                    {zoneLabel(zone.name, zone.display_name)}
                   </option>
                 ))}
               </optgroup>

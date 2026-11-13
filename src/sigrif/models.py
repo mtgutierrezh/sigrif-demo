@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from typing import Any
 
@@ -41,6 +42,11 @@ class Zone(Base):
     name_official: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     geometry: Mapped[str] = mapped_column(Geometry("MULTIPOLYGON", srid=4326))
     risk_level: Mapped[str] = mapped_column(String(10), default="Bajo")
+
+    @property
+    def display_name(self) -> str:
+        return re.sub(r" · D\d+-Z\d+$", "", self.name)
+
     risk_score: Mapped[float] = mapped_column(Float, default=0.0)
     vegetation: Mapped[float] = mapped_column(Float, default=0.3, server_default="0.3")
     historical_fires: Mapped[int] = mapped_column(

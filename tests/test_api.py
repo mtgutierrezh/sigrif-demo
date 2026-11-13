@@ -13,6 +13,7 @@ from sigrif.models import Alert
 ZONE = SimpleNamespace(
     id=1,
     name="Valparaiso",
+    display_name="Valparaiso",
     comuna="Valparaiso",
     provincia="Valparaíso",
     region="Valparaíso",
