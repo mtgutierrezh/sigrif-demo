@@ -38,3 +38,4 @@ artifacts/*.joblib
 artifacts/*.pkl
 
 ACCESOS.local.md
+ml/cache/

@@ -8,9 +8,8 @@ from typing import Annotated
 import joblib
 import numpy as np
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-
 from model import MODEL_PATH, train_and_save_model
+from pydantic import BaseModel, Field
 
 app = FastAPI(
     title="Student Success Predictor & Prescriptor",
@@ -85,9 +84,7 @@ def analyze_student(data: StudentGrades) -> PredictionResponse:
     # 2. Prescripción: traducimos el resultado a una acción concreta y factible.
     recommendations: list[str] = []
     if prediction == 1:
-        recommendations.append(
-            "El rendimiento actual es suficiente. Mantener el ritmo de estudio."
-        )
+        recommendations.append("El rendimiento actual es suficiente. Mantener el ritmo de estudio.")
     else:
         current_average = float(np.mean(data.grades))
         target_average = 4.0

@@ -17,9 +17,7 @@ CITY = DATA / "cerros_sectores.geojson"
 DPA = DATA / "dpa_valparaiso_2022.geojson"
 OUT = DATA / "cerros_sectores_valparaiso_dpa.geojson"
 
-# Prior académico por provincia: vegetación (0-1), incendios históricos
-# (conteo de referencia) y pendiente media (grados). Es una estimación de
-# partida, no un dato CONAF/IDE. Se reemplazará por capas oficiales.
+
 PRIORS: dict[str, tuple[float, int, float]] = {
     "Petorca": (0.45, 8, 28.0),
     "Los Andes": (0.35, 5, 30.0),

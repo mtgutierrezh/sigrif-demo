@@ -17,7 +17,7 @@ const FIELDS: Array<{
   { key: "humidity", label: "Humedad", unit: "%", min: 0, max: 100, step: 1 },
   { key: "wind_speed", label: "Viento", unit: "km/h", min: 0, max: 150, step: 1 },
   { key: "vegetation", label: "Vegetación", unit: "0–1", min: 0, max: 1, step: 0.01 },
-  { key: "historical_fires", label: "Incendios históricos", unit: "eventos", min: 0, max: 30, step: 1 },
+  { key: "historical_fires", label: "Incendios históricos", unit: "eventos", min: 0, max: 500, step: 1 },
   { key: "slope", label: "Pendiente", unit: "°", min: 0, max: 60, step: 1 },
 ];
 

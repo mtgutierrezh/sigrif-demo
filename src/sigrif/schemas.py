@@ -45,7 +45,7 @@ class RiskFeaturesIn(BaseModel):
     humidity: float = Field(ge=0, le=100)
     wind_speed: float = Field(ge=0, le=150)
     vegetation: float = Field(ge=0, le=1)
-    historical_fires: int = Field(ge=0, le=30)
+    historical_fires: int = Field(ge=0, le=500)
     slope: float = Field(ge=0, le=60)
 
 

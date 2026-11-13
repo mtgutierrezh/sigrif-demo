@@ -12,8 +12,8 @@ import io
 import unicodedata
 from collections.abc import Sequence
 from datetime import datetime
+from html import escape
 from typing import Any
-from xml.sax.saxutils import escape
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4

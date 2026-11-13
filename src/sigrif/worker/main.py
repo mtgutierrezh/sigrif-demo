@@ -9,7 +9,11 @@ from ..db import SessionLocal, init_db
 from ..models import Reading, RiskCell, Zone
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-ZONES_FILE = DATA_DIR / "cerros_sectores_valparaiso_region.geojson"
+ZONES_BASE_FILE = DATA_DIR / "cerros_sectores_valparaiso_region.geojson"
+ZONES_OFFICIAL_FILE = DATA_DIR / "cerros_sectores_valparaiso_region_oficial.geojson"
+
+
+ZONES_FILE = ZONES_OFFICIAL_FILE if ZONES_OFFICIAL_FILE.exists() else ZONES_BASE_FILE
 CELLS_FILE = DATA_DIR / "risk_cells.geojson"
 
 
