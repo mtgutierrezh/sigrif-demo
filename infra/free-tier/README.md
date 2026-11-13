@@ -9,7 +9,7 @@ todavía no necesita.
 
 | Recurso | Uso |
 |---|---|
-| EC2 `t3.micro` | Ejecuta Nginx, API, IA, PostGIS y el job de seed. |
+| EC2 `t3.small` | Ejecuta Nginx, API, IA, ingesta, PostGIS y observabilidad. |
 | Elastic IP | Mantiene estable la IP pública usada por el DNS y TLS. |
 | Security group | Abre 80 y 443; no abre SSH. |
 | Rol IAM + SSM | Acceso administrativo por Session Manager, sin llave SSH. |
@@ -48,10 +48,10 @@ El stack está aplicado en la cuenta `434661699063`, región `us-east-2`:
 | Dato | Valor |
 |---|---|
 | URL | <https://18-224-211-162.sslip.io> |
-| Instancia | `i-0a17768ef560ac55d` |
+| Instancia | `i-0c0447a362c77d720` |
 | Elastic IP | `18.224.211.162` |
 | Certificado | Let's Encrypt, vence el 9 de febrero de 2027 |
-| Color activo | `blue` |
+| Color activo | `green` |
 
 El certificado se emitió con `scripts/init_letsencrypt.sh`; el script ahora
 carga `images.env` para no intentar descargar una etiqueta inexistente. La
@@ -115,7 +115,7 @@ terraform destroy
 
 ## Costos
 
-`t3.micro`, 20 GB de gp3, una IP pública y los logs consumen el crédito de la
+`t3.small`, 20 GB de gp3, una IP pública y los logs consumen el crédito de la
 cuenta nueva. La estimación de trabajo es USD 0 a 4 mensuales dentro del plan
 gratuito; si el crédito no cubre algún recurso, el gasto sigue siendo bajo.
 Configurar `budget_email` y destruir al final de la demostración.
