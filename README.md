@@ -208,7 +208,7 @@ Grafana se publica en `https://<dominio>/grafana/` y usa Prometheus para las mé
 
 ## Datos de la demo
 
-- 54 sectores urbanos de Valparaíso y 35 comunas continentales (89 zonas).
+- 54 sectores urbanos de Valparaíso y 506 zonas censales de 35 comunas continentales (560 zonas).
 - 467 celdas H3 con combustible derivado de CONAF para la capa urbana de Valparaíso.
 - 1.978 polígonos forestales: bosque nativo, plantación, matorral y pradera.
 - Variables meteorológicas reales de la Red EMA de la DMC, actualizadas cada 15 minutos; Open-Meteo queda como respaldo.

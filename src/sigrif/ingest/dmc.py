@@ -63,6 +63,11 @@ def parse_response(payload: dict[str, Any]) -> list[DMCStation]:
             wind_kt = _number(reading.get("fuerzaDelVientoPromedio10Minutos"))
             if observed is None or temperature is None or humidity is None:
                 continue
+            if not -10.0 <= temperature <= 50.0 or not 0.0 <= humidity <= 100.0:
+                continue
+            wind_kmh = round((wind_kt or 0.0) * 1.852, 2)
+            if not 0.0 <= wind_kmh <= 150.0:
+                continue
             candidate = DMCStation(
                 code=str(station.get("codigoNacional", "")),
                 name=str(station.get("nombreEstacion", "")),
@@ -71,7 +76,7 @@ def parse_response(payload: dict[str, Any]) -> list[DMCStation]:
                 observed_at=observed,
                 temperature=temperature,
                 humidity=humidity,
-                wind_kmh=round((wind_kt or 0.0) * 1.852, 2),
+                wind_kmh=wind_kmh,
             )
             if latest is None or candidate.observed_at > latest.observed_at:
                 latest = candidate

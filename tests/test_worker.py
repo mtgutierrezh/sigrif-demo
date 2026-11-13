@@ -47,9 +47,9 @@ def test_multipolygon_wkt_from_polygon():
 
 def test_load_zones_reads_geojson():
     zones = main.load_zones()
-    assert len(zones) == 89
+    assert len(zones) == 560
     assert zones[0]["name"] == "SECTOR CENTRO"
-    assert len({zone["name"] for zone in zones}) == 89
+    assert len({zone["name"] for zone in zones}) == 560
 
 
 def test_seed_inserts_zones(monkeypatch):
@@ -59,7 +59,7 @@ def test_seed_inserts_zones(monkeypatch):
 
     main.seed_zones()
 
-    assert len(session.added) == 89
+    assert len(session.added) == 560
     assert session.committed is True
 
 
@@ -70,12 +70,12 @@ def test_seed_replaces_old_zones(monkeypatch):
 
     main.seed_zones()
 
-    assert len(session.added) == 89
+    assert len(session.added) == 560
     assert len(session.executed) == 2
 
 
 def test_seed_skips_existing_zones(monkeypatch):
-    session = FakeSession(existing=89)
+    session = FakeSession(existing=560)
     monkeypatch.setattr(main, "init_db", lambda: None)
     monkeypatch.setattr(main, "SessionLocal", lambda: session)
 

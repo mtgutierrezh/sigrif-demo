@@ -15,7 +15,7 @@ from typing import Any
 DATA = Path(__file__).resolve().parents[1] / "src" / "sigrif" / "data"
 CITY = DATA / "cerros_sectores.geojson"
 DPA = DATA / "dpa_valparaiso_2022.geojson"
-OUT = DATA / "cerros_sectores_valparaiso_region.geojson"
+OUT = DATA / "cerros_sectores_valparaiso_dpa.geojson"
 
 # Prior académico por provincia: vegetación (0-1), incendios históricos
 # (conteo de referencia) y pendiente media (grados). Es una estimación de
