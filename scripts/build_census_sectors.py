@@ -30,7 +30,7 @@ PRIORS = {
     "SAN ANTONIO": (0.30, 4, 18.0),
     "ISLA DE PASCUA": (0.20, 1, 12.0),
 }
-ISLAND_OR_CITY = {"VALPARAISO", "ISLA DE PASCUA", "JUAN FERNANDEZ", "VALPARAÍSO", "ISLA DE PASCUA"}
+ISLAND_OR_CITY = {"VALPARAISO", "ISLA DE PASCUA", "JUAN FERNANDEZ", "VALPARAÍSO"}
 
 
 def norm(value: str) -> str:
@@ -133,8 +133,10 @@ def build_regional() -> int:
 if __name__ == "__main__":
     import sys
 
-    source = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(
-        "/tmp/opencode/zonas2017/Zonas_censales_Chile_2017.shp"
+    source = (
+        Path(sys.argv[1])
+        if len(sys.argv) > 1
+        else Path("/tmp/opencode/zonas2017/Zonas_censales_Chile_2017.shp")
     )
     convert_census(source)
     build_regional()

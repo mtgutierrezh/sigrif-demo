@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -151,6 +151,58 @@ class ZoneAlertOut(BaseModel):
     last_source: str | None = None
     last_alert_at: datetime | None = None
     updated_at: datetime
+
+
+class AlertEventOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    alert_id: int
+    event_type: str
+    detail: str | None = None
+    actor: str
+    created_at: datetime
+
+
+class AlertOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    zone_id: int
+    zone_name: str
+    comuna: str
+    evaluation_id: int | None = None
+    risk_level: str | None = None
+    risk_score: float | None = None
+    status: str
+    assigned_to: str | None = None
+    comment: str | None = None
+    created_at: datetime
+    updated_at: datetime
+    closed_at: datetime | None = None
+    evaluation: EvaluationSummaryOut | None = None
+
+
+class AlertDetailOut(AlertOut):
+    events: list[AlertEventOut] = Field(default_factory=list)
+
+
+class AlertUpdate(BaseModel):
+    status: Literal["nueva", "en_revision", "cerrada"] | None = None
+    assigned_to: str | None = Field(default=None, max_length=120)
+    comment: str | None = Field(default=None, max_length=5000)
+
+
+class AlertEventCreate(BaseModel):
+    event_type: str = Field(default="comentario", max_length=30)
+    detail: str = Field(min_length=1, max_length=5000)
+
+
+class AlertSummaryOut(BaseModel):
+    total: int
+    nueva: int
+    en_revision: int
+    cerrada: int
 
 
 class IngestionRunOut(BaseModel):

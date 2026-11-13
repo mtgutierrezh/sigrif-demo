@@ -1,4 +1,13 @@
-import { Activity, AlertTriangle, Database, Gauge, RefreshCw, Server, Waves } from "lucide-react";
+import {
+  Activity,
+  AlertTriangle,
+  Database,
+  Download,
+  Gauge,
+  RefreshCw,
+  Server,
+  Waves,
+} from "lucide-react";
 import { useState } from "react";
 
 import { PageLoader } from "../components/PageLoader";
@@ -11,6 +20,7 @@ import {
   useOpsOverview,
   useRunIngestion,
 } from "../features/zones/useOps";
+import { downloadFile } from "../lib/api";
 import { formatDateTime, formatNumber, formatScore } from "../lib/format";
 
 function metricValue(metrics: Record<string, unknown>, key: string): number | null {
@@ -30,13 +40,29 @@ function sourceLabel(source: string | null | undefined): string {
 }
 
 export default function OperationsPage() {
-  const { canSimulate } = useSession();
+  const { canSimulate, token } = useSession();
   const overview = useOpsOverview();
   const alerts = useOpsAlerts();
   const ingestion = useOpsIngestion();
   const model = useModelInfo();
   const runIngestion = useRunIngestion();
   const [provider, setProvider] = useState("auto");
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+
+  async function handleExport() {
+    setExporting(true);
+    setExportError(null);
+    try {
+      await downloadFile("/api/v1/reports/zones.csv", token, "sigrif-zonas.csv");
+    } catch (error) {
+      setExportError(
+        error instanceof Error ? error.message : "No pudimos exportar las zonas.",
+      );
+    } finally {
+      setExporting(false);
+    }
+  }
 
   if (!canSimulate) {
     return (
@@ -87,10 +113,24 @@ export default function OperationsPage() {
             grupo operadores.
           </p>
         </div>
-        <button type="button" className="btn btn-ghost" onClick={() => void overview.refetch()}>
-          <RefreshCw size={16} strokeWidth={1.5} aria-hidden="true" /> Actualizar
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            className="btn btn-ghost"
+            disabled={exporting}
+            onClick={() => void handleExport()}
+          >
+            <Download size={16} strokeWidth={1.5} aria-hidden="true" />
+            {exporting ? "Exportando…" : "Exportar CSV"}
+          </button>
+          <button type="button" className="btn btn-ghost" onClick={() => void overview.refetch()}>
+            <RefreshCw size={16} strokeWidth={1.5} aria-hidden="true" /> Actualizar
+          </button>
+        </div>
       </div>
+      <p className="mt-2 min-h-5 font-mono text-[11px] text-ember" aria-live="polite">
+        {exportError}
+      </p>
 
       <section className="mt-10 grid gap-px bg-iron sm:grid-cols-2 lg:grid-cols-5">
         {[

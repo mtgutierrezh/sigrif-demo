@@ -69,7 +69,9 @@ def _from_dmc(
     readings: list[ZoneWeather] = []
     missing: list[int] = []
     for zone, latitude, longitude in zones:
-        station = interpolate_station(latitude, longitude, stations, settings.ingest_station_radius_km)
+        station = interpolate_station(
+            latitude, longitude, stations, settings.ingest_station_radius_km
+        )
         if station is None:
             missing.append(zone.id)
             continue

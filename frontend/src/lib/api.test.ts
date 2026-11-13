@@ -1,12 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { fetchJson, postForm, postJson, setAccessToken } from "./api";
+import { fetchJson, downloadFile, postForm, postJson, setAccessToken } from "./api";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "";
 
 afterEach(() => {
   setAccessToken(null);
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe("api client", () => {
@@ -97,5 +98,45 @@ describe("api client", () => {
     expect(fetchMock).toHaveBeenCalledWith(`${baseUrl}/health`, {
       headers: { Accept: "application/json" },
     });
+  });
+
+  it("downloads an authenticated file as a blob", async () => {
+    const blob = new Blob(["zona,comuna"], { type: "text/csv" });
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      blob: async () => blob,
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const createObjectURL = vi.fn().mockReturnValue("blob:demo");
+    const revokeObjectURL = vi.fn();
+    Object.defineProperty(URL, "createObjectURL", { configurable: true, value: createObjectURL });
+    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: revokeObjectURL });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    setAccessToken("token-demo");
+
+    await downloadFile("/api/v1/zones/7/report.csv", "token-demo", "reporte.csv");
+
+    expect(fetchMock).toHaveBeenCalledWith(`${baseUrl}/api/v1/zones/7/report.csv`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer token-demo",
+      },
+    });
+    expect(createObjectURL).toHaveBeenCalledWith(blob);
+    expect(click).toHaveBeenCalled();
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:demo");
+  });
+
+  it("surfaces the API detail when a download fails", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      json: async () => ({ detail: "La zona no tiene evaluaciones registradas." }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      downloadFile("/api/v1/zones/7/report.pdf", "token-demo", "reporte.pdf"),
+    ).rejects.toThrow("La zona no tiene evaluaciones registradas.");
   });
 });

@@ -119,6 +119,49 @@ class Evaluation(Base):
     zone: Mapped[Zone] = relationship()
 
 
+class Alert(Base):
+    __tablename__ = "alerts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    zone_id: Mapped[int] = mapped_column(ForeignKey("zones.id", ondelete="CASCADE"))
+    evaluation_id: Mapped[int | None] = mapped_column(
+        ForeignKey("evaluations.id", ondelete="SET NULL"), nullable=True
+    )
+    status: Mapped[str] = mapped_column(
+        String(20), default="nueva", server_default="nueva", nullable=False
+    )
+    assigned_to: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    comment: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    closed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    zone: Mapped[Zone] = relationship()
+    evaluation: Mapped[Evaluation | None] = relationship()
+    events: Mapped[list["AlertEvent"]] = relationship(
+        back_populates="alert",
+        cascade="all, delete-orphan",
+        order_by="AlertEvent.id",
+    )
+    __table_args__ = (
+        Index("ix_alerts_zone_status", "zone_id", "status"),
+        Index("ix_alerts_created_at", "created_at"),
+    )
+
+
+class AlertEvent(Base):
+    __tablename__ = "alert_events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    alert_id: Mapped[int] = mapped_column(ForeignKey("alerts.id", ondelete="CASCADE"), index=True)
+    event_type: Mapped[str] = mapped_column(String(30))
+    detail: Mapped[str | None] = mapped_column(Text, nullable=True)
+    actor: Mapped[str] = mapped_column(String(120), default="sistema")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    alert: Mapped[Alert] = relationship(back_populates="events")
+
+
 class IngestionRun(Base):
     __tablename__ = "ingestion_runs"
 

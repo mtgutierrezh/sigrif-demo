@@ -8,6 +8,7 @@ from sigrif.config import settings
 from sigrif.db import get_session
 from sigrif.events import MessagingDisabled
 from sigrif.ia.client import IAUnavailable
+from sigrif.models import Alert
 
 ZONE = SimpleNamespace(
     id=1,
@@ -240,6 +241,32 @@ def test_evaluate_zone_persists_reading(monkeypatch):
     assert body["model_version"] == "random-forest-0.2.0"
     assert session.committed is True
     assert session.added[0].historical_fires == 8
+
+
+def test_evaluate_zone_creates_alert(monkeypatch):
+    session = FakeSession()
+    monkeypatch.setattr(main, "predict_risk", lambda features, **_: PREDICTION)
+    main.app.dependency_overrides[get_session] = lambda: session
+    response = client.post("/api/v1/zones/1/evaluate", json=FEATURES)
+    main.app.dependency_overrides.clear()
+
+    assert response.status_code == 200
+    alerts = [item for item in session.added if isinstance(item, Alert)]
+    assert len(alerts) == 1
+    assert alerts[0].zone_id == 1
+    assert alerts[0].status == "nueva"
+
+
+def test_evaluate_zone_does_not_create_alert_for_low_risk(monkeypatch):
+    session = FakeSession()
+    low = {**PREDICTION, "risk_level": "Bajo", "risk_score": 0.12}
+    monkeypatch.setattr(main, "predict_risk", lambda features, **_: low)
+    main.app.dependency_overrides[get_session] = lambda: session
+    response = client.post("/api/v1/zones/1/evaluate", json=FEATURES)
+    main.app.dependency_overrides.clear()
+
+    assert response.status_code == 200
+    assert not [item for item in session.added if isinstance(item, Alert)]
 
 
 def test_evaluate_zone_forwards_request_id(monkeypatch):

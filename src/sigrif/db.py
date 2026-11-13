@@ -78,6 +78,12 @@ def init_db() -> None:
             text("ALTER TABLE zones ADD COLUMN IF NOT EXISTS last_alert_at TIMESTAMPTZ")
         )
         connection.execute(
+            text("CREATE INDEX IF NOT EXISTS ix_alerts_zone_status ON alerts (zone_id, status)")
+        )
+        connection.execute(
+            text("CREATE INDEX IF NOT EXISTS ix_alerts_created_at ON alerts (created_at)")
+        )
+        connection.execute(
             text(
                 "UPDATE zones SET "
                 "vegetation = round((0.15 + ((id * 37) % 70) / 100.0)::numeric, 2), "

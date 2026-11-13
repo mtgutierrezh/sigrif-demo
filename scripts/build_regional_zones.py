@@ -83,7 +83,7 @@ def main() -> None:
         "features": regional,
     }
     OUT.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
-    print(f"Zonas: {len(regional)} (sectores={len(city)}, comunas={len(regional)-len(city)})")
+    print(f"Zonas: {len(regional)} (sectores={len(city)}, comunas={len(regional) - len(city)})")
     print(OUT)
 
 

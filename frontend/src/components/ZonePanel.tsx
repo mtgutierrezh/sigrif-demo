@@ -1,8 +1,9 @@
-import { X } from "lucide-react";
-import type { ReactNode } from "react";
+import { Download, X } from "lucide-react";
+import { useState, type ReactNode } from "react";
 
 import type { SimulationStage } from "../features/zones/useSimulate";
 import type { HistoryPoint, Zone } from "../features/zones/types";
+import { downloadFile } from "../lib/api";
 import { formatDateTime, formatScore } from "../lib/format";
 import { FieldReportOCR } from "./FieldReportOCR";
 import { RiskBadge } from "./RiskBadge";
@@ -47,7 +48,9 @@ export function ZonePanel({
   message,
   telemetry,
 }: ZonePanelProps) {
-  const { canSimulate } = useSession();
+  const { canSimulate, token } = useSession();
+  const [downloading, setDownloading] = useState<"pdf" | "csv" | null>(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
   const steps = [
     { key: "publishing", label: "Publicada en SNS" },
     { key: "queued", label: "En cola SQS" },
@@ -63,6 +66,25 @@ export function ZonePanel({
           : simulateStage === "done"
             ? 3
             : -1;
+
+  async function handleReport(format: "pdf" | "csv") {
+    if (!zone) return;
+    setDownloading(format);
+    setDownloadError(null);
+    try {
+      await downloadFile(
+        `/api/v1/zones/${zone.id}/report.${format}`,
+        token,
+        `sigrif-zona-${zone.id}.${format}`,
+      );
+    } catch (error) {
+      setDownloadError(
+        error instanceof Error ? error.message : "No pudimos generar el reporte.",
+      );
+    } finally {
+      setDownloading(null);
+    }
+  }
 
   return (
     <aside
@@ -114,6 +136,37 @@ export function ZonePanel({
 
           {canSimulate ? <RiskEvaluator key={zone.id} zone={zone} /> : null}
           {canSimulate ? <FieldReportOCR key={`ocr-${zone.id}`} zone={zone} /> : null}
+
+          {canSimulate ? (
+            <div className="mt-5 border-t border-iron pt-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">
+                Reportes de la zona
+              </p>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  disabled={downloading !== null}
+                  onClick={() => void handleReport("pdf")}
+                >
+                  <Download size={15} strokeWidth={1.5} aria-hidden="true" />
+                  {downloading === "pdf" ? "Generando…" : "PDF"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  disabled={downloading !== null}
+                  onClick={() => void handleReport("csv")}
+                >
+                  <Download size={15} strokeWidth={1.5} aria-hidden="true" />
+                  {downloading === "csv" ? "Generando…" : "CSV"}
+                </button>
+              </div>
+              <p className="mt-2 min-h-5 font-mono text-[10px] text-ember" aria-live="polite">
+                {downloadError}
+              </p>
+            </div>
+          ) : null}
 
           {canSimulate ? (
             <button

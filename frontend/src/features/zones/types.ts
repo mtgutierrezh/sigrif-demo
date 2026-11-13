@@ -190,3 +190,64 @@ export interface ModelInfo {
   feature_importance: Array<Record<string, unknown>>;
   source: string | null;
 }
+
+export type AlertStatus = "nueva" | "en_revision" | "cerrada";
+
+export interface EvaluationSummary {
+  id: number;
+  zone_id: number;
+  risk_level: RiskLevel;
+  risk_score: number;
+  model_version: string;
+  source: string;
+  created_at: string;
+  prescription_count: number;
+}
+
+export interface AlertEvent {
+  id: number;
+  alert_id: number;
+  event_type: string;
+  detail: string | null;
+  actor: string;
+  created_at: string;
+}
+
+export interface Alert {
+  id: number;
+  zone_id: number;
+  zone_name: string;
+  comuna: string;
+  evaluation_id: number | null;
+  risk_level: RiskLevel | null;
+  risk_score: number | null;
+  status: AlertStatus;
+  assigned_to: string | null;
+  comment: string | null;
+  created_at: string;
+  updated_at: string;
+  closed_at: string | null;
+  evaluation: EvaluationSummary | null;
+}
+
+export interface AlertDetail extends Alert {
+  events: AlertEvent[];
+}
+
+export interface AlertSummary {
+  total: number;
+  nueva: number;
+  en_revision: number;
+  cerrada: number;
+}
+
+export interface AlertUpdatePayload {
+  status?: AlertStatus;
+  assigned_to?: string;
+  comment?: string;
+}
+
+export interface AlertEventPayload {
+  event_type: string;
+  detail: string;
+}

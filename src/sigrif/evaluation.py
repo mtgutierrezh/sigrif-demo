@@ -4,6 +4,7 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from .alerts import ensure_alert
 from .config import settings
 from .events import publish_alert
 from .models import Evaluation, Reading, Zone
@@ -100,12 +101,14 @@ def store_evaluation(
         created_at=evaluated_at,
     )
     session.add(evaluation)
+    session.flush()
 
     zone.risk_level = risk_level
     zone.risk_score = risk_score
     zone.last_source = source
 
     if risk_level == "Alto":
+        ensure_alert(session, zone, evaluation)
         cooldown = timedelta(hours=max(1, settings.alert_cooldown_hours))
         if zone.last_alert_at is None or zone.last_alert_at < evaluated_at - cooldown:
             delivered = publish_alert(

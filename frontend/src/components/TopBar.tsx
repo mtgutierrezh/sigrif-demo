@@ -22,7 +22,11 @@ export function TopBar() {
 
   const authenticated = session.status === "authenticated";
   const navLinks = session.canSimulate
-    ? [...links, { to: "/operaciones", label: "Operaciones" }]
+    ? [
+        ...links,
+        { to: "/alertas", label: "Alertas" },
+        { to: "/operaciones", label: "Operaciones" },
+      ]
     : links;
 
   return (

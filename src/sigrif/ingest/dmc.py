@@ -171,9 +171,21 @@ def interpolate_station(
     nearest = nearby[0][1]
     weights = [1.0 / max(distance, 0.05) ** 2 for distance, _ in nearby]
     total = sum(weights)
-    temperature = sum(weight * station.temperature for weight, (_, station) in zip(weights, nearby)) / total
-    humidity = sum(weight * station.humidity for weight, (_, station) in zip(weights, nearby)) / total
-    wind = sum(weight * station.wind_kmh for weight, (_, station) in zip(weights, nearby)) / total
+    temperature = (
+        sum(
+            weight * station.temperature
+            for weight, (_, station) in zip(weights, nearby, strict=True)
+        )
+        / total
+    )
+    humidity = (
+        sum(weight * station.humidity for weight, (_, station) in zip(weights, nearby, strict=True))
+        / total
+    )
+    wind = (
+        sum(weight * station.wind_kmh for weight, (_, station) in zip(weights, nearby, strict=True))
+        / total
+    )
     return DMCStation(
         code="idw",
         name=f"IDW {nearest.name}",

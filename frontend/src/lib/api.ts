@@ -100,3 +100,73 @@ export async function postForm<T>(
 
   return (await response.json()) as T;
 }
+
+export async function patchJson<T>(
+  path: string,
+  token: string | undefined,
+  body?: unknown,
+): Promise<T> {
+  const hasBody = body !== undefined;
+  const response = await fetch(`${baseUrl}${path}`, {
+    method: "PATCH",
+    headers: {
+      ...authHeaders(token),
+      ...(hasBody ? { "Content-Type": "application/json" } : {}),
+    },
+    ...(hasBody ? { body: JSON.stringify(body) } : {}),
+  });
+
+  if (!response.ok) {
+    let message =
+      response.status === 401
+        ? "Necesitas iniciar sesión para actualizar esta información."
+        : "No pudimos completar la operación.";
+    try {
+      const payload = (await response.json()) as { detail?: unknown };
+      if (typeof payload.detail === "string") {
+        message = payload.detail;
+      }
+    } catch {
+      // El cuerpo puede no ser JSON; se conserva el mensaje genérico.
+    }
+    throw new ApiError(response.status, message);
+  }
+
+  return (await response.json()) as T;
+}
+
+export async function downloadFile(
+  path: string,
+  token: string | undefined,
+  filename: string,
+): Promise<void> {
+  const response = await fetch(`${baseUrl}${path}`, {
+    headers: authHeaders(token),
+  });
+
+  if (!response.ok) {
+    let message =
+      response.status === 401
+        ? "Necesitas iniciar sesión para descargar este reporte."
+        : "No pudimos generar el reporte. Intenta nuevamente.";
+    try {
+      const payload = (await response.json()) as { detail?: unknown };
+      if (typeof payload.detail === "string") {
+        message = payload.detail;
+      }
+    } catch {
+      // El cuerpo puede no ser JSON; se conserva el mensaje genérico.
+    }
+    throw new ApiError(response.status, message);
+  }
+
+  const blob = await response.blob();
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = objectUrl;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(objectUrl);
+}

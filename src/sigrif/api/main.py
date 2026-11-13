@@ -17,6 +17,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
+from ..alerts import ALERT_STATUSES, add_event, update_alert
 from ..auth import OperatorUser
 from ..config import settings
 from ..db import get_session, init_db
@@ -26,7 +27,16 @@ from ..ia.bedrock_ocr import ALLOWED_CONTENT_TYPES, detect_content_type
 from ..ia.client import IAUnavailable, model_info, ocr_image, predict_risk
 from ..ingest.service import run_ingestion
 from ..model_spec import LABELS, MODEL_VERSION
-from ..models import Evaluation, FieldReport, IngestionRun, Reading, RiskCell, Zone
+from ..models import (
+    Alert,
+    AlertEvent,
+    Evaluation,
+    FieldReport,
+    IngestionRun,
+    Reading,
+    RiskCell,
+    Zone,
+)
 from ..monitoring import (
     data_timestamps,
     drift_report,
@@ -35,7 +45,14 @@ from ..monitoring import (
     risk_counts,
 )
 from ..prescription import build_prescription
+from ..reports import report_filename, zone_csv_bytes, zone_pdf_bytes, zones_summary_csv_bytes
 from ..schemas import (
+    AlertDetailOut,
+    AlertEventCreate,
+    AlertEventOut,
+    AlertOut,
+    AlertSummaryOut,
+    AlertUpdate,
     DriftFeatureOut,
     EvaluationOut,
     EvaluationSummaryOut,
@@ -91,7 +108,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
 )
 
@@ -157,6 +174,55 @@ def _evaluation_summary(evaluation: Evaluation) -> EvaluationSummaryOut:
         created_at=evaluation.created_at,
         prescription_count=len(evaluation.prescription or []),
     )
+
+
+def _latest_evaluation(session: Session, zone_id: int) -> Evaluation | None:
+    return session.scalars(
+        select(Evaluation)
+        .where(Evaluation.zone_id == zone_id)
+        .order_by(Evaluation.id.desc())
+        .limit(1)
+    ).first()
+
+
+def _alert_out(session: Session, alert: Alert) -> AlertOut:
+    zone = session.get(Zone, alert.zone_id)
+    evaluation = (
+        session.get(Evaluation, alert.evaluation_id) if alert.evaluation_id is not None else None
+    )
+    return AlertOut(
+        id=alert.id,
+        zone_id=alert.zone_id,
+        zone_name=zone.name if zone is not None else f"Zona {alert.zone_id}",
+        comuna=zone.comuna if zone is not None else "",
+        evaluation_id=alert.evaluation_id,
+        risk_level=evaluation.risk_level if evaluation else (zone.risk_level if zone else None),
+        risk_score=evaluation.risk_score if evaluation else (zone.risk_score if zone else None),
+        status=alert.status,
+        assigned_to=alert.assigned_to,
+        comment=alert.comment,
+        created_at=alert.created_at,
+        updated_at=alert.updated_at,
+        closed_at=alert.closed_at,
+        evaluation=_evaluation_summary(evaluation) if evaluation else None,
+    )
+
+
+def _alert_detail(session: Session, alert: Alert) -> AlertDetailOut:
+    base = _alert_out(session, alert)
+    events = session.scalars(
+        select(AlertEvent)
+        .where(AlertEvent.alert_id == alert.id)
+        .order_by(AlertEvent.created_at, AlertEvent.id)
+    ).all()
+    return AlertDetailOut(
+        **base.model_dump(),
+        events=[AlertEventOut.model_validate(event) for event in events],
+    )
+
+
+def _report_headers(filename: str) -> dict[str, str]:
+    return {"Content-Disposition": f'attachment; filename="{filename}"'}
 
 
 @app.get("/health")
@@ -384,6 +450,179 @@ def ops_alerts(
         select(Zone).where(Zone.risk_level == "Alto").order_by(Zone.updated_at.desc()).limit(limit)
     ).all()
     return [ZoneAlertOut.model_validate(zone) for zone in zones]
+
+
+@app.get("/api/v1/alerts/summary", response_model=AlertSummaryOut)
+def alerts_summary(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> AlertSummaryOut:
+    rows = session.execute(select(Alert.status, func.count(Alert.id)).group_by(Alert.status)).all()
+    counts = {str(status): int(count) for status, count in rows}
+    return AlertSummaryOut(
+        total=sum(counts.values()),
+        nueva=counts.get("nueva", 0),
+        en_revision=counts.get("en_revision", 0),
+        cerrada=counts.get("cerrada", 0),
+    )
+
+
+@app.get("/api/v1/alerts", response_model=list[AlertOut])
+def list_alerts(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    status: str | None = None,
+    zone_id: int | None = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 50,
+) -> list[AlertOut]:
+    if status is not None and status not in ALERT_STATUSES:
+        raise HTTPException(status_code=422, detail="Estado de alerta inválido")
+    stmt = select(Alert)
+    if status is not None:
+        stmt = stmt.where(Alert.status == status)
+    if zone_id is not None:
+        stmt = stmt.where(Alert.zone_id == zone_id)
+    stmt = stmt.order_by(Alert.created_at.desc(), Alert.id.desc()).limit(limit)
+    alerts = session.scalars(stmt).all()
+    return [_alert_out(session, alert) for alert in alerts]
+
+
+@app.get("/api/v1/alerts/{alert_id}", response_model=AlertDetailOut)
+def get_alert(
+    alert_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> AlertDetailOut:
+    alert = session.get(Alert, alert_id)
+    if alert is None:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    return _alert_detail(session, alert)
+
+
+@app.patch("/api/v1/alerts/{alert_id}", response_model=AlertDetailOut)
+def patch_alert(
+    alert_id: int,
+    payload: AlertUpdate,
+    session: Annotated[Session, Depends(get_session)],
+    user: OperatorUser,
+) -> AlertDetailOut:
+    alert = session.get(Alert, alert_id)
+    if alert is None:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    try:
+        update_alert(
+            session,
+            alert,
+            status=payload.status,
+            assigned_to=payload.assigned_to,
+            comment=payload.comment,
+            actor=str(user.get("sub", "local")),
+        )
+        session.commit()
+        session.refresh(alert)
+    except ValueError as exc:
+        session.rollback()
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return _alert_detail(session, alert)
+
+
+@app.post(
+    "/api/v1/alerts/{alert_id}/events",
+    response_model=AlertEventOut,
+    status_code=201,
+)
+def create_alert_event(
+    alert_id: int,
+    payload: AlertEventCreate,
+    session: Annotated[Session, Depends(get_session)],
+    user: OperatorUser,
+) -> AlertEventOut:
+    alert = session.get(Alert, alert_id)
+    if alert is None:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    event = add_event(
+        session,
+        alert,
+        payload.event_type,
+        detail=payload.detail,
+        actor=str(user.get("sub", "local")),
+    )
+    session.commit()
+    session.refresh(event)
+    return AlertEventOut.model_validate(event)
+
+
+@app.get("/api/v1/zones/{zone_id}/report.csv")
+def zone_report_csv(
+    zone_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> Response:
+    zone = session.get(Zone, zone_id)
+    if zone is None:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    evaluation = _latest_evaluation(session, zone_id)
+    if evaluation is None:
+        raise HTTPException(
+            status_code=404,
+            detail="La zona no tiene evaluaciones registradas; genera una evaluación primero.",
+        )
+    reading = (
+        session.get(Reading, evaluation.reading_id) if evaluation.reading_id is not None else None
+    )
+    content = zone_csv_bytes(zone, evaluation, reading, evaluation.prescription or [])
+    return Response(
+        content=content,
+        media_type="text/csv; charset=utf-8",
+        headers=_report_headers(report_filename(zone, "csv")),
+    )
+
+
+@app.get("/api/v1/zones/{zone_id}/report.pdf")
+def zone_report_pdf(
+    zone_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> Response:
+    zone = session.get(Zone, zone_id)
+    if zone is None:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    evaluation = _latest_evaluation(session, zone_id)
+    if evaluation is None:
+        raise HTTPException(
+            status_code=404,
+            detail="La zona no tiene evaluaciones registradas; genera una evaluación primero.",
+        )
+    reading = (
+        session.get(Reading, evaluation.reading_id) if evaluation.reading_id is not None else None
+    )
+    content = zone_pdf_bytes(zone, evaluation, reading, evaluation.prescription or [])
+    return Response(
+        content=content,
+        media_type="application/pdf",
+        headers=_report_headers(report_filename(zone, "pdf")),
+    )
+
+
+@app.get("/api/v1/reports/zones.csv")
+def zones_report_csv(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> Response:
+    zones = session.scalars(select(Zone).order_by(Zone.id)).all()
+    if not zones:
+        raise HTTPException(status_code=404, detail="No hay zonas cargadas")
+    rows = [(zone, _latest_evaluation(session, zone.id)) for zone in zones]
+    if not any(evaluation is not None for _, evaluation in rows):
+        raise HTTPException(
+            status_code=404,
+            detail="No hay evaluaciones registradas; genera al menos una evaluación primero.",
+        )
+    return Response(
+        content=zones_summary_csv_bytes(rows),
+        media_type="text/csv; charset=utf-8",
+        headers=_report_headers(report_filename(None, "csv")),
+    )
 
 
 @app.get("/api/v1/ops/ingestion", response_model=list[IngestionRunOut])
