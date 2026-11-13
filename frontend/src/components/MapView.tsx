@@ -40,18 +40,15 @@ const REGION_BOUNDS: [[number, number], [number, number]] = [
   [-31.8, -69.8],
 ];
 
-function MapFit({ zones, hasSelection }: { zones: Zone[]; hasSelection: boolean }) {
+function MapFit({ hasSelection }: { hasSelection: boolean }) {
   const map = useMap();
 
   useEffect(() => {
-    if (hasSelection || zones.length === 0) {
+    if (hasSelection) {
       return;
     }
-    const bounds = L.geoJSON(zonesToFeatureCollection(zones)).getBounds();
-    if (bounds.isValid()) {
-      map.fitBounds(bounds, { padding: [40, 40] });
-    }
-  }, [hasSelection, map, zones]);
+    map.fitBounds(REGION_BOUNDS, { padding: [24, 24] });
+  }, [hasSelection, map]);
 
   return null;
 }
@@ -67,12 +64,7 @@ function MapFocus({ zone }: { zone: Zone | null }) {
     if (!bounds.isValid()) {
       return;
     }
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      map.fitBounds(bounds, { padding: [40, 40] });
-      return;
-    }
-    map.flyTo(bounds.getCenter(), 13, { duration: 0.6 });
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
   }, [map, zone]);
 
   return null;
@@ -105,8 +97,8 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
   return (
     <div className="h-full w-full" role="application" aria-label="Mapa de riesgo por zona">
       <MapContainer
-        center={[-33.05, -71.5]}
-        zoom={11}
+        center={[-32.9, -71.3]}
+        zoom={8}
         minZoom={9}
         maxBounds={REGION_BOUNDS}
         maxBoundsViscosity={1}
@@ -158,7 +150,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
             path.on("click", () => onSelect(zone.id));
           }}
         />
-        <MapFit zones={zones} hasSelection={selectedId !== null} />
+        <MapFit hasSelection={selectedId !== null} />
         <MapFocus zone={selectedZone} />
       </MapContainer>
     </div>

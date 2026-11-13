@@ -9,9 +9,8 @@ from ..db import SessionLocal, init_db
 from ..models import Reading, RiskCell, Zone
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-ZONES_FILE = DATA_DIR / "cerros_sectores.geojson"
+ZONES_FILE = DATA_DIR / "cerros_sectores_valparaiso_region.geojson"
 CELLS_FILE = DATA_DIR / "risk_cells.geojson"
-COMUNA = "Valparaíso"
 
 
 def _multipolygon_wkt(geometry: dict[str, Any]) -> str:
@@ -40,18 +39,28 @@ def _polygon_wkt(geometry: dict[str, Any]) -> str:
     return "POLYGON(" + ", ".join(rings) + ")"
 
 
-def load_zones(path: Path = ZONES_FILE) -> list[tuple[str, str, str]]:
+def load_zones(path: Path = ZONES_FILE) -> list[dict[str, Any]]:
     data = json.loads(path.read_text(encoding="utf-8"))
-    zones = []
+    zones: list[dict[str, Any]] = []
     for feature in data["features"]:
-        name = feature["properties"]["Nombre_Cer"].strip()
-        zones.append((name, COMUNA, _multipolygon_wkt(feature["geometry"])))
+        properties = feature.get("properties") or {}
+        name = str(properties.get("Nombre_Cer") or properties.get("comuna") or "").strip()
+        comuna = str(properties.get("Comuna") or properties.get("comuna") or "").strip()
+        if not name or not comuna:
+            continue
+        zones.append(
+            {
+                "name": name,
+                "comuna": comuna,
+                "provincia": str(properties.get("Provincia") or "").strip(),
+                "level": str(properties.get("Nivel") or "comunal"),
+                "vegetation": float(properties.get("vegetation", 0.3)),
+                "historical_fires": int(properties.get("historical_fires", 0)),
+                "slope": float(properties.get("slope", 15.0)),
+                "wkt": _multipolygon_wkt(feature["geometry"]),
+            }
+        )
     return zones
-
-
-def load_cells(path: Path = CELLS_FILE) -> list[dict[str, Any]]:
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return data["features"]
 
 
 def seed_zones() -> None:
@@ -59,24 +68,32 @@ def seed_zones() -> None:
     with SessionLocal() as session:
         count = session.scalar(select(func.count(Zone.id))) or 0
         if count == len(zones):
-            print("Las zonas ya existen")
+            print(f"Zonas ya cargadas: {count}")
             return
         if count:
             session.execute(delete(Reading))
             session.execute(delete(Zone))
             session.commit()
-        for name, comuna, wkt in zones:
+        for zone in zones:
             session.add(
                 Zone(
-                    name=name,
-                    comuna=comuna,
-                    geometry=WKTElement(wkt, srid=4326),
+                    name=zone["name"],
+                    comuna=zone["comuna"],
+                    geometry=WKTElement(zone["wkt"], srid=4326),
                     risk_level="Bajo",
                     risk_score=0.0,
+                    vegetation=zone["vegetation"],
+                    historical_fires=zone["historical_fires"],
+                    slope=zone["slope"],
                 )
             )
         session.commit()
-    print(f"Zonas cargadas: {len(zones)}")
+        print(f"Zonas cargadas: {len(zones)}")
+
+
+def load_cells(path: Path = CELLS_FILE) -> list[dict[str, Any]]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return list(data["features"])
 
 
 def seed_cells() -> None:

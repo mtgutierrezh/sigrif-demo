@@ -14,7 +14,7 @@ from ..config import settings
 from ..evaluation import evaluate_and_store
 from ..events import publish_reading
 from ..models import IngestionRun, Zone
-from .dmc import DMCError, DMCStation, fetch_stations, nearest_station
+from .dmc import DMCError, DMCStation, fetch_stations, interpolate_station
 from .open_meteo import fetch_zones
 
 logger = logging.getLogger(__name__)
@@ -69,7 +69,7 @@ def _from_dmc(
     readings: list[ZoneWeather] = []
     missing: list[int] = []
     for zone, latitude, longitude in zones:
-        station = nearest_station(latitude, longitude, stations, settings.ingest_station_radius_km)
+        station = interpolate_station(latitude, longitude, stations, settings.ingest_station_radius_km)
         if station is None:
             missing.append(zone.id)
             continue

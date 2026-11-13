@@ -77,7 +77,7 @@ export default function MapPage() {
             htmlFor="zone-select"
             className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash"
           >
-            Cerro o sector
+            Comuna o sector
           </label>
           <select
             id="zone-select"
@@ -94,7 +94,7 @@ export default function MapPage() {
             </option>
             {(zonesQuery.data ?? []).map((zone) => (
               <option key={zone.id} className="bg-obsidian text-bone" value={zone.id}>
-                {zone.name}
+                {zone.name === zone.comuna ? zone.name : `${zone.name} · ${zone.comuna}`}
               </option>
             ))}
           </select>

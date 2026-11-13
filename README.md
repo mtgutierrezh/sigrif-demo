@@ -1,6 +1,6 @@
 # SIGRIF
 
-Demo funcional de riesgo de incendios forestales para Valparaíso. Incluye API en FastAPI, PostgreSQL/PostGIS, mensajería SNS/SQS, ingesta meteorológica DMC con respaldo Open-Meteo, un servicio de IA con Random Forest, Nginx, Prometheus/Grafana y un frontend en React.
+Demo funcional de riesgo de incendios forestales para la Región de Valparaíso. Incluye API en FastAPI, PostgreSQL/PostGIS, mensajería SNS/SQS, ingesta meteorológica DMC con respaldo Open-Meteo, un servicio de IA con Random Forest, Nginx, Prometheus/Grafana y un frontend en React.
 
 Las etiquetas de entrenamiento son académicas y el modelo no reemplaza a CONAF ni SENAPRED. Los polígonos forestales provienen del catastro de uso de suelo y vegetación de CONAF; las lecturas meteorológicas de producción se obtienen de la Red EMA de la DMC.
 
@@ -208,8 +208,8 @@ Grafana se publica en `https://<dominio>/grafana/` y usa Prometheus para las mé
 
 ## Datos de la demo
 
-- 54 cerros y sectores de Valparaíso.
-- 467 celdas H3 con combustible derivado de CONAF.
+- 54 sectores urbanos de Valparaíso y 35 comunas continentales (89 zonas).
+- 467 celdas H3 con combustible derivado de CONAF para la capa urbana de Valparaíso.
 - 1.978 polígonos forestales: bosque nativo, plantación, matorral y pradera.
 - Variables meteorológicas reales de la Red EMA de la DMC, actualizadas cada 15 minutos; Open-Meteo queda como respaldo.
 - Las etiquetas del modelo son académicas: validan la regla de entrenamiento, no el riesgo real. El sistema no reemplaza las alertas de CONAF ni SENAPRED.

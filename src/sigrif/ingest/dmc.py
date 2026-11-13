@@ -138,3 +138,44 @@ def nearest_station(
         return None
     distance = haversine_km(latitude, longitude, nearest.latitude, nearest.longitude)
     return nearest if distance <= radius_km else None
+
+
+def interpolate_station(
+    latitude: float,
+    longitude: float,
+    stations: Sequence[DMCStation],
+    radius_km: float,
+    k: int = 3,
+) -> DMCStation | None:
+    """Interpola las k estaciones más cercanas con peso 1/d².
+
+    La estación más cercana aporta la marca temporal. Así evitamos que todas
+    las zonas cercanas hereden exactamente el mismo valor de una sola estación.
+    """
+
+    distances = sorted(
+        (
+            haversine_km(latitude, longitude, station.latitude, station.longitude),
+            station,
+        )
+        for station in stations
+    )
+    nearby = [(distance, station) for distance, station in distances if distance <= radius_km][:k]
+    if not nearby:
+        return None
+    nearest = nearby[0][1]
+    weights = [1.0 / max(distance, 0.05) ** 2 for distance, _ in nearby]
+    total = sum(weights)
+    temperature = sum(weight * station.temperature for weight, (_, station) in zip(weights, nearby)) / total
+    humidity = sum(weight * station.humidity for weight, (_, station) in zip(weights, nearby)) / total
+    wind = sum(weight * station.wind_kmh for weight, (_, station) in zip(weights, nearby)) / total
+    return DMCStation(
+        code="idw",
+        name=f"IDW {nearest.name}",
+        latitude=latitude,
+        longitude=longitude,
+        observed_at=nearest.observed_at,
+        temperature=round(temperature, 2),
+        humidity=round(min(100.0, max(0.0, humidity)), 2),
+        wind_kmh=round(max(0.0, wind), 2),
+    )
