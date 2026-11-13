@@ -105,7 +105,11 @@ def main() -> None:
         provincia = str(lookup["properties"].get("provincia") or props.get("NOM_PROVINCIA") or "")
         geo = geokey(props.get("GEOCODIGO"))
         found = name_by_geo.get(geo, {})
+        if str(found.get("field")) == "osm_landuse" and found.get("osm_value") != "residential":
+            found = {}
         base = str(found.get("name") or "").strip()
+        if any(token in base.lower() for token in ("industrial", "conservera", "s.a.", "planta")):
+            base = ""
         source = "OpenStreetMap/Photon" if base else "Censo 2017 INE (localidad)"
         official = False
         if not base:

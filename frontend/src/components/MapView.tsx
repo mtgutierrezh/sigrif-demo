@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import type { Feature, Geometry } from "geojson";
 import L, { type Path, type PathOptions } from "leaflet";
 import { useEffect, useMemo } from "react";
-import { GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, useMap } from "react-leaflet";
+import { CircleMarker, GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, useMap } from "react-leaflet";
 
 import { RiskSurface } from "./RiskSurface";
 import { ZoomControl } from "./ZoomControl";
@@ -156,6 +156,26 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
             path.on("click", () => onSelect(zone.id));
           }}
         />
+        {zones.map((zone) => {
+          if (!zone.geometry) {
+            return null;
+          }
+          const center = L.geoJSON(zone.geometry).getBounds().getCenter();
+          return (
+            <CircleMarker
+              key={`dot-${zone.id}`}
+              center={[center.lat, center.lng]}
+              radius={zone.id === selectedId ? 7 : 3}
+              pathOptions={{
+                color: zone.id === selectedId ? "#ebfc72" : "#13140e",
+                weight: zone.id === selectedId ? 2 : 0.5,
+                fillColor: riskColor(zone.risk_level),
+                fillOpacity: 0.9,
+              }}
+              eventHandlers={{ click: () => onSelect(zone.id) }}
+            />
+          );
+        })}
         <MapFit hasSelection={selectedId !== null} />
         <MapFocus zone={selectedZone} />
       </MapContainer>
