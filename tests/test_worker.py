@@ -1,6 +1,11 @@
 from sigrif.worker import main
 
 
+class FakeScalars:
+    def all(self):
+        return []
+
+
 class FakeSession:
     def __init__(self, existing):
         self.existing = existing
@@ -16,6 +21,9 @@ class FakeSession:
 
     def scalar(self, _):
         return self.existing
+
+    def scalars(self, _):
+        return FakeScalars()
 
     def add(self, item):
         self.added.append(item)
@@ -82,7 +90,7 @@ def test_seed_skips_existing_zones(monkeypatch):
     main.seed_zones()
 
     assert session.added == []
-    assert session.committed is False
+    assert session.committed is True
 
 
 def test_load_cells_reads_geojson():

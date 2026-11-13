@@ -72,23 +72,35 @@ def seed_zones() -> None:
     with SessionLocal() as session:
         count = session.scalar(select(func.count(Zone.id))) or 0
         if count == len(zones):
-            print(f"Zonas ya cargadas: {count}")
+            existing = {zone.name: zone for zone in session.scalars(select(Zone)).all()}
+            updated = 0
+            for zone_data in zones:
+                current = existing.get(zone_data["name"])
+                if current is None:
+                    continue
+                current.comuna = zone_data["comuna"]
+                current.vegetation = zone_data["vegetation"]
+                current.historical_fires = zone_data["historical_fires"]
+                current.slope = zone_data["slope"]
+                updated += 1
+            session.commit()
+            print(f"Zonas actualizadas: {updated}")
             return
         if count:
             session.execute(delete(Reading))
             session.execute(delete(Zone))
             session.commit()
-        for zone in zones:
+        for zone_data in zones:
             session.add(
                 Zone(
-                    name=zone["name"],
-                    comuna=zone["comuna"],
-                    geometry=WKTElement(zone["wkt"], srid=4326),
+                    name=zone_data["name"],
+                    comuna=zone_data["comuna"],
+                    geometry=WKTElement(zone_data["wkt"], srid=4326),
                     risk_level="Bajo",
                     risk_score=0.0,
-                    vegetation=zone["vegetation"],
-                    historical_fires=zone["historical_fires"],
-                    slope=zone["slope"],
+                    vegetation=zone_data["vegetation"],
+                    historical_fires=zone_data["historical_fires"],
+                    slope=zone_data["slope"],
                 )
             )
         session.commit()
