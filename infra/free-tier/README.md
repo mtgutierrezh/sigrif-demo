@@ -47,8 +47,8 @@ El stack está aplicado en la cuenta `434661699063`, región `us-east-2`:
 
 | Dato | Valor |
 |---|---|
-| URL | <https://18-224-211-162.sslip.io> |
-| Instancia | `i-0c0447a362c77d720` |
+| URL | <https://sigrif-valparaiso.duckdns.org> |
+| Instancia | `i-03b99e09039f981c3` |
 | Elastic IP | `18.224.211.162` |
 | Certificado | Let's Encrypt, vence el 9 de febrero de 2027 |
 | Color activo | `green` |

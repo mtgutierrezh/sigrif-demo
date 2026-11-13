@@ -230,7 +230,7 @@ make test-e2e
 
 El despliegue vigente es EC2 `t3.small` + Docker Compose durante la evaluación,
 pensado para el plan gratuito. Está aplicado en `us-east-2` y responde en
-<https://18-224-211-162.sslip.io> con certificado Let's Encrypt. La memoria
+<https://sigrif-valparaiso.duckdns.org> con certificado Let's Encrypt. La memoria
 extra permite ejecutar ingesta, Prometheus, Grafana y node-exporter junto al
 stack principal; al terminar la evaluación se puede volver a `t3.micro`.
 
