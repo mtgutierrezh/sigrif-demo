@@ -100,6 +100,11 @@ export interface Zone {
   id: number;
   name: string;
   comuna: string;
+  provincia: string;
+  region: string;
+  zone_type: string;
+  name_source: string;
+  name_official: boolean;
   risk_level: RiskLevel;
   risk_score: number;
   vegetation: number;

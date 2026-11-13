@@ -26,6 +26,11 @@ class ZoneOut(BaseModel):
     id: int
     name: str
     comuna: str
+    provincia: str = "Valparaíso"
+    region: str = "Valparaíso"
+    zone_type: str = "sector_municipal"
+    name_source: str = "desconocida"
+    name_official: bool = False
     risk_level: str
     risk_score: float
     vegetation: float = 0.3
@@ -146,6 +151,11 @@ class ZoneAlertOut(BaseModel):
     id: int
     name: str
     comuna: str
+    provincia: str = "Valparaíso"
+    region: str = "Valparaíso"
+    zone_type: str = "sector_municipal"
+    name_source: str = "desconocida"
+    name_official: bool = False
     risk_level: str
     risk_score: float
     last_source: str | None = None

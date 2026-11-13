@@ -78,6 +78,36 @@ def init_db() -> None:
             text("ALTER TABLE zones ADD COLUMN IF NOT EXISTS last_alert_at TIMESTAMPTZ")
         )
         connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS provincia "
+                "VARCHAR(80) NOT NULL DEFAULT 'Valparaíso'"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS region "
+                "VARCHAR(80) NOT NULL DEFAULT 'Valparaíso'"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS zone_type "
+                "VARCHAR(30) NOT NULL DEFAULT 'sector_municipal'"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS name_source "
+                "VARCHAR(120) NOT NULL DEFAULT 'desconocida'"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS name_official "
+                "BOOLEAN NOT NULL DEFAULT false"
+            )
+        )
+        connection.execute(
             text("CREATE INDEX IF NOT EXISTS ix_alerts_zone_status ON alerts (zone_id, status)")
         )
         connection.execute(

@@ -217,7 +217,12 @@ Los reportes PDF y CSV incluyen nivel, score, fuente, fecha, factores, escenario
 
 ## Datos de la demo
 
-- 54 sectores urbanos de Valparaíso y 506 zonas censales de 35 comunas continentales (560 zonas).
+La capa de nombres combina los 54 sectores municipales de Valparaíso, nombres
+referenciales de OpenStreetMap/Photon para zonas censales y localidades del
+Censo 2017. Cada zona declara `zone_type`, `name_source` y `name_official`; los
+nombres no oficiales se muestran como referencia y no como límites oficiales.
+
+- 54 sectores urbanos de Valparaíso, 506 zonas censales de 35 comunas continentales, 2 zonas de Isla de Pascua y 1 polígono de Juan Fernández (563 zonas, 38/38 comunas).
 - 467 celdas H3 con combustible derivado de CONAF para la capa urbana de Valparaíso.
 - 1.978 polígonos forestales: bosque nativo, plantación, matorral y pradera.
 - Variables estáticas por zona: CONAF 2019 (uso de suelo y vegetación), incendios históricos 2010–2025 y pendiente SRTM 30 m.

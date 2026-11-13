@@ -1,4 +1,5 @@
 import { AlertTriangle, RotateCcw } from "lucide-react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { MapLegend } from "../components/MapLegend";
@@ -23,6 +24,17 @@ export default function MapPage() {
 
   const selectedZone =
     zoneQuery.data ?? zonesQuery.data?.find((zone) => zone.id === selectedId) ?? null;
+
+  const groupedZones = useMemo(() => {
+    const groups = new Map<string, typeof zonesQuery.data>();
+    for (const zone of zonesQuery.data ?? []) {
+      const key = `${zone.provincia} · ${zone.comuna}`;
+      const current = groups.get(key) ?? [];
+      current.push(zone);
+      groups.set(key, current);
+    }
+    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b, "es"));
+  }, [zonesQuery.data]);
 
   const message =
     simulate.stage === "publishing"
@@ -92,10 +104,14 @@ export default function MapPage() {
             <option className="bg-obsidian text-bone" value="">
               Selecciona…
             </option>
-            {(zonesQuery.data ?? []).map((zone) => (
-              <option key={zone.id} className="bg-obsidian text-bone" value={zone.id}>
-                {zone.name === zone.comuna ? zone.name : `${zone.name} · ${zone.comuna}`}
-              </option>
+            {groupedZones.map(([label, group]) => (
+              <optgroup key={label} label={label}>
+                {(group ?? []).map((zone) => (
+                  <option key={zone.id} className="bg-obsidian text-bone" value={zone.id}>
+                    {zone.name}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </div>

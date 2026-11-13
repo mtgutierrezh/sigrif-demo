@@ -122,6 +122,10 @@ export function ZonePanel({
           <p className="mt-3 font-mono text-[12px] text-ash">
             Actualizado {formatDateTime(zone.updated_at)}
           </p>
+          <p className="mt-2 font-mono text-[11px] text-ash">
+            {zone.zone_type.replaceAll("_", " ")} · {zone.provincia} · nombre:{" "}
+            {zone.name_official ? "oficial" : "referencial"} ({zone.name_source})
+          </p>
 
           <div className="mt-6">
             <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-ash">

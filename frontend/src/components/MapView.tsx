@@ -40,6 +40,11 @@ const REGION_BOUNDS: [[number, number], [number, number]] = [
   [-31.8, -69.8],
 ];
 
+const MAP_BOUNDS: [[number, number], [number, number]] = [
+  [-56.0, -110.0],
+  [-17.0, -66.0],
+];
+
 function MapFit({ hasSelection }: { hasSelection: boolean }) {
   const map = useMap();
 
@@ -100,7 +105,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
         center={[-32.9, -71.3]}
         zoom={8}
         minZoom={9}
-        maxBounds={REGION_BOUNDS}
+        maxBounds={MAP_BOUNDS}
         maxBoundsViscosity={1}
         zoomControl={false}
         preferCanvas

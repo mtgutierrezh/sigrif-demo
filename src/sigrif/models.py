@@ -2,7 +2,19 @@ from datetime import datetime
 from typing import Any
 
 from geoalchemy2 import Geometry
-from sqlalchemy import JSON, DateTime, Float, ForeignKey, Index, Integer, String, Text, func, text
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    func,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .db import Base
@@ -14,6 +26,19 @@ class Zone(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(80), unique=True)
     comuna: Mapped[str] = mapped_column(String(80))
+    provincia: Mapped[str] = mapped_column(
+        String(80), default="Valparaíso", server_default="Valparaíso"
+    )
+    region: Mapped[str] = mapped_column(
+        String(80), default="Valparaíso", server_default="Valparaíso"
+    )
+    zone_type: Mapped[str] = mapped_column(
+        String(30), default="sector_municipal", server_default="sector_municipal"
+    )
+    name_source: Mapped[str] = mapped_column(
+        String(120), default="desconocida", server_default="desconocida"
+    )
+    name_official: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     geometry: Mapped[str] = mapped_column(Geometry("MULTIPOLYGON", srid=4326))
     risk_level: Mapped[str] = mapped_column(String(10), default="Bajo")
     risk_score: Mapped[float] = mapped_column(Float, default=0.0)

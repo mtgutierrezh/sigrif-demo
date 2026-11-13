@@ -1,0 +1,4574 @@
+{
+  "5602021003.0": {
+    "name": "El Yeco",
+    "field": "district",
+    "district": "El Yeco",
+    "locality": null,
+    "osm_name": "Esmeralda Sur",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5602021001.0": {
+    "name": "Los Molles",
+    "field": "district",
+    "district": "Los Molles",
+    "locality": "Comunidad Mirasol",
+    "osm_name": "Puerto Valparaíso",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5602031001.0": {
+    "name": "Altos de San Alfonso",
+    "field": "osm_landuse",
+    "district": null,
+    "locality": null,
+    "osm_name": "Altos de San Alfonso",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5602011006.0": {
+    "name": "Stella Maris",
+    "field": "locality",
+    "district": null,
+    "locality": "Stella Maris",
+    "osm_name": "Juan Pablo II",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5602011002.0": {
+    "name": "Ignacio Carrera Pinto",
+    "field": "locality",
+    "district": null,
+    "locality": "Ignacio Carrera Pinto",
+    "osm_name": "Las Encinas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5602011004.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Quebrada Las Casas",
+    "osm_key": "natural",
+    "osm_value": "wood"
+  },
+  "5602011003.0": {
+    "name": "El Canelo",
+    "field": "locality",
+    "district": null,
+    "locality": "El Canelo",
+    "osm_name": "Pasaje Cunco",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5602011001.0": {
+    "name": "Villa Los Jardines",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Jardines",
+    "osm_name": "Orión",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5604011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Santa Rita",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5604011011.0": {
+    "name": "Loteo Maipumar",
+    "field": "locality",
+    "district": null,
+    "locality": "Loteo Maipumar",
+    "osm_name": "Cabaña El Mirador, El Quisco",
+    "osm_key": "tourism",
+    "osm_value": "motel"
+  },
+  "5604011003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Acuario",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5604011005.0": {
+    "name": "Comunidad Vista Hermosa",
+    "field": "osm_landuse",
+    "district": null,
+    "locality": null,
+    "osm_name": "Comunidad Vista Hermosa",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5604011010.0": {
+    "name": "Punta de Tralca",
+    "field": "district",
+    "district": "Punta de Tralca",
+    "locality": null,
+    "osm_name": "Being",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5604011004.0": {
+    "name": "Punta de Tralca",
+    "field": "district",
+    "district": "Punta de Tralca",
+    "locality": "Los Escritores",
+    "osm_name": "Calle Veinte",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5604011007.0": {
+    "name": "Villa Cordillera",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Cordillera",
+    "osm_name": "Camino de los Tordos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5604011008.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Estadio El Quisco",
+    "osm_key": "leisure",
+    "osm_value": "pitch"
+  },
+  "5604011009.0": {
+    "name": "Isla Negra",
+    "field": "district",
+    "district": "Isla Negra",
+    "locality": null,
+    "osm_name": "Las Anitas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5604011006.0": {
+    "name": "Punta de Tralca",
+    "field": "district",
+    "district": "Punta de Tralca",
+    "locality": null,
+    "osm_name": "Altas Cumbres",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5604011002.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Los Eucaliptos",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5602011005.0": {
+    "name": "Ignacio Carrera Pinto",
+    "field": "locality",
+    "district": null,
+    "locality": "Ignacio Carrera Pinto",
+    "osm_name": "Avenida Doctor Guillermo Mucke",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5602011007.0": {
+    "name": "Los Pitihues",
+    "field": "locality",
+    "district": null,
+    "locality": "Los Pitihues",
+    "osm_name": "Los Pitihues",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5602021002.0": {
+    "name": "Los Molles",
+    "field": "district",
+    "district": "Los Molles",
+    "locality": null,
+    "osm_name": "Mirador",
+    "osm_key": "tourism",
+    "osm_value": "viewpoint"
+  },
+  "5502031001.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": "Luchando por un Sueño",
+    "osm_name": "Jardín Infantil y Sala Cuna 'El Bosque",
+    "osm_key": "amenity",
+    "osm_value": "kindergarten"
+  },
+  "5502031003.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": "Villa Sopraval",
+    "osm_name": "José Joaquín Godoy",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5502031002.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": null,
+    "osm_name": "Las Quintas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5502011001.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": null,
+    "osm_name": "Cali",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5502051006.0": {
+    "name": "Villa Los Copihues",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Copihues",
+    "osm_name": "San Javier",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5502021001.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": null,
+    "osm_name": "Avenida Alcalde Gonzalo Lizasoaín",
+    "osm_key": "highway",
+    "osm_value": "primary"
+  },
+  "5502011002.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": null,
+    "osm_name": "Escuela Básica Gabriela Mistral",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5502051002.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": null,
+    "osm_name": "Lebu",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5502011003.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": null,
+    "osm_name": "Colegio John Crane",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5502021002.0": {
+    "name": "Las Cabritas",
+    "field": "district",
+    "district": "Las Cabritas",
+    "locality": null,
+    "osm_name": "aCuenta",
+    "osm_key": "shop",
+    "osm_value": "supermarket"
+  },
+  "5502051005.0": {
+    "name": "Villa Valparaíso",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Valparaíso",
+    "osm_name": "Colegio San Francisco de Asís",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5502051003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Michimalongo",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5502011004.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Autopista Los Andes",
+    "osm_key": "highway",
+    "osm_value": "motorway"
+  },
+  "5502051001.0": {
+    "name": "Villa Valparaíso",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Valparaíso",
+    "osm_name": "Libertad",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5502051004.0": {
+    "name": "Condominio Doña Javiera",
+    "field": "locality",
+    "district": null,
+    "locality": "Condominio Doña Javiera",
+    "osm_name": "Doña Javiera",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5503011001.0": {
+    "name": "Calle Chépica",
+    "field": "district",
+    "district": "Calle Chépica",
+    "locality": null,
+    "osm_name": "Ruta 5 Norte",
+    "osm_key": "highway",
+    "osm_value": "motorway"
+  },
+  "5503021001.0": {
+    "name": "Cabo de Hornos",
+    "field": "district",
+    "district": "Cabo de Hornos",
+    "locality": null,
+    "osm_name": "Ruta F-325",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5503031001.0": {
+    "name": "Barracita",
+    "field": "district",
+    "district": "Barracita",
+    "locality": null,
+    "osm_name": "Ruta 5 Norte",
+    "osm_key": "highway",
+    "osm_value": "motorway"
+  },
+  "5506021001.0": {
+    "name": "Las Romazas",
+    "field": "district",
+    "district": "Las Romazas",
+    "locality": null,
+    "osm_name": "Pasaje 2",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5506021002.0": {
+    "name": "El Polígono",
+    "field": "locality",
+    "district": null,
+    "locality": "El Polígono",
+    "osm_name": "El Molle",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5506011001.0": {
+    "name": "Los Litres",
+    "field": "district",
+    "district": "Los Litres",
+    "locality": null,
+    "osm_name": "Chacabuco",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5506031001.0": {
+    "name": "El Melón",
+    "field": "district",
+    "district": "El Melón",
+    "locality": null,
+    "osm_name": "Los Olivos",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5506031002.0": {
+    "name": "El Melón",
+    "field": "district",
+    "district": "El Melón",
+    "locality": null,
+    "osm_name": "Parroquia Santa Isabel de Hungría",
+    "osm_key": "amenity",
+    "osm_value": "place_of_worship"
+  },
+  "5506031003.0": {
+    "name": "El Melón",
+    "field": "district",
+    "district": "El Melón",
+    "locality": null,
+    "osm_name": "Esperanza",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5502021003.0": {
+    "name": "Pachacamita",
+    "field": "district",
+    "district": "Pachacamita",
+    "locality": null,
+    "osm_name": "Pasaje El Roble",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5502041001.0": {
+    "name": "Pachacamita Norte",
+    "field": "district",
+    "district": "Pachacamita Norte",
+    "locality": null,
+    "osm_name": "Ruta F-300",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5503051001.0": {
+    "name": "Barrio Alto",
+    "field": "district",
+    "district": "Barrio Alto",
+    "locality": null,
+    "osm_name": "Escuela Básica Rabuco",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5603011007.0": {
+    "name": "Costa Azul",
+    "field": "district",
+    "district": "Costa Azul",
+    "locality": null,
+    "osm_name": "Pasaje Concón",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5603011010.0": {
+    "name": "San Sebastián",
+    "field": "district",
+    "district": "San Sebastián",
+    "locality": null,
+    "osm_name": "Avenida Central",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011011.0": {
+    "name": "San Sebastián",
+    "field": "district",
+    "district": "San Sebastián",
+    "locality": "Cooperativa La Bacarola",
+    "osm_name": "El Boldal",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011006.0": {
+    "name": "San Sebastián",
+    "field": "district",
+    "district": "San Sebastián",
+    "locality": null,
+    "osm_name": "Avenida del Comercio",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011005.0": {
+    "name": "San Sebastián",
+    "field": "district",
+    "district": "San Sebastián",
+    "locality": "Monte Marino",
+    "osm_name": "Pasaje Las Petunias",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011009.0": {
+    "name": "San Sebastián",
+    "field": "district",
+    "district": "San Sebastián",
+    "locality": null,
+    "osm_name": "Camino Los Leones",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011004.0": {
+    "name": "San Sebastián",
+    "field": "district",
+    "district": "San Sebastián",
+    "locality": null,
+    "osm_name": "Pasaje Coihue",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5603011003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Baquedano",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011008.0": {
+    "name": "El Mirador",
+    "field": "locality",
+    "district": null,
+    "locality": "El Mirador",
+    "osm_name": "Apoquindo",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011001.0": {
+    "name": "Villa Puerto Nuevo",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Puerto Nuevo",
+    "osm_name": "Pasaje Los Jacarandá",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5603011002.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Parque Vicente Huidobro",
+    "osm_key": "leisure",
+    "osm_value": "park"
+  },
+  "5605011008.0": {
+    "name": "Villa Almería",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Almería",
+    "osm_name": "Petreos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5605011006.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "El Estuche 1",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5605021001.0": {
+    "name": "Las Cruces",
+    "field": "district",
+    "district": "Las Cruces",
+    "locality": "Condominio Fray Luis Beltrán",
+    "osm_name": "Los Álamos Arena",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5605021003.0": {
+    "name": "Las Cruces",
+    "field": "district",
+    "district": "Las Cruces",
+    "locality": "Catamarca",
+    "osm_name": "Nueva Inés",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5605021004.0": {
+    "name": "Las Cruces",
+    "field": "district",
+    "district": "Las Cruces",
+    "locality": null,
+    "osm_name": "Centro Recreacional El Peral",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5605021002.0": {
+    "name": "Las Cruces",
+    "field": "district",
+    "district": "Las Cruces",
+    "locality": "Playas Blancas",
+    "osm_name": "Avenida La Playa",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5605021005.0": {
+    "name": "Las Cruces",
+    "field": "district",
+    "district": "Las Cruces",
+    "locality": "San Carlos",
+    "osm_name": "Estero La Cigüeña",
+    "osm_key": "waterway",
+    "osm_value": "stream"
+  },
+  "5605011001.0": {
+    "name": "Condominio Bosques del Tabo",
+    "field": "osm_landuse",
+    "district": null,
+    "locality": null,
+    "osm_name": "Condominio Bosques del Tabo",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5605011005.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Hector Navarrete",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5605011003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Nueva Baquedano",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5605011004.0": {
+    "name": "Cooperativa El Bosque de Castilla",
+    "field": "locality",
+    "district": null,
+    "locality": "Cooperativa El Bosque de Castilla",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "yes"
+  },
+  "5605011002.0": {
+    "name": "Las Cruces",
+    "field": "district",
+    "district": "Las Cruces",
+    "locality": "El Consistorial",
+    "osm_name": "Avenida del Mar",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5605011007.0": {
+    "name": "El Puquio",
+    "field": "district",
+    "district": "El Puquio",
+    "locality": "El Triángulo",
+    "osm_name": "El Bosque 1",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109041011.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": "Jardín del Mar",
+    "osm_name": "Bellavista",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109041001.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": null,
+    "osm_name": "Casas del Pinar V",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5109041008.0": {
+    "name": "Ecoaldea Blowing in the Wind",
+    "field": "locality",
+    "district": null,
+    "locality": "Ecoaldea Blowing in the Wind",
+    "osm_name": "Licanray",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109171001.0": {
+    "name": "Torquemada",
+    "field": "district",
+    "district": "Torquemada",
+    "locality": null,
+    "osm_name": "Pasaje Santa Angela",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109041003.0": {
+    "name": "Gómez Carreño",
+    "field": "district",
+    "district": "Gómez Carreño",
+    "locality": null,
+    "osm_name": "Cuerpo de Entrenamiento de Bomberos Viña del Mar",
+    "osm_key": "amenity",
+    "osm_value": "fire_station"
+  },
+  "5109041009.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": "Jardín del Mar",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5109041002.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": "Población Río Palena",
+    "osm_name": "Litorina",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109041004.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": "Población Naval Las Salinas",
+    "osm_name": "Procyon",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109171002.0": {
+    "name": "Reñaca Alto",
+    "field": "district",
+    "district": "Reñaca Alto",
+    "locality": null,
+    "osm_name": "Pasaje Florencia",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5109121002.0": {
+    "name": "Gómez Carreño",
+    "field": "district",
+    "district": "Gómez Carreño",
+    "locality": null,
+    "osm_name": "Parque Natural Gómez Carreño",
+    "osm_key": "natural",
+    "osm_value": "scrub"
+  },
+  "5109141003.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Brisas del Mar",
+    "osm_name": "Malfatti",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109121001.0": {
+    "name": "Armada de Chile",
+    "field": "osm_landuse",
+    "district": null,
+    "locality": null,
+    "osm_name": "Armada de Chile",
+    "osm_key": "landuse",
+    "osm_value": "military"
+  },
+  "5109121003.0": {
+    "name": "Gómez Carreño",
+    "field": "district",
+    "district": "Gómez Carreño",
+    "locality": "Cuarto Sector Gómez Carreño",
+    "osm_name": "21 Poniente",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109171006.0": {
+    "name": "Reñaca Alto",
+    "field": "district",
+    "district": "Reñaca Alto",
+    "locality": null,
+    "osm_name": "Condominio Lingue",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5109131001.0": {
+    "name": "Gómez Carreño",
+    "field": "district",
+    "district": "Gómez Carreño",
+    "locality": "Conjunto Habitacional Empart Las Salinas.",
+    "osm_name": "Aramark",
+    "osm_key": "office",
+    "osm_value": "yes"
+  },
+  "5109171013.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Bosques de Santa Julia",
+    "osm_name": "Estero Seco",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109141001.0": {
+    "name": "Gómez Carreño",
+    "field": "district",
+    "district": "Gómez Carreño",
+    "locality": "Nueva Granadilla",
+    "osm_name": "Block 13",
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5109171009.0": {
+    "name": "Reñaca Alto",
+    "field": "district",
+    "district": "Reñaca Alto",
+    "locality": null,
+    "osm_name": "Camino Los Cerros",
+    "osm_key": "highway",
+    "osm_value": "track"
+  },
+  "5109171007.0": {
+    "name": "Reñaca Alto",
+    "field": "district",
+    "district": "Reñaca Alto",
+    "locality": "Mirador de Reñaca",
+    "osm_name": "Los Archipielagos",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109171005.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Santa Julia Norte",
+    "osm_name": "Las Camelias",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5109171004.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Villa Belén",
+    "osm_name": "Río Claro",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109051002.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Caupolicán",
+    "osm_name": "Ancud",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109171008.0": {
+    "name": "Reñaca Alto",
+    "field": "district",
+    "district": "Reñaca Alto",
+    "locality": "villa San Jorge",
+    "osm_name": "Lago Puyehue",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109051001.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Granadilla",
+    "osm_name": "Camino a Granadilla",
+    "osm_key": "highway",
+    "osm_value": "service"
+  },
+  "5109171012.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Los Alelies",
+    "osm_name": "Los Alelies",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109131002.0": {
+    "name": "Gómez Carreño",
+    "field": "district",
+    "district": "Gómez Carreño",
+    "locality": "Villa Naval",
+    "osm_name": "Ambrosoli",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109171011.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Villa Belén",
+    "osm_name": "Villarrica",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109171003.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Población Angamos",
+    "osm_name": "Rhin",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109171010.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Entre Vientos",
+    "osm_name": "Elena Caffarena",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109131003.0": {
+    "name": "Gómez Carreño",
+    "field": "district",
+    "district": "Gómez Carreño",
+    "locality": "Población Gratry Santa Inés",
+    "osm_name": "Pasaje 7 1/2",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109051003.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "La Parva",
+    "osm_name": "Colegual",
+    "osm_key": "highway",
+    "osm_value": "path"
+  },
+  "5109031001.0": {
+    "name": "Población Muelle",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Muelle",
+    "osm_name": "Edificio Don Alfredo",
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5109031002.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Conjunto Habitacional Población Textil Viña",
+    "osm_name": "Pecado del Inka",
+    "osm_key": "amenity",
+    "osm_value": "restaurant"
+  },
+  "5109051006.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Villa Carlos Condell",
+    "osm_name": "Queitao",
+    "osm_key": "highway",
+    "osm_value": "path"
+  },
+  "5109151001.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Conjunto Residencial Benidorm",
+    "osm_name": "Valparaíso Sporting Club",
+    "osm_key": "highway",
+    "osm_value": "service"
+  },
+  "5109051004.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Población Empleados Públicos",
+    "osm_name": "Anita Lizana",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109031003.0": {
+    "name": "Población Muelle",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Muelle",
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5109051005.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Villa Buzo Sobenes",
+    "osm_name": "Los Corrales",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109161001.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Los Almendros B",
+    "osm_name": "Luis Hurtado López",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5109161007.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Campamento Manuel Bustos II",
+    "osm_name": "Milenium",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109021001.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": null,
+    "osm_name": "aStop",
+    "osm_key": "shop",
+    "osm_value": "convenience"
+  },
+  "5109021003.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": null,
+    "osm_name": "Edificio Leblon",
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5109081001.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": null,
+    "osm_name": "Instituto Chileno Norteamericano",
+    "osm_key": "amenity",
+    "osm_value": "language_school"
+  },
+  "5109051007.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Villa Buzo Sobenes",
+    "osm_name": "Copa ESVAL",
+    "osm_key": "man_made",
+    "osm_value": "water_tower"
+  },
+  "5109081002.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": null,
+    "osm_name": "5 Oriente",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5109151002.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Granadilla",
+    "osm_name": "ESede UAB Meseta del Gallo",
+    "osm_key": "landuse",
+    "osm_value": "construction"
+  },
+  "5109161003.0": {
+    "name": "Las Torres",
+    "field": "locality",
+    "district": null,
+    "locality": "Las Torres",
+    "osm_name": "Uruguay",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109021002.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Cerro Castillo",
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5109061002.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Ampliación Villa Dulce",
+    "osm_name": "Pasaje Zapallar",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109021004.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": null,
+    "osm_name": "Gran Hotel del Pacífico",
+    "osm_key": "tourism",
+    "osm_value": "hotel"
+  },
+  "5109011001.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Cerro Castillo",
+    "osm_name": "República",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109151003.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Miraflores Alto",
+    "osm_name": "Pasaje 7",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109161005.0": {
+    "name": "Villa Arauco",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Arauco",
+    "osm_name": "Huara",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109151004.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Villa Buzo Sobenes",
+    "osm_name": "Pasaje 30",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109151007.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Chorrillos",
+    "osm_name": "Las Rejas",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5109061001.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Ampliación Villa Dulce",
+    "osm_name": "Calle 12",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109011004.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": null,
+    "osm_name": "Plaza José Francisco Vergara",
+    "osm_key": "highway",
+    "osm_value": "primary"
+  },
+  "5109161006.0": {
+    "name": "El Olivar",
+    "field": "locality",
+    "district": null,
+    "locality": "El Olivar",
+    "osm_name": "Pucará",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109151006.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Miraflores Bajo",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5109091002.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Chorrillos",
+    "osm_name": "Instituto Oncológico FALP V Región",
+    "osm_key": "landuse",
+    "osm_value": "construction"
+  },
+  "5109161004.0": {
+    "name": "El Olivar",
+    "field": "locality",
+    "district": null,
+    "locality": "El Olivar",
+    "osm_name": "Parinacota",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109111004.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Miramar",
+    "osm_name": "Escuela Especial San Juan de Dios",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5109151005.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Población Gustavo Lorca",
+    "osm_name": "Pasaje 1",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109101005.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Población Las Colinas",
+    "osm_name": "Almirante Goñi",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109111006.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Villa Moderna",
+    "osm_name": "Lord Cochrane",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109111001.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Barrio Recreo",
+    "osm_name": "Recreo Park",
+    "osm_key": "building",
+    "osm_value": "residential"
+  },
+  "5109101002.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Población Lourdes",
+    "osm_name": "Avenida Gregorio Marañón",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5109111005.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Población Monterrey",
+    "osm_name": "Madrid",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109181001.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": null,
+    "osm_name": "Agustín Edwards",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109111003.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": null,
+    "osm_name": "Quebrada Abarca",
+    "osm_key": "waterway",
+    "osm_value": "stream"
+  },
+  "5109181004.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Viña del Mar Alto",
+    "osm_name": "Pasaje Quinta Vergara",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109111002.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "La Hacienda",
+    "osm_name": "12 de Febrero",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109181005.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Quinta Claude",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5109101004.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Población Las Colinas",
+    "osm_name": "San Enrique",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109101003.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Jardines de Agua Santa",
+    "osm_name": "Edificio Brisas del Mar",
+    "osm_key": "building",
+    "osm_value": "yes"
+  },
+  "5109071001.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Lusitania",
+    "osm_name": "Del Álamo",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109211002.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Deportes Recreo",
+    "osm_name": "Bartolomé Vivar",
+    "osm_key": "highway",
+    "osm_value": "service"
+  },
+  "5109181003.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Chorrillos",
+    "osm_name": "Mauricio Muñoz",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109071002.0": {
+    "name": "El Salto",
+    "field": "locality",
+    "district": null,
+    "locality": "El Salto",
+    "osm_name": "Sorepa",
+    "osm_key": "amenity",
+    "osm_value": "recycling"
+  },
+  "5109061003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Jardín Botánico Nacional Viña del Mar - Sector Bastión Ecológico",
+    "osm_key": "leisure",
+    "osm_value": "nature_reserve"
+  },
+  "5109201001.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Población Las Brisas",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "yes"
+  },
+  "5109061004.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Canal Beagle",
+    "osm_name": "Canal Sarmiento",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5109211001.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Población Los Mayos",
+    "osm_name": "Pasaje Fernando De Aragón",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109191001.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Población Tranque Sur",
+    "osm_name": "Calama",
+    "osm_key": "highway",
+    "osm_value": "steps"
+  },
+  "5109191002.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Chorrillos",
+    "osm_name": "Manuel Cobos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109201002.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Villa Monte",
+    "osm_name": "Pasaje Las Canteras",
+    "osm_key": "highway",
+    "osm_value": "footway"
+  },
+  "5109191003.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Cardenal Caro",
+    "osm_name": "Amalia Errázuriz",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109071003.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": null,
+    "osm_name": "Vía Las Palmas",
+    "osm_key": "highway",
+    "osm_value": "trunk"
+  },
+  "5109211003.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Deportes Recreo",
+    "osm_name": "Volcán San José",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109201004.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Borinquen",
+    "osm_name": "Guacolda",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109201003.0": {
+    "name": "Rodelillo",
+    "field": "district",
+    "district": "Rodelillo",
+    "locality": "Población Las Palmas II",
+    "osm_name": "COVISA",
+    "osm_key": "building",
+    "osm_value": "industrial"
+  },
+  "5109211004.0": {
+    "name": "Nueva Aurora",
+    "field": "district",
+    "district": "Nueva Aurora",
+    "locality": "Villa Real",
+    "osm_name": "Río Manai",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109071005.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Quebrada Quiteño",
+    "osm_key": "waterway",
+    "osm_value": "stream"
+  },
+  "5109071004.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Las Torres",
+    "osm_name": "Voipire",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109071007.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Población Puerto Aysén",
+    "osm_name": "Esperanza",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109071006.0": {
+    "name": "Las Palmas Chilenas",
+    "field": "locality",
+    "district": null,
+    "locality": "Las Palmas Chilenas",
+    "osm_name": "Río Jordán",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109011003.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": null,
+    "osm_name": "Edificio Tigullio",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5109011002.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": null,
+    "osm_name": "Traslaviña",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5109051008.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Granadilla",
+    "osm_name": "Trébol",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5109061005.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": "Villa Dulce CRAV",
+    "osm_name": "Pasaje Roberto Benitez",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109091001.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Chorrillos",
+    "osm_name": "Piscina Condominio Imagina",
+    "osm_key": "leisure",
+    "osm_value": "swimming_pool"
+  },
+  "5109101001.0": {
+    "name": "Recreo",
+    "field": "district",
+    "district": "Recreo",
+    "locality": "Miramar",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5109131004.0": {
+    "name": "Coraceros",
+    "field": "locality",
+    "district": null,
+    "locality": "Coraceros",
+    "osm_name": "Meseta Pacífico",
+    "osm_key": "building",
+    "osm_value": "yes"
+  },
+  "5109161002.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Villa Independencia",
+    "osm_name": "Misquehue",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109161008.0": {
+    "name": "Villa Hermosa",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Hermosa",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5109171014.0": {
+    "name": "Reñaca Alto",
+    "field": "district",
+    "district": "Reñaca Alto",
+    "locality": "Mirador de Reñaca",
+    "osm_name": "Seis",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5109181002.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Conjunto Habitacional Quinta Claude",
+    "osm_name": "Turquesa",
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5109041005.0": {
+    "name": "Cochoa",
+    "field": "locality",
+    "district": null,
+    "locality": "Cochoa",
+    "osm_name": "Edificio Foresta del Mar",
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5109041006.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": "Las Golondrinas",
+    "osm_name": "Positano Coffee Shop & Bar",
+    "osm_key": "shop",
+    "osm_value": "coffee"
+  },
+  "5109041007.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": "Foresta de la Costa",
+    "osm_name": "Las Perdices",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109041010.0": {
+    "name": "Reñaca",
+    "field": "district",
+    "district": "Reñaca",
+    "locality": "El Encanto",
+    "osm_name": "Avenida Edmundo Eluchans",
+    "osm_key": "highway",
+    "osm_value": "primary"
+  },
+  "5109091003.0": {
+    "name": "Forestal",
+    "field": "district",
+    "district": "Forestal",
+    "locality": "Viña del Mar Alto",
+    "osm_name": "Instituto Profesional Los Leones Viña del Mar",
+    "osm_key": "amenity",
+    "osm_value": "university"
+  },
+  "5109141004.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Población Nuevo Horizonte",
+    "osm_name": "Destructor Orellana",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5109141002.0": {
+    "name": "Santa Julia",
+    "field": "district",
+    "district": "Santa Julia",
+    "locality": "Brisas del Mar",
+    "osm_name": "Escuela de Carabineros",
+    "osm_key": "amenity",
+    "osm_value": "college"
+  },
+  "5103011002.0": {
+    "name": "Condominio Embassy",
+    "field": "locality",
+    "district": null,
+    "locality": "Condominio Embassy",
+    "osm_name": "Ilustre Municipalidad de Concón",
+    "osm_key": "amenity",
+    "osm_value": "townhall"
+  },
+  "5103021001.0": {
+    "name": "Parque Industrial Gulmúe",
+    "field": "locality",
+    "district": null,
+    "locality": "Parque Industrial Gulmúe",
+    "osm_name": "El Pedregal",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5103011007.0": {
+    "name": "La Isla",
+    "field": "district",
+    "district": "La Isla",
+    "locality": "Esperanza",
+    "osm_name": "San Agustín",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5103011008.0": {
+    "name": "Población Enap",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Enap",
+    "osm_name": "Avenida Magallanes",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5103011003.0": {
+    "name": "Nueva Concón",
+    "field": "osm_place",
+    "district": null,
+    "locality": null,
+    "osm_name": "Nueva Concón",
+    "osm_key": "place",
+    "osm_value": "neighbourhood"
+  },
+  "5103011001.0": {
+    "name": "Costa de Montemar",
+    "field": "locality",
+    "district": null,
+    "locality": "Costa de Montemar",
+    "osm_name": "Edificio Terraza Pacífico",
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5103011004.0": {
+    "name": "Las Gaviotas",
+    "field": "locality",
+    "district": null,
+    "locality": "Las Gaviotas",
+    "osm_name": "Avenida Central",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5103011011.0": {
+    "name": "La Chacrilla",
+    "field": "locality",
+    "district": null,
+    "locality": "La Chacrilla",
+    "osm_name": "Matias' place",
+    "osm_key": "tourism",
+    "osm_value": "guest_house"
+  },
+  "5103011010.0": {
+    "name": "Laderas de Montemar",
+    "field": "locality",
+    "district": null,
+    "locality": "Laderas de Montemar",
+    "osm_name": "Avenida Los Marinos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5103011005.0": {
+    "name": "Villa Concón Dos",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Concón Dos",
+    "osm_name": "Volcán Lonquimay",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5103011006.0": {
+    "name": "Bosques de Montemar",
+    "field": "locality",
+    "district": null,
+    "locality": "Bosques de Montemar",
+    "osm_name": "Mundo Naranja",
+    "osm_key": "amenity",
+    "osm_value": "kindergarten"
+  },
+  "5103011013.0": {
+    "name": "Costa de Montemar",
+    "field": "locality",
+    "district": null,
+    "locality": "Costa de Montemar",
+    "osm_name": "Avenida Costa de Montemar",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5103011012.0": {
+    "name": "Costa Brava",
+    "field": "locality",
+    "district": null,
+    "locality": "Costa Brava",
+    "osm_name": "Las Malvas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5103011009.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Avenida Magallanes",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5103011014.0": {
+    "name": "Villa Primavera",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Primavera",
+    "osm_name": "Calle Uno - Los Lobos",
+    "osm_key": "highway",
+    "osm_value": "bus_stop"
+  },
+  "5201011002.0": {
+    "name": "Orito",
+    "field": "district",
+    "district": "Orito",
+    "locality": "Vai Honu",
+    "osm_name": "Tuki Horo Pari",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5201011001.0": {
+    "name": "Hanga Roa",
+    "field": "district",
+    "district": "Hanga Roa",
+    "locality": null,
+    "osm_name": "Vai Kia Kia",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5401131001.0": {
+    "name": "Valle Hermoso",
+    "field": "district",
+    "district": "Valle Hermoso",
+    "locality": null,
+    "osm_name": "Esmeralda",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5401011001.0": {
+    "name": "Población Los Paltos",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Los Paltos",
+    "osm_name": "José Joaquín Pérez",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5401051001.0": {
+    "name": "Quinquimo",
+    "field": "district",
+    "district": "Quinquimo",
+    "locality": null,
+    "osm_name": "Avenida Diego Portales",
+    "osm_key": "highway",
+    "osm_value": "primary"
+  },
+  "5401021004.0": {
+    "name": "El Rayado",
+    "field": "locality",
+    "district": null,
+    "locality": "El Rayado",
+    "osm_name": "Lihuén",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5401021002.0": {
+    "name": "Valle Hermoso",
+    "field": "district",
+    "district": "Valle Hermoso",
+    "locality": "La Cantera",
+    "osm_name": "5 Sur",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5401021001.0": {
+    "name": "El Mirador",
+    "field": "locality",
+    "district": null,
+    "locality": "El Mirador",
+    "osm_name": "Julio Montt Salamanca",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5401021003.0": {
+    "name": "El Cobre",
+    "field": "locality",
+    "district": null,
+    "locality": "El Cobre",
+    "osm_name": "Pasaje 10 Sur",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5401011002.0": {
+    "name": "Valle Hermoso",
+    "field": "district",
+    "district": "Valle Hermoso",
+    "locality": "Pulmahue",
+    "osm_name": "3 de Junio",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5401041001.0": {
+    "name": "El Carmen",
+    "field": "district",
+    "district": "El Carmen",
+    "locality": null,
+    "osm_name": "Ruta E-35",
+    "osm_key": "highway",
+    "osm_value": "primary"
+  },
+  "5401021005.0": {
+    "name": "El Carmen",
+    "field": "district",
+    "district": "El Carmen",
+    "locality": null,
+    "osm_name": "Camino a La Puntilla de la Cruz",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5301021004.0": {
+    "name": "Los Villares",
+    "field": "district",
+    "district": "Los Villares",
+    "locality": "Villa Valle del Real",
+    "osm_name": "Aeródromo San Rafael",
+    "osm_key": "highway",
+    "osm_value": "service"
+  },
+  "5301021001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Las Camelias",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5301031001.0": {
+    "name": "Hacienda Cordillera",
+    "field": "locality",
+    "district": null,
+    "locality": "Hacienda Cordillera",
+    "osm_name": "Hermano Carlos Marcelino",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5301021003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Glaciar Nef",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301021002.0": {
+    "name": "Villa Alborada",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Alborada",
+    "osm_name": "Las Petunias",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5301031004.0": {
+    "name": "Montes Andinos",
+    "field": "locality",
+    "district": null,
+    "locality": "Montes Andinos",
+    "osm_name": "José Celedon Lagos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301031002.0": {
+    "name": "Villa Los Castaños",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Castaños",
+    "osm_name": "Liquimax",
+    "osm_key": "shop",
+    "osm_value": "chemist"
+  },
+  "5301011001.0": {
+    "name": "Villa Los Acacios",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Acacios",
+    "osm_name": "José Villarroel",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301011005.0": {
+    "name": "Villa Los Acacios",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Acacios",
+    "osm_name": "Frontera",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301011002.0": {
+    "name": "Villa Los Castaños",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Castaños",
+    "osm_name": "Colegio Alcazar",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5301061001.0": {
+    "name": "Villa Los Castaños",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Castaños",
+    "osm_name": "Estadio Centenario",
+    "osm_key": "leisure",
+    "osm_value": "stadium"
+  },
+  "5301061002.0": {
+    "name": "Villa Lomas De Santa Rosa",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Lomas De Santa Rosa",
+    "osm_name": "Caletera",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301061003.0": {
+    "name": "Villa Degania",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Degania",
+    "osm_name": "General Schneider",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5301011004.0": {
+    "name": "Villa Sor Teresa",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Sor Teresa",
+    "osm_name": "Hueñuman",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301011003.0": {
+    "name": "Villa Minera Andina",
+    "field": "osm_place",
+    "district": null,
+    "locality": null,
+    "osm_name": "Villa Minera Andina",
+    "osm_key": "place",
+    "osm_value": "neighbourhood"
+  },
+  "5301061004.0": {
+    "name": "Villa La Parva",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa La Parva",
+    "osm_name": "Portillo",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5301061005.0": {
+    "name": "Villa Lomas De Santa Rosa",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Lomas De Santa Rosa",
+    "osm_name": "Mayor Amadeo Casarino Candia",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301061007.0": {
+    "name": "Aires de Aconcagua",
+    "field": "locality",
+    "district": null,
+    "locality": "Aires de Aconcagua",
+    "osm_name": "Regidora Dissolina Rojas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5304011001.0": {
+    "name": "La Ermita",
+    "field": "district",
+    "district": "La Ermita",
+    "locality": null,
+    "osm_name": "Topacio",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5304091001.0": {
+    "name": "Los Olmos",
+    "field": "district",
+    "district": "Los Olmos",
+    "locality": "Villa Los Ríos",
+    "osm_name": "Pasaje Curalaba",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5304071001.0": {
+    "name": "Callejón Los Jiménez",
+    "field": "district",
+    "district": "Callejón Los Jiménez",
+    "locality": null,
+    "osm_name": "Sagrada Familia",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5304081001.0": {
+    "name": "Los Olmos",
+    "field": "district",
+    "district": "Los Olmos",
+    "locality": "Villa El Dorado",
+    "osm_name": "Pasaje Santa Cecilia",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5301061006.0": {
+    "name": "Santa Rosa de Los Andes",
+    "field": "locality",
+    "district": null,
+    "locality": "Santa Rosa de Los Andes",
+    "osm_name": "Rafael Grasso Fernández",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5301031003.0": {
+    "name": "Villa Los Alerces",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Alerces",
+    "osm_name": "Pasaje A. Bezamat",
+    "osm_key": "highway",
+    "osm_value": "steps"
+  },
+  "5304011002.0": {
+    "name": "El Maqui",
+    "field": "district",
+    "district": "El Maqui",
+    "locality": null,
+    "osm_name": "Escuela Básica Libertad",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5802061001.0": {
+    "name": "Los Laureles",
+    "field": "district",
+    "district": "Los Laureles",
+    "locality": null,
+    "osm_name": "Los Aromos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5802051001.0": {
+    "name": "San Francisco de Limache",
+    "field": "district",
+    "district": "San Francisco de Limache",
+    "locality": "Villa Las Américas",
+    "osm_name": "Impresos La Prensa",
+    "osm_key": "shop",
+    "osm_value": "copyshop"
+  },
+  "5802041002.0": {
+    "name": "Lo Chaparro",
+    "field": "district",
+    "district": "Lo Chaparro",
+    "locality": null,
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5802051002.0": {
+    "name": "San Francisco de Limache",
+    "field": "district",
+    "district": "San Francisco de Limache",
+    "locality": null,
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5802041001.0": {
+    "name": "Limache Viejo",
+    "field": "district",
+    "district": "Limache Viejo",
+    "locality": null,
+    "osm_name": "Doña Renata",
+    "osm_key": "highway",
+    "osm_value": "service"
+  },
+  "5802071002.0": {
+    "name": "San Francisco de Limache",
+    "field": "district",
+    "district": "San Francisco de Limache",
+    "locality": "Villa Galilea",
+    "osm_name": "Carelmapu",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5802011001.0": {
+    "name": "Limache Viejo",
+    "field": "district",
+    "district": "Limache Viejo",
+    "locality": "Población San Francisco de Asís",
+    "osm_name": "Roma",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5802011004.0": {
+    "name": "Limache Viejo",
+    "field": "district",
+    "district": "Limache Viejo",
+    "locality": null,
+    "osm_name": "Camino A Campo Verde",
+    "osm_key": "highway",
+    "osm_value": "service"
+  },
+  "5802021001.0": {
+    "name": "Limache Viejo",
+    "field": "district",
+    "district": "Limache Viejo",
+    "locality": "Villa Primavera",
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5802011003.0": {
+    "name": "Limache Viejo",
+    "field": "district",
+    "district": "Limache Viejo",
+    "locality": "Villa Independencia",
+    "osm_name": "Feria de las Pulgas Limache",
+    "osm_key": "amenity",
+    "osm_value": "marketplace"
+  },
+  "5802011005.0": {
+    "name": "Limache Viejo",
+    "field": "district",
+    "district": "Limache Viejo",
+    "locality": null,
+    "osm_name": "Pasaje Ancud",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5802011002.0": {
+    "name": "Hacienda Limache",
+    "field": "district",
+    "district": "Hacienda Limache",
+    "locality": null,
+    "osm_name": "Endukepark",
+    "osm_key": "leisure",
+    "osm_value": "sports_centre"
+  },
+  "5803021002.0": {
+    "name": "Santa Regina",
+    "field": "district",
+    "district": "Santa Regina",
+    "locality": null,
+    "osm_name": "Lo Guala",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5803021001.0": {
+    "name": "Carlos Condell",
+    "field": "locality",
+    "district": null,
+    "locality": "Carlos Condell",
+    "osm_name": "Riquelme",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5803011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5803021003.0": {
+    "name": "Granizo",
+    "field": "district",
+    "district": "Granizo",
+    "locality": "Cajón Grande",
+    "osm_name": "KiM Teatro Danzante",
+    "osm_key": "amenity",
+    "osm_value": "dancing_school"
+  },
+  "5802071001.0": {
+    "name": "Limache Viejo",
+    "field": "district",
+    "district": "Limache Viejo",
+    "locality": "Población 5 de Abril",
+    "osm_name": "Pasaje San Alfonso",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5703011004.0": {
+    "name": "Barrio Norte",
+    "field": "locality",
+    "district": null,
+    "locality": "Barrio Norte",
+    "osm_name": "Profesor Guillermo Cortés",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5703011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Pasaje Modesto Arancibia",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5703021001.0": {
+    "name": "Las Palmas Norte",
+    "field": "district",
+    "district": "Las Palmas Norte",
+    "locality": "Villa Amanecer",
+    "osm_name": "Los Sauces",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5703011003.0": {
+    "name": "Las Palmas Norte",
+    "field": "district",
+    "district": "Las Palmas Norte",
+    "locality": null,
+    "osm_name": "Morande",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5703011002.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Luis Cruz Martínez",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5703031001.0": {
+    "name": "El Porvenir",
+    "field": "district",
+    "district": "El Porvenir",
+    "locality": null,
+    "osm_name": "Ruta 5 Norte",
+    "osm_key": "highway",
+    "osm_value": "motorway"
+  },
+  "5703041001.0": {
+    "name": "Santa Teresa Norte",
+    "field": "district",
+    "district": "Santa Teresa Norte",
+    "locality": null,
+    "osm_name": "Avenida Ferrocarril",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5704031001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Vina Peumayen",
+    "osm_key": "building",
+    "osm_value": "industrial"
+  },
+  "5704031002.0": {
+    "name": "Población Héroes de la Concepción",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Héroes de la Concepción",
+    "osm_name": "Arturo Prat Chacón",
+    "osm_key": "historic",
+    "osm_value": "memorial"
+  },
+  "5704021001.0": {
+    "name": "El Mirador",
+    "field": "district",
+    "district": "El Mirador",
+    "locality": "San Roque",
+    "osm_name": "Callejón Olegario Contreras",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5403021001.0": {
+    "name": "Aguas Blancas",
+    "field": "district",
+    "district": "Aguas Blancas",
+    "locality": null,
+    "osm_name": "Escuela Rural Pullally",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5405011001.0": {
+    "name": "El Morro",
+    "field": "locality",
+    "district": null,
+    "locality": "El Morro",
+    "osm_name": "La Esquina",
+    "osm_key": "amenity",
+    "osm_value": "fast_food"
+  },
+  "5405041001.0": {
+    "name": "Los Aromos",
+    "field": "district",
+    "district": "Los Aromos",
+    "locality": "Villa Esperanza",
+    "osm_name": "Papudo",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5405021001.0": {
+    "name": "Cachagua",
+    "field": "district",
+    "district": "Cachagua",
+    "locality": null,
+    "osm_name": "Los Maitenes",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5405021003.0": {
+    "name": "Población Estadio",
+    "field": "district",
+    "district": "Población Estadio",
+    "locality": "Costa Cachagua",
+    "osm_name": "Camino del Mirador",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5403011003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Humedal Urbano Estero Agua Salada",
+    "osm_key": "leisure",
+    "osm_value": "nature_reserve"
+  },
+  "5403011001.0": {
+    "name": "Mirador Punta Pite",
+    "field": "district",
+    "district": "Mirador Punta Pite",
+    "locality": null,
+    "osm_name": "Quebrada El Francés",
+    "osm_key": "waterway",
+    "osm_value": "stream"
+  },
+  "5403011002.0": {
+    "name": "Villa Almendral",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Almendral",
+    "osm_name": "El Belloto",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5405021002.0": {
+    "name": "La Laguna de Zapallar",
+    "field": "district",
+    "district": "La Laguna de Zapallar",
+    "locality": "Punta Cachagua",
+    "osm_name": "Ruta E-30-F",
+    "osm_key": "highway",
+    "osm_value": "primary"
+  },
+  "5402011001.0": {
+    "name": "Artificio",
+    "field": "district",
+    "district": "Artificio",
+    "locality": null,
+    "osm_name": "La Posta",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5402051002.0": {
+    "name": "Villa San José",
+    "field": "district",
+    "district": "Villa San José",
+    "locality": "Barrio Bellavista",
+    "osm_name": "Municipal",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5402051003.0": {
+    "name": "Villa San José",
+    "field": "district",
+    "district": "Villa San José",
+    "locality": "Villa Enami",
+    "osm_name": "Liceo Bicentenario Técnico Profesional de Minería",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5402051001.0": {
+    "name": "Villa San José",
+    "field": "district",
+    "district": "Villa San José",
+    "locality": null,
+    "osm_name": "Población El Esfuerzo",
+    "osm_key": "place",
+    "osm_value": "neighbourhood"
+  },
+  "5404041001.0": {
+    "name": "Chincolco",
+    "field": "district",
+    "district": "Chincolco",
+    "locality": null,
+    "osm_name": "Quebrada Zanjón de las Gredas",
+    "osm_key": "waterway",
+    "osm_value": "stream"
+  },
+  "5404051001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Silva",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5404061001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Tablón Seco",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5105021001.0": {
+    "name": "Maitencillo",
+    "field": "district",
+    "district": "Maitencillo",
+    "locality": null,
+    "osm_name": "Frutillar",
+    "osm_key": "highway",
+    "osm_value": "track"
+  },
+  "5105021002.0": {
+    "name": "Maitencillo",
+    "field": "district",
+    "district": "Maitencillo",
+    "locality": "Condominio Mallorca",
+    "osm_name": "Copas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5105021003.0": {
+    "name": "Maitencillo",
+    "field": "district",
+    "district": "Maitencillo",
+    "locality": "Marbella",
+    "osm_name": "Tongoy",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5105011002.0": {
+    "name": "Maitencillo",
+    "field": "district",
+    "district": "Maitencillo",
+    "locality": "Tacna",
+    "osm_name": "General Velásquez",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5105011003.0": {
+    "name": "El Rungue",
+    "field": "district",
+    "district": "El Rungue",
+    "locality": null,
+    "osm_name": "Los Molles",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5105041001.0": {
+    "name": "El Paso",
+    "field": "district",
+    "district": "El Paso",
+    "locality": null,
+    "osm_name": "Museo de Sitio Melinka-Puchuncaví",
+    "osm_key": "tourism",
+    "osm_value": "museum"
+  },
+  "5105011001.0": {
+    "name": "Las Catitas",
+    "field": "district",
+    "district": "Las Catitas",
+    "locality": "Mundo Nuevo",
+    "osm_name": "Avenida Presidente Ríos",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5105081002.0": {
+    "name": "Ventanas",
+    "field": "district",
+    "district": "Ventanas",
+    "locality": "Comunidad Vecinal Las Camelias de Horcón",
+    "osm_name": "Las Camelias",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5105081005.0": {
+    "name": "Ventanas",
+    "field": "district",
+    "district": "Ventanas",
+    "locality": null,
+    "osm_name": "Pasaje Las Gaviotas",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5105081001.0": {
+    "name": "Ventanas",
+    "field": "district",
+    "district": "Ventanas",
+    "locality": "Villa Canaán",
+    "osm_name": "Camino Vecinal",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5105081006.0": {
+    "name": "Ventanas",
+    "field": "district",
+    "district": "Ventanas",
+    "locality": "Villa Vista Hermosa",
+    "osm_name": "Pasaje Las Magnolias",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5105081007.0": {
+    "name": "Ventanas",
+    "field": "district",
+    "district": "Ventanas",
+    "locality": "La Greda",
+    "osm_name": "Las Lomas",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5105081004.0": {
+    "name": "Ventanas",
+    "field": "district",
+    "district": "Ventanas",
+    "locality": null,
+    "osm_name": "Costa Quilén",
+    "osm_key": "place",
+    "osm_value": "neighbourhood"
+  },
+  "5105081003.0": {
+    "name": "Ventanas",
+    "field": "district",
+    "district": "Ventanas",
+    "locality": null,
+    "osm_name": "Camino Vecinal",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Junta de Vecinos Roberto Parrague",
+    "osm_key": "amenity",
+    "osm_value": "community_centre"
+  },
+  "5107011010.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Luis Cousiño",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011006.0": {
+    "name": "Loncura",
+    "field": "district",
+    "district": "Loncura",
+    "locality": null,
+    "osm_name": "Villa Las Rosas",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5107011005.0": {
+    "name": "Loncura",
+    "field": "district",
+    "district": "Loncura",
+    "locality": "Villa Los Mellizos",
+    "osm_name": "Vista Hermosa",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011002.0": {
+    "name": "Loncura",
+    "field": "district",
+    "district": "Loncura",
+    "locality": null,
+    "osm_name": "Estrella de Chile",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011009.0": {
+    "name": "Loncura",
+    "field": "district",
+    "district": "Loncura",
+    "locality": "Villa Manutara",
+    "osm_name": "Los Morros",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011008.0": {
+    "name": "Loncura",
+    "field": "district",
+    "district": "Loncura",
+    "locality": "Las Brisas de Quintero",
+    "osm_name": "Piloto Moraga",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011004.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Calle 5",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011007.0": {
+    "name": "Loncura",
+    "field": "district",
+    "district": "Loncura",
+    "locality": "Villa Los Alerce",
+    "osm_name": "Los Eucaliptus",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011003.0": {
+    "name": "Población Porvenir",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Porvenir",
+    "osm_name": "Pasaje Mataveri",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5107011011.0": {
+    "name": "Población Lomas de Quintero",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Lomas de Quintero",
+    "osm_name": "Pasaje Poniente",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5107011012.0": {
+    "name": "Loncura",
+    "field": "district",
+    "district": "Loncura",
+    "locality": null,
+    "osm_name": "Calle 2",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5107011013.0": {
+    "name": "Población Santa Victoria",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Santa Victoria",
+    "osm_name": "Calle 2",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5705011001.0": {
+    "name": "Granalla",
+    "field": "district",
+    "district": "Granalla",
+    "locality": "Población La Hermandad",
+    "osm_name": "Pasaje Estero Chalaco",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5705011002.0": {
+    "name": "Granalla",
+    "field": "district",
+    "district": "Granalla",
+    "locality": null,
+    "osm_name": "Comercio",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5706011003.0": {
+    "name": "San Fernando",
+    "field": "locality",
+    "district": null,
+    "locality": "San Fernando",
+    "osm_name": "Urquietajon",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5706031002.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": null,
+    "osm_name": "Ruta E-777",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5706051001.0": {
+    "name": "San José",
+    "field": "district",
+    "district": "San José",
+    "locality": null,
+    "osm_name": "Estero San Francisco",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5706031001.0": {
+    "name": "Miraflores",
+    "field": "district",
+    "district": "Miraflores",
+    "locality": null,
+    "osm_name": "Estero San Francisco",
+    "osm_key": "waterway",
+    "osm_value": "river"
+  },
+  "5706011002.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Las Palmas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5706041001.0": {
+    "name": "El Llano",
+    "field": "district",
+    "district": "El Llano",
+    "locality": "Villa Las Cadenas",
+    "osm_name": "Pasaje Las Estrellas",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5706051002.0": {
+    "name": "Placilla",
+    "field": "district",
+    "district": "Placilla",
+    "locality": "Villa Santa Teresa",
+    "osm_name": "Callejón La Cancha",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5706011001.0": {
+    "name": "Camino a Jahuel",
+    "field": "district",
+    "district": "Camino a Jahuel",
+    "locality": null,
+    "osm_name": "Ojos de Agua",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5504011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Arauco",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5504041001.0": {
+    "name": "Augusto Best",
+    "field": "district",
+    "district": "Augusto Best",
+    "locality": null,
+    "osm_name": "Autopista Los Andes",
+    "osm_key": "highway",
+    "osm_value": "motorway"
+  },
+  "5504051002.0": {
+    "name": "Condominio Campanario",
+    "field": "district",
+    "district": "Condominio Campanario",
+    "locality": "Villa Buque Escuela Esmeralda",
+    "osm_name": "Francisco Bilbao",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5504051001.0": {
+    "name": "Villa Buque Escuela Esmeralda",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Buque Escuela Esmeralda",
+    "osm_name": "1 Norte",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501041002.0": {
+    "name": "El Cóndor Norte",
+    "field": "district",
+    "district": "El Cóndor Norte",
+    "locality": null,
+    "osm_name": "Libertad",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501051001.0": {
+    "name": "El Cóndor Norte",
+    "field": "district",
+    "district": "El Cóndor Norte",
+    "locality": "Villa Padre Hurtado",
+    "osm_name": "La Espuela",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501031001.0": {
+    "name": "Altos de Serrano",
+    "field": "locality",
+    "district": null,
+    "locality": "Altos de Serrano",
+    "osm_name": "Oriente",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501031002.0": {
+    "name": "Boco",
+    "field": "district",
+    "district": "Boco",
+    "locality": "Población La Concepción",
+    "osm_name": "John Kennedy",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501111001.0": {
+    "name": "Boco Sur",
+    "field": "district",
+    "district": "Boco Sur",
+    "locality": null,
+    "osm_name": "Pasaje Interior",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501011001.0": {
+    "name": "Población Portales",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Portales",
+    "osm_name": "Uno Salud Dental",
+    "osm_key": "amenity",
+    "osm_value": "dentist"
+  },
+  "5501021001.0": {
+    "name": "Boco",
+    "field": "district",
+    "district": "Boco",
+    "locality": "Los Paltos",
+    "osm_name": "Gabriela Mistral",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501021004.0": {
+    "name": "Boco",
+    "field": "district",
+    "district": "Boco",
+    "locality": "Población Chile Nuevo",
+    "osm_name": "Los Aromos",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501021006.0": {
+    "name": "Boco",
+    "field": "district",
+    "district": "Boco",
+    "locality": "Población Rios de Chile",
+    "osm_name": "Junta de vecinos Jardines del Aconcagua",
+    "osm_key": "amenity",
+    "osm_value": "community_centre"
+  },
+  "5501021003.0": {
+    "name": "Boco Sur",
+    "field": "district",
+    "district": "Boco Sur",
+    "locality": "Población Antumapu",
+    "osm_name": "Pasaje Parinacota (Laguna de Flamencos)",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501021002.0": {
+    "name": "Boco",
+    "field": "district",
+    "district": "Boco",
+    "locality": "Premio Nobel de Literatura",
+    "osm_name": "Las Bellotas",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501121001.0": {
+    "name": "Población Corvi",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Corvi",
+    "osm_name": "Ramón Freire",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5501021008.0": {
+    "name": "Boco",
+    "field": "district",
+    "district": "Boco",
+    "locality": "Población Santo Domingo",
+    "osm_name": "Aconcagua",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501051003.0": {
+    "name": "La Tetera",
+    "field": "district",
+    "district": "La Tetera",
+    "locality": null,
+    "osm_name": "La Tetera",
+    "osm_key": "place",
+    "osm_value": "neighbourhood"
+  },
+  "5501081002.0": {
+    "name": "Portal Araucarias",
+    "field": "locality",
+    "district": null,
+    "locality": "Portal Araucarias",
+    "osm_name": "Avenida Las Araucarias",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501021009.0": {
+    "name": "Boco",
+    "field": "district",
+    "district": "Boco",
+    "locality": "Población El Bosque",
+    "osm_name": "Mañío",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501121002.0": {
+    "name": "Condominio Independiente Lo López",
+    "field": "district",
+    "district": "Condominio Independiente Lo López",
+    "locality": "Villa Hermano Bonifacio",
+    "osm_name": "Ramón Freire",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5501021005.0": {
+    "name": "Villa Los Reyes Católicos",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Los Reyes Católicos",
+    "osm_name": "Multicancha Reyes Católicos",
+    "osm_key": "leisure",
+    "osm_value": "pitch"
+  },
+  "5501081001.0": {
+    "name": "Camino Internacional",
+    "field": "district",
+    "district": "Camino Internacional",
+    "locality": "Villa El Sendero",
+    "osm_name": "Avenida Pintor Nemesio Antúnez Zañartu",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501071001.0": {
+    "name": "Cajón de San Pedro",
+    "field": "district",
+    "district": "Cajón de San Pedro",
+    "locality": null,
+    "osm_name": "Santa Rosa",
+    "osm_key": "highway",
+    "osm_value": "secondary"
+  },
+  "5501051002.0": {
+    "name": "Población Lo Garzo",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Lo Garzo",
+    "osm_name": "Pedro Aguirre Cerda",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5504031001.0": {
+    "name": "Santos Molina",
+    "field": "district",
+    "district": "Santos Molina",
+    "locality": null,
+    "osm_name": "Paradero 20, La Cruz",
+    "osm_key": "highway",
+    "osm_value": "bus_stop"
+  },
+  "5501041001.0": {
+    "name": "Camino Internacional",
+    "field": "district",
+    "district": "Camino Internacional",
+    "locality": null,
+    "osm_name": "Mendoza",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5501081003.0": {
+    "name": "Condominio Independiente Lo López",
+    "field": "district",
+    "district": "Condominio Independiente Lo López",
+    "locality": "Villa Los Manantiales del Inca",
+    "osm_name": "Los Boldos Oriente",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5501021007.0": {
+    "name": "Boco Sur",
+    "field": "district",
+    "district": "Boco Sur",
+    "locality": "Población Antumapu",
+    "osm_name": "Pasaje Caleuche (Barco Mitológico)",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804021006.0": {
+    "name": "Alta Las Vegas",
+    "field": "locality",
+    "district": null,
+    "locality": "Alta Las Vegas",
+    "osm_name": "Santa Rosa",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804021001.0": {
+    "name": "Mirador del Valle",
+    "field": "locality",
+    "district": null,
+    "locality": "Mirador del Valle",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5804021004.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Convento Corazón Eucarístico de Jesús",
+    "osm_key": "amenity",
+    "osm_value": "monastery"
+  },
+  "5804021005.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": "El Páramo",
+    "osm_name": "Pasaje Manuel Thomson",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804031001.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Plaza La Justicia",
+    "osm_key": "leisure",
+    "osm_value": "park"
+  },
+  "5804021002.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Pasaje Condell",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804021008.0": {
+    "name": "Villa Caviale",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Caviale",
+    "osm_name": "Pasaje Volcán Socompa",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804021003.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Quinta",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804021007.0": {
+    "name": "Villa Caviale",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Caviale",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5804011001.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "La Comarca",
+    "osm_key": "amenity",
+    "osm_value": "marketplace"
+  },
+  "5804051001.0": {
+    "name": "Población Benito Juárez",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Benito Juárez",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5804041005.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": "Villa Germania",
+    "osm_name": "Club de Campo Servicio de Salud Viña del Mar Quillota",
+    "osm_key": "leisure",
+    "osm_value": "resort"
+  },
+  "5804031003.0": {
+    "name": "Los Boldos",
+    "field": "district",
+    "district": "Los Boldos",
+    "locality": null,
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5804041002.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5804041001.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Almirante Neff",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5804081001.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Segunda",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804051003.0": {
+    "name": "Población Vicente Martínez",
+    "field": "locality",
+    "district": null,
+    "locality": "Población Vicente Martínez",
+    "osm_name": "Los Manzanos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804051006.0": {
+    "name": "Villa Andrea 2",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Andrea 2",
+    "osm_name": "Daniel De La Vega",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804051002.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Manuel Ortiz de Zárate",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804041006.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": "Condominio Doña Francisca",
+    "osm_name": "Calle 1",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804051009.0": {
+    "name": "Toma Lomas de Bellavista",
+    "field": "locality",
+    "district": null,
+    "locality": "Toma Lomas de Bellavista",
+    "osm_name": "Alcalde Miguel Gandulfo",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804081004.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Rivadavia",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804081005.0": {
+    "name": "Villa John Kennedy",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa John Kennedy",
+    "osm_name": "Pasaje Myrian",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804051007.0": {
+    "name": "Puyaral",
+    "field": "locality",
+    "district": null,
+    "locality": "Puyaral",
+    "osm_name": "José Bohr",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804041003.0": {
+    "name": "Chile Nuevo",
+    "field": "district",
+    "district": "Chile Nuevo",
+    "locality": null,
+    "osm_name": "Condominio Santa Elena",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5804081003.0": {
+    "name": "Valles de Marga Marga",
+    "field": "locality",
+    "district": null,
+    "locality": "Valles de Marga Marga",
+    "osm_name": "Las Chacrillas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804081002.0": {
+    "name": "Chile Nuevo",
+    "field": "district",
+    "district": "Chile Nuevo",
+    "locality": "San José de la Palmilla",
+    "osm_name": "Block 13",
+    "osm_key": "building",
+    "osm_value": "apartments"
+  },
+  "5804051004.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Los Crateus",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804051005.0": {
+    "name": "Villa John Kennedy",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa John Kennedy",
+    "osm_name": "Pasaje Samuel Román Rojas",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804041004.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": "Población Valencia",
+    "osm_name": "Gerona",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5804041007.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": "El Peumo",
+    "osm_name": "Rosmar",
+    "osm_key": "shop",
+    "osm_value": "convenience"
+  },
+  "5804031002.0": {
+    "name": "Peñablanca",
+    "field": "district",
+    "district": "Peñablanca",
+    "locality": null,
+    "osm_name": "Pasaje 4",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5804051008.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "El Relente",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801101001.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Lomas Del Sol 3",
+    "osm_name": "Lomas del Sol",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801101002.0": {
+    "name": "El Frutillar",
+    "field": "district",
+    "district": "El Frutillar",
+    "locality": null,
+    "osm_name": "Marinero Fuentealba",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801011001.0": {
+    "name": "Villa Paso Hondo",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Paso Hondo",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5801011005.0": {
+    "name": "Los Espinos",
+    "field": "locality",
+    "district": null,
+    "locality": "Los Espinos",
+    "osm_name": "Media Luna Las Pataguas",
+    "osm_key": "leisure",
+    "osm_value": "pitch"
+  },
+  "5801011004.0": {
+    "name": "El Retiro",
+    "field": "locality",
+    "district": null,
+    "locality": "El Retiro",
+    "osm_name": "Lisboa",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801011002.0": {
+    "name": "El Retiro",
+    "field": "locality",
+    "district": null,
+    "locality": "El Retiro",
+    "osm_name": "Berna",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801101004.0": {
+    "name": "El Frutillar",
+    "field": "district",
+    "district": "El Frutillar",
+    "locality": "Frutillar Alto",
+    "osm_name": "Lincoyán",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801101005.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": null,
+    "osm_name": "Condominio Rapa Nui",
+    "osm_key": "landuse",
+    "osm_value": "residential"
+  },
+  "5801081001.0": {
+    "name": "Canal Chacao",
+    "field": "locality",
+    "district": null,
+    "locality": "Canal Chacao",
+    "osm_name": "Pasaje Tiaca",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801101003.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Belloto Centro",
+    "osm_name": "Baquedano",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801011003.0": {
+    "name": "Buenos Aires",
+    "field": "locality",
+    "district": null,
+    "locality": "Buenos Aires",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5801081002.0": {
+    "name": "Argentina",
+    "field": "locality",
+    "district": null,
+    "locality": "Argentina",
+    "osm_name": "Flamarion",
+    "osm_key": "highway",
+    "osm_value": "steps"
+  },
+  "5801091001.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Los Naranjos",
+    "osm_name": "Calle 5",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801121005.0": {
+    "name": "Soublete",
+    "field": "locality",
+    "district": null,
+    "locality": "Soublete",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5801121001.0": {
+    "name": "Carozzi",
+    "field": "locality",
+    "district": null,
+    "locality": "Carozzi",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5801081003.0": {
+    "name": "Samuel Valencia",
+    "field": "locality",
+    "district": null,
+    "locality": "Samuel Valencia",
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5801091005.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Belloto Centro",
+    "osm_name": "El Vergel",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801091006.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Júpiter",
+    "osm_name": "Pasaje 1",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801091002.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Puerto del Este",
+    "osm_name": "Pasaje A",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801081004.0": {
+    "name": "Basso",
+    "field": "locality",
+    "district": null,
+    "locality": "Basso",
+    "osm_name": "Galileo",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801111002.0": {
+    "name": "Mena",
+    "field": "locality",
+    "district": null,
+    "locality": "Mena",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5801091003.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Las Rosas",
+    "osm_name": "Ovalle",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801081005.0": {
+    "name": "Pompeya Sur",
+    "field": "locality",
+    "district": null,
+    "locality": "Pompeya Sur",
+    "osm_name": "Coquimbo",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801121002.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Los Naranjos",
+    "osm_name": "Schiller",
+    "osm_key": "shop",
+    "osm_value": "funeral_directors"
+  },
+  "5801091007.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Baldomero Lillo",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "house"
+  },
+  "5801091004.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Puerto Marino",
+    "osm_name": "El Alba",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801021006.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Textil Viña",
+    "osm_name": "San Antonio",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801121006.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Sol del Pacífico",
+    "osm_name": null,
+    "osm_key": "place",
+    "osm_value": "house"
+  },
+  "5801121003.0": {
+    "name": "La Cumbre",
+    "field": "locality",
+    "district": null,
+    "locality": "La Cumbre",
+    "osm_name": "Del Limonal",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801021003.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Serena I",
+    "osm_name": "Las Carretas",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801111003.0": {
+    "name": "Condominio Las Vertientes",
+    "field": "locality",
+    "district": null,
+    "locality": "Condominio Las Vertientes",
+    "osm_name": "Pasaje Mena",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801021002.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Condominio Los Aromos",
+    "osm_name": "Pasaje 805",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801121007.0": {
+    "name": "Bosques de Marga-Marga",
+    "field": "locality",
+    "district": null,
+    "locality": "Bosques de Marga-Marga",
+    "osm_name": "Uno Oriente",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801121004.0": {
+    "name": "Casas Valle del Sol",
+    "field": "locality",
+    "district": null,
+    "locality": "Casas Valle del Sol",
+    "osm_name": "Glaciar Soler",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801021004.0": {
+    "name": "Teniente Serrano",
+    "field": "locality",
+    "district": null,
+    "locality": "Teniente Serrano",
+    "osm_name": "Asado Al Palo",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801121009.0": {
+    "name": "Lomas de Quilpué",
+    "field": "locality",
+    "district": null,
+    "locality": "Lomas de Quilpué",
+    "osm_name": "Pasaje La Invernada",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801121008.0": {
+    "name": "Altos de Manquehue",
+    "field": "locality",
+    "district": null,
+    "locality": "Altos de Manquehue",
+    "osm_name": "Las Hijuelas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801111001.0": {
+    "name": "Los Estanques",
+    "field": "locality",
+    "district": null,
+    "locality": "Los Estanques",
+    "osm_name": "Manuel Plaza 1373",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5801021001.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Las Rosas",
+    "osm_name": "Panadería Alexis",
+    "osm_key": "shop",
+    "osm_value": "bakery"
+  },
+  "5801021005.0": {
+    "name": "El Belloto",
+    "field": "district",
+    "district": "El Belloto",
+    "locality": "Villa Ari Henúa",
+    "osm_name": "Calle Tongariki",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5801111004.0": {
+    "name": "Camino Calichero",
+    "field": "district",
+    "district": "Camino Calichero",
+    "locality": null,
+    "osm_name": "Autódromo Gustavo Felo Rivera",
+    "osm_key": "highway",
+    "osm_value": "raceway"
+  },
+  "5801031001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "El Rocío",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5302011001.0": {
+    "name": "Paso Basaure",
+    "field": "district",
+    "district": "Paso Basaure",
+    "locality": "Villa Los Jardines",
+    "osm_name": "10 de Julio",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5302021002.0": {
+    "name": "El Patagual",
+    "field": "district",
+    "district": "El Patagual",
+    "locality": null,
+    "osm_name": "Señor Pobre",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5302021001.0": {
+    "name": "Alto del Puerto",
+    "field": "district",
+    "district": "Alto del Puerto",
+    "locality": "Población El Cristo",
+    "osm_name": "Escuela Especial de Lenguaje Voces Del Valle",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5302051001.0": {
+    "name": "Alto del Puerto",
+    "field": "district",
+    "district": "Alto del Puerto",
+    "locality": "Villa San José",
+    "osm_name": "Ruta E-57",
+    "osm_key": "highway",
+    "osm_value": "primary"
+  },
+  "5302041001.0": {
+    "name": "La Caldera",
+    "field": "district",
+    "district": "La Caldera",
+    "locality": "La Pampilla",
+    "osm_name": "Callejon Vergara",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5303011001.0": {
+    "name": "Lo Araya",
+    "field": "district",
+    "district": "Lo Araya",
+    "locality": "Villa Colunquen",
+    "osm_name": "Pasaje Causino",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5303021001.0": {
+    "name": "Villa Cordillera",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Cordillera",
+    "osm_name": "Juzgado de Policía Local Rinconada",
+    "osm_key": "amenity",
+    "osm_value": "courthouse"
+  },
+  "5303031001.0": {
+    "name": "Villa Las Flores",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Las Flores",
+    "osm_name": "Bomberos Rinconada de Los Andes",
+    "osm_key": "amenity",
+    "osm_value": "fire_station"
+  },
+  "5303041001.0": {
+    "name": "Casuto",
+    "field": "locality",
+    "district": null,
+    "locality": "Casuto",
+    "osm_name": "Casuto",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5303011002.0": {
+    "name": "Villa San Alberto",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa San Alberto",
+    "osm_name": "Las Acacias",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5302031001.0": {
+    "name": "La Caldera",
+    "field": "district",
+    "district": "La Caldera",
+    "locality": null,
+    "osm_name": "San Carlos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5302041002.0": {
+    "name": "El Monte",
+    "field": "district",
+    "district": "El Monte",
+    "locality": null,
+    "osm_name": "Bernardo Vargas Pizarro",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5302021003.0": {
+    "name": "El Monte",
+    "field": "district",
+    "district": "El Monte",
+    "locality": null,
+    "osm_name": "Herrera",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5702011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "El Arrayán",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5702061001.0": {
+    "name": "Chagres",
+    "field": "locality",
+    "district": null,
+    "locality": "Chagres",
+    "osm_name": "Fundición Chagres",
+    "osm_key": "man_made",
+    "osm_value": "works"
+  },
+  "5701031009.0": {
+    "name": "El Algarrobal",
+    "field": "district",
+    "district": "El Algarrobal",
+    "locality": null,
+    "osm_name": "circuito las antenas La Virgen SF",
+    "osm_key": "highway",
+    "osm_value": "path"
+  },
+  "5701041002.0": {
+    "name": "El Algarrobal",
+    "field": "district",
+    "district": "El Algarrobal",
+    "locality": null,
+    "osm_name": "Ruta E-751",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5701041001.0": {
+    "name": "Los Molles",
+    "field": "district",
+    "district": "Los Molles",
+    "locality": null,
+    "osm_name": "Ruta E-709",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5701031001.0": {
+    "name": "Encón",
+    "field": "district",
+    "district": "Encón",
+    "locality": "Barrio Carlos Veloa Peliz",
+    "osm_name": "Pasaje Nuevo 16",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701051001.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": null,
+    "osm_name": "Centro Cultural y Museo Almendral",
+    "osm_key": "tourism",
+    "osm_value": "museum"
+  },
+  "5701021001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Pasaje Dos",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701031003.0": {
+    "name": "Villa El Totoral",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa El Totoral",
+    "osm_name": "Calle Dos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701031008.0": {
+    "name": "Encón",
+    "field": "district",
+    "district": "Encón",
+    "locality": "Barrio Carlos Veloa Peliz",
+    "osm_name": "Avenida Santa Teresa de Los Andes",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701021007.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": "Portal de Aconcagua",
+    "osm_name": "Villarroel",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701021002.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": "Villa Cordillera",
+    "osm_name": "Primavera",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701031006.0": {
+    "name": "Tres Canchas",
+    "field": "district",
+    "district": "Tres Canchas",
+    "locality": "Villa El Totoral",
+    "osm_name": "Séptimo de Línea",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701031004.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Pasaje J",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701031002.0": {
+    "name": "Tres Canchas",
+    "field": "district",
+    "district": "Tres Canchas",
+    "locality": null,
+    "osm_name": "Benigno Caldera",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701021003.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Liceo Doctor Roberto Humeres",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5701021004.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Obispo del Canto",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701021005.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": null,
+    "osm_name": "Conde",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701031005.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "General Velásquez",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701031007.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Pasaje Hortensias",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701021006.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": null,
+    "osm_name": "Los Lirios",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Colegio Santa Juana de Arco",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5701011002.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Instituto Abdón Cifuentes",
+    "osm_key": "amenity",
+    "osm_value": "school"
+  },
+  "5701011003.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": null,
+    "osm_name": "Bombero Guillermo Farías",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701011007.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": "Conjunto Puerta del Inca",
+    "osm_name": "Manuel Caballero",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701011004.0": {
+    "name": "Conservera Pentzke S.A.",
+    "field": "osm_landuse",
+    "district": null,
+    "locality": null,
+    "osm_name": "Conservera Pentzke S.A.",
+    "osm_key": "landuse",
+    "osm_value": "industrial"
+  },
+  "5701011005.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Cajales",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701011006.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Dardignac",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5701081001.0": {
+    "name": "Curimón",
+    "field": "district",
+    "district": "Curimón",
+    "locality": null,
+    "osm_name": "Santa Rosa",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5701071001.0": {
+    "name": "Curimón",
+    "field": "district",
+    "district": "Curimón",
+    "locality": null,
+    "osm_name": "Pasaje Interior Cerro Zapata",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5701061001.0": {
+    "name": "Curimón",
+    "field": "district",
+    "district": "Curimón",
+    "locality": null,
+    "osm_name": "El Porvenir",
+    "osm_key": "place",
+    "osm_value": "neighbourhood"
+  },
+  "5701061002.0": {
+    "name": "Villa Sol de Aconcagua",
+    "field": "district",
+    "district": "Villa Sol de Aconcagua",
+    "locality": null,
+    "osm_name": "Hotel Punakora Aconcagua",
+    "osm_key": "tourism",
+    "osm_value": "hotel"
+  },
+  "5701011008.0": {
+    "name": "Tocornal",
+    "field": "district",
+    "district": "Tocornal",
+    "locality": "Población Óscar Bonilla",
+    "osm_name": "Pasaje Bío Bío",
+    "osm_key": "highway",
+    "osm_value": "footway"
+  },
+  "5701021008.0": {
+    "name": "Almendral",
+    "field": "district",
+    "district": "Almendral",
+    "locality": null,
+    "osm_name": "Avenida Cañada",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601011005.0": {
+    "name": "Pelancura",
+    "field": "district",
+    "district": "Pelancura",
+    "locality": null,
+    "osm_name": "Pasaje Los Álamos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601011002.0": {
+    "name": "Villa El Sol",
+    "field": "district",
+    "district": "Villa El Sol",
+    "locality": "Las Bodegas",
+    "osm_name": "Cancha Balmaceda",
+    "osm_key": "leisure",
+    "osm_value": "pitch"
+  },
+  "5601011007.0": {
+    "name": "Vista Hermosa",
+    "field": "locality",
+    "district": null,
+    "locality": "Vista Hermosa",
+    "osm_name": "Pasaje Las Violetas",
+    "osm_key": "highway",
+    "osm_value": "steps"
+  },
+  "5601011006.0": {
+    "name": "Vista Hermosa",
+    "field": "locality",
+    "district": null,
+    "locality": "Vista Hermosa",
+    "osm_name": "Manuel Bulnes",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5601011003.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Placilla",
+    "osm_name": "Almacén y Librería \"Kraf\"",
+    "osm_key": "shop",
+    "osm_value": "books"
+  },
+  "5601011001.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": null,
+    "osm_name": "Los Españoles",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601011004.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Cerro La Arena",
+    "osm_name": "Las Dunas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601051001.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Puerto San Antonio",
+    "osm_name": "SAAM Extraportuario Sai",
+    "osm_key": "office",
+    "osm_value": "company"
+  },
+  "5601051008.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Villa El Trigal II",
+    "osm_name": "Almacén",
+    "osm_key": "shop",
+    "osm_value": "convenience"
+  },
+  "5601051003.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Villa Italia",
+    "osm_name": "Florencia",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601051002.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Villa Italia",
+    "osm_name": "Galvarino Riveros",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601051007.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Población 30 de Marzo",
+    "osm_name": "Manuel Rodríguez Erdoíza",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601051005.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": null,
+    "osm_name": "Pasaje San Vicente",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5601051009.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Población Teresa de los Andes",
+    "osm_name": "Seno Reloncaví",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601051004.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Colinas del Mar",
+    "osm_name": "Ignacio Loyola",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601061001.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Cerro La Viuda",
+    "osm_name": "Cauquenes",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601041001.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Tejas Verdes",
+    "osm_name": "Avenida El Arrayán",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5601061002.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Los Álamos",
+    "osm_name": "Pasaje Las Alpacas",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5601061006.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Los Nogales",
+    "osm_name": "Pasaje Las Perdices",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601061003.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Mirador de Campina",
+    "osm_name": "Los Laureles",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601041004.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Benjamín Videla",
+    "osm_name": "27 de Abril",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601061004.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": null,
+    "osm_name": "Cerro El Cristo",
+    "osm_key": "leisure",
+    "osm_value": "park"
+  },
+  "5601061005.0": {
+    "name": "San Juan",
+    "field": "district",
+    "district": "San Juan",
+    "locality": null,
+    "osm_name": "El Estribo",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5606011001.0": {
+    "name": "Rocas de Santo Domingo",
+    "field": "district",
+    "district": "Rocas de Santo Domingo",
+    "locality": null,
+    "osm_name": "Avenida del Litoral",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5606011002.0": {
+    "name": "Rocas de Santo Domingo",
+    "field": "district",
+    "district": "Rocas de Santo Domingo",
+    "locality": null,
+    "osm_name": "Vesta",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5606011003.0": {
+    "name": "Rocas de Santo Domingo",
+    "field": "district",
+    "district": "Rocas de Santo Domingo",
+    "locality": null,
+    "osm_name": "De la Boca",
+    "osm_key": "highway",
+    "osm_value": "unclassified"
+  },
+  "5606011004.0": {
+    "name": "Rocas de Santo Domingo",
+    "field": "district",
+    "district": "Rocas de Santo Domingo",
+    "locality": null,
+    "osm_name": "Los Espinos",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5606011005.0": {
+    "name": "Rocas de Santo Domingo",
+    "field": "district",
+    "district": "Rocas de Santo Domingo",
+    "locality": null,
+    "osm_name": "Las Violetas",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5601041003.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Población Juan XXIII",
+    "osm_name": "Avenida Francisco de Paula Ginebra",
+    "osm_key": "highway",
+    "osm_value": "tertiary"
+  },
+  "5601041002.0": {
+    "name": "Llo Lleo",
+    "field": "district",
+    "district": "Llo Lleo",
+    "locality": "Villa Pacífico",
+    "osm_name": "Tercera Compañía del Cuerpo de Bomberos de San Antonio",
+    "osm_key": "amenity",
+    "osm_value": "fire_station"
+  },
+  "5601051006.0": {
+    "name": "Barrancas",
+    "field": "district",
+    "district": "Barrancas",
+    "locality": "Villa Las Dunas",
+    "osm_name": "Los Huilliches",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5102131001.0": {
+    "name": "Villorrio La Rotunda",
+    "field": "locality",
+    "district": null,
+    "locality": "Villorrio La Rotunda",
+    "osm_name": "British American Tobacco",
+    "osm_key": "man_made",
+    "osm_value": "works"
+  },
+  "5102011001.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Calle Uno",
+    "osm_key": "highway",
+    "osm_value": "residential"
+  },
+  "5102011005.0": {
+    "name": "Villa Magallanes",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Magallanes",
+    "osm_name": null,
+    "osm_key": "building",
+    "osm_value": "yes"
+  },
+  "5102011003.0": {
+    "name": "Villa Esperanza",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Esperanza",
+    "osm_name": "Los Alerces",
+    "osm_key": "highway",
+    "osm_value": "living_street"
+  },
+  "5102011004.0": {
+    "name": null,
+    "field": null,
+    "district": null,
+    "locality": null,
+    "osm_name": "Ruta 68",
+    "osm_key": "highway",
+    "osm_value": "motorway"
+  },
+  "5102031001.0": {
+    "name": "Condominio Los Viñedos",
+    "field": "district",
+    "district": "Condominio Los Viñedos",
+    "locality": null,
+    "osm_name": "Bodega San Francisco",
+    "osm_key": "building",
+    "osm_value": "yes"
+  },
+  "5102011002.0": {
+    "name": "Villa Magallanes",
+    "field": "locality",
+    "district": null,
+    "locality": "Villa Magallanes",
+    "osm_name": "Hospital San José de Casablanca",
+    "osm_key": "amenity",
+    "osm_value": "hospital"
+  }
+}

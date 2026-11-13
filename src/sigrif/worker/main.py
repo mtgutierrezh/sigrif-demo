@@ -57,6 +57,12 @@ def load_zones(path: Path = ZONES_FILE) -> list[dict[str, Any]]:
                 "name": name,
                 "comuna": comuna,
                 "provincia": str(properties.get("Provincia") or "").strip(),
+                "region": str(properties.get("Region") or "Valparaíso").strip(),
+                "zone_type": str(
+                    properties.get("zone_type") or properties.get("Nivel") or "comunal"
+                ),
+                "name_source": str(properties.get("name_source") or "desconocida"),
+                "name_official": bool(properties.get("name_official", False)),
                 "level": str(properties.get("Nivel") or "comunal"),
                 "vegetation": float(properties.get("vegetation", 0.3)),
                 "historical_fires": int(properties.get("historical_fires", 0)),
@@ -79,6 +85,11 @@ def seed_zones() -> None:
                 if current is None:
                     continue
                 current.comuna = zone_data["comuna"]
+                current.provincia = zone_data["provincia"]
+                current.region = zone_data["region"]
+                current.zone_type = zone_data["zone_type"]
+                current.name_source = zone_data["name_source"]
+                current.name_official = zone_data["name_official"]
                 current.vegetation = zone_data["vegetation"]
                 current.historical_fires = zone_data["historical_fires"]
                 current.slope = zone_data["slope"]
@@ -95,6 +106,11 @@ def seed_zones() -> None:
                 Zone(
                     name=zone_data["name"],
                     comuna=zone_data["comuna"],
+                    provincia=zone_data["provincia"],
+                    region=zone_data["region"],
+                    zone_type=zone_data["zone_type"],
+                    name_source=zone_data["name_source"],
+                    name_official=zone_data["name_official"],
                     geometry=WKTElement(zone_data["wkt"], srid=4326),
                     risk_level="Bajo",
                     risk_score=0.0,
