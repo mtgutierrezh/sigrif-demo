@@ -116,25 +116,28 @@ export default function MapPage() {
           onViewportChange={setViewport}
         />
 
-        <div className="pointer-events-auto absolute left-4 top-4 z-[1000] w-[260px] rounded-[3.6px] border border-iron bg-obsidian/90 p-3 backdrop-blur-sm">
-          <div className="mb-3 flex gap-2">
+        <div className="pointer-events-auto absolute left-4 top-4 z-[1000] w-[300px] rounded-[3.6px] border border-iron bg-obsidian/90 p-3 backdrop-blur-sm">
+          <div className="mb-3 grid grid-cols-3 gap-1">
             <button
               type="button"
-              className={`btn ${colorMode === "risk" ? "btn-primary" : "btn-ghost"} flex-1`}
+              className={`btn ${colorMode === "risk" ? "btn-primary" : "btn-ghost"} min-w-0`}
+              style={{ padding: "6px 4px", fontSize: "9px", lineHeight: 1.15 }}
               onClick={() => setColorMode("risk")}
             >
               Riesgo
             </button>
             <button
               type="button"
-              className={`btn ${colorMode === "fuel" ? "btn-primary" : "btn-ghost"} flex-1`}
+              className={`btn ${colorMode === "fuel" ? "btn-primary" : "btn-ghost"} min-w-0`}
+              style={{ padding: "6px 4px", fontSize: "9px", lineHeight: 1.15 }}
               onClick={() => setColorMode("fuel")}
             >
               Combustible
             </button>
             <button
               type="button"
-              className={`btn ${colorMode === "fire" ? "btn-primary" : "btn-ghost"} flex-1`}
+              className={`btn ${colorMode === "fire" ? "btn-primary" : "btn-ghost"} min-w-0`}
+              style={{ padding: "6px 4px", fontSize: "9px", lineHeight: 1.15 }}
               onClick={() => setColorMode("fire")}
             >
               Prob. histórica
