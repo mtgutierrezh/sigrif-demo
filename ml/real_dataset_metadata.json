@@ -1,0 +1,486 @@
+{
+  "dataset_version": "conaf-real-zona-temporada-v1",
+  "created_at": "2026-11-14T02:07:40.043949+00:00",
+  "seed": 42,
+  "target": {
+    "name": "fire_next_season",
+    "definition": "1 si al menos un punto de ignición CONAF cae dentro de la zona en la temporada objetivo; 0 en caso contrario.",
+    "positive_class": 1,
+    "rows_are": "zona x temporada objetivo"
+  },
+  "seasons": {
+    "all": [
+      "2010_2011",
+      "2011_2012",
+      "2012_2013",
+      "2013_2014",
+      "2014_2015",
+      "2015_2016",
+      "2016_2017",
+      "2017_2018",
+      "2018_2019",
+      "2019_2020",
+      "2020_2021",
+      "2021_2022",
+      "2022_2023",
+      "2023_2024",
+      "2024_2025"
+    ],
+    "history_only": "2010_2011",
+    "target": [
+      "2011_2012",
+      "2012_2013",
+      "2013_2014",
+      "2014_2015",
+      "2015_2016",
+      "2016_2017",
+      "2017_2018",
+      "2018_2019",
+      "2019_2020",
+      "2020_2021",
+      "2021_2022",
+      "2022_2023",
+      "2023_2024",
+      "2024_2025"
+    ]
+  },
+  "rows": 7840,
+  "positives": 1500,
+  "negatives": 6340,
+  "prevalence": 0.191327,
+  "dataset": {
+    "rows": 7840,
+    "zones": 560,
+    "target_seasons": [
+      "2011_2012",
+      "2012_2013",
+      "2013_2014",
+      "2014_2015",
+      "2015_2016",
+      "2016_2017",
+      "2017_2018",
+      "2018_2019",
+      "2019_2020",
+      "2020_2021",
+      "2021_2022",
+      "2022_2023",
+      "2023_2024",
+      "2024_2025"
+    ],
+    "history_only_season": "2010_2011",
+    "positives": 1500,
+    "negatives": 6340,
+    "prevalence": 0.1913,
+    "by_season": [
+      {
+        "season": "2011_2012",
+        "rows": 560,
+        "positives": 136,
+        "negatives": 424,
+        "prevalence": 0.2429
+      },
+      {
+        "season": "2012_2013",
+        "rows": 560,
+        "positives": 148,
+        "negatives": 412,
+        "prevalence": 0.2643
+      },
+      {
+        "season": "2013_2014",
+        "rows": 560,
+        "positives": 131,
+        "negatives": 429,
+        "prevalence": 0.2339
+      },
+      {
+        "season": "2014_2015",
+        "rows": 560,
+        "positives": 127,
+        "negatives": 433,
+        "prevalence": 0.2268
+      },
+      {
+        "season": "2015_2016",
+        "rows": 560,
+        "positives": 114,
+        "negatives": 446,
+        "prevalence": 0.2036
+      },
+      {
+        "season": "2016_2017",
+        "rows": 560,
+        "positives": 124,
+        "negatives": 436,
+        "prevalence": 0.2214
+      },
+      {
+        "season": "2017_2018",
+        "rows": 560,
+        "positives": 121,
+        "negatives": 439,
+        "prevalence": 0.2161
+      },
+      {
+        "season": "2018_2019",
+        "rows": 560,
+        "positives": 130,
+        "negatives": 430,
+        "prevalence": 0.2321
+      },
+      {
+        "season": "2019_2020",
+        "rows": 560,
+        "positives": 107,
+        "negatives": 453,
+        "prevalence": 0.1911
+      },
+      {
+        "season": "2020_2021",
+        "rows": 560,
+        "positives": 55,
+        "negatives": 505,
+        "prevalence": 0.0982
+      },
+      {
+        "season": "2021_2022",
+        "rows": 560,
+        "positives": 59,
+        "negatives": 501,
+        "prevalence": 0.1054
+      },
+      {
+        "season": "2022_2023",
+        "rows": 560,
+        "positives": 59,
+        "negatives": 501,
+        "prevalence": 0.1054
+      },
+      {
+        "season": "2023_2024",
+        "rows": 560,
+        "positives": 91,
+        "negatives": 469,
+        "prevalence": 0.1625
+      },
+      {
+        "season": "2024_2025",
+        "rows": 560,
+        "positives": 98,
+        "negatives": 462,
+        "prevalence": 0.175
+      }
+    ],
+    "by_province": [
+      {
+        "provincia": "Los Andes",
+        "rows": 532,
+        "positives": 23,
+        "prevalence": 0.0432
+      },
+      {
+        "provincia": "Marga Marga",
+        "rows": 1288,
+        "positives": 369,
+        "prevalence": 0.2865
+      },
+      {
+        "provincia": "Petorca",
+        "rows": 364,
+        "positives": 25,
+        "prevalence": 0.0687
+      },
+      {
+        "provincia": "Quillota",
+        "rows": 784,
+        "positives": 248,
+        "prevalence": 0.3163
+      },
+      {
+        "provincia": "San Antonio",
+        "rows": 1078,
+        "positives": 250,
+        "prevalence": 0.2319
+      },
+      {
+        "provincia": "San Felipe de Aconcagua",
+        "rows": 756,
+        "positives": 80,
+        "prevalence": 0.1058
+      },
+      {
+        "provincia": "Valparaíso",
+        "rows": 3038,
+        "positives": 505,
+        "prevalence": 0.1662
+      }
+    ],
+    "features": {
+      "numeric": [
+        "fuel_native",
+        "fuel_plantation",
+        "fuel_shrub",
+        "fuel_grass",
+        "fuel_agriculture",
+        "fuel_urban",
+        "vegetation",
+        "slope",
+        "area_km2",
+        "log_area_km2",
+        "population_log",
+        "elev_mean_m",
+        "elev_range_m",
+        "centroid_lon",
+        "centroid_lat",
+        "prior_fires_last1_log",
+        "prior_fires_last3_log",
+        "prior_fires_last5_log",
+        "prior_fires_total_log",
+        "prior_burned_seasons",
+        "prior_burn_rate",
+        "seasons_since_last_fire",
+        "prior_fire_area_last3_log",
+        "prior_fire_area_total_log",
+        "comuna_prior_fires_last1_log",
+        "comuna_prior_fire_rate_last1",
+        "comuna_prior_burn_rate",
+        "prior_tmean_c",
+        "prior_tmean_anom_c",
+        "prior_precip_mm",
+        "prior_precip_anom_mm",
+        "prior_precip_ratio",
+        "prior_dry_days",
+        "prior_max_dry_spell",
+        "prior_rh_mean",
+        "prior_wind_mean",
+        "prior3_precip_anom_mm"
+      ],
+      "categorical": [
+        "comuna",
+        "provincia",
+        "dominant_fuel",
+        "zone_type"
+      ]
+    },
+    "climate": {
+      "status": "ok"
+    }
+  },
+  "features": {
+    "numeric": [
+      "fuel_native",
+      "fuel_plantation",
+      "fuel_shrub",
+      "fuel_grass",
+      "fuel_agriculture",
+      "fuel_urban",
+      "vegetation",
+      "slope",
+      "area_km2",
+      "log_area_km2",
+      "population_log",
+      "elev_mean_m",
+      "elev_range_m",
+      "centroid_lon",
+      "centroid_lat",
+      "prior_fires_last1_log",
+      "prior_fires_last3_log",
+      "prior_fires_last5_log",
+      "prior_fires_total_log",
+      "prior_burned_seasons",
+      "prior_burn_rate",
+      "seasons_since_last_fire",
+      "prior_fire_area_last3_log",
+      "prior_fire_area_total_log",
+      "comuna_prior_fires_last1_log",
+      "comuna_prior_fire_rate_last1",
+      "comuna_prior_burn_rate",
+      "prior_tmean_c",
+      "prior_tmean_anom_c",
+      "prior_precip_mm",
+      "prior_precip_anom_mm",
+      "prior_precip_ratio",
+      "prior_dry_days",
+      "prior_max_dry_spell",
+      "prior_rh_mean",
+      "prior_wind_mean",
+      "prior3_precip_anom_mm"
+    ],
+    "categorical": [
+      "comuna",
+      "provincia",
+      "dominant_fuel",
+      "zone_type"
+    ],
+    "dropped": [
+      "prior_et0_mm",
+      "prior_et0_anom_mm"
+    ]
+  },
+  "identifiers": [
+    "season",
+    "season_index",
+    "zone_id",
+    "zone_name",
+    "comuna",
+    "provincia",
+    "zone_type"
+  ],
+  "sources": {
+    "fires": "CONAF ocurrencia de incendios 2010-2025, shapefiles por temporada",
+    "zones": "/mnt/NeuralVault/ava_blackboard/ARQUITECTURA_DE_SISTEMAS_001D/EA2/sigrif-demo/src/sigrif/data/cerros_sectores_valparaiso_region_oficial.geojson",
+    "fuels": "CONAF Catastro de Uso de Suelo y Vegetación 2019 (fracciones por zona)",
+    "slope": "SRTM 30 m / OpenTopoData (campo slope de la capa de zonas)",
+    "climate": "NASA POWER (MERRA-2), centroide comunal (respaldo por límite de Open-Meteo)"
+  },
+  "zones": {
+    "source": "/mnt/NeuralVault/ava_blackboard/ARQUITECTURA_DE_SISTEMAS_001D/EA2/sigrif-demo/src/sigrif/data/cerros_sectores_valparaiso_region_oficial.geojson",
+    "features_total": 563,
+    "zones_used": 560,
+    "zones_skipped": 3,
+    "skipped_reasons": {
+      "island_comunas": 3,
+      "other": 0
+    },
+    "include_islands": false,
+    "total_area_km2": 613.681,
+    "coverage_region_pct": 3.74,
+    "comunas": [
+      "Algarrobo",
+      "Cabildo",
+      "Calera",
+      "Calle Larga",
+      "Cartagena",
+      "Casablanca",
+      "Catemu",
+      "Concón",
+      "El Quisco",
+      "El Tabo",
+      "Hijuelas",
+      "La Cruz",
+      "La Ligua",
+      "Limache",
+      "Llaillay",
+      "Los Andes",
+      "Nogales",
+      "Olmué",
+      "Panquehue",
+      "Papudo",
+      "Petorca",
+      "Puchuncaví",
+      "Putaendo",
+      "Quillota",
+      "Quilpué",
+      "Quintero",
+      "Rinconada",
+      "San Antonio",
+      "San Esteban",
+      "San Felipe",
+      "Santa María",
+      "Santo Domingo",
+      "Valparaíso",
+      "Villa Alemana",
+      "Viña del Mar",
+      "Zapallar"
+    ],
+    "provincias": [
+      "Los Andes",
+      "Marga Marga",
+      "Petorca",
+      "Quillota",
+      "San Antonio",
+      "San Felipe de Aconcagua",
+      "Valparaíso"
+    ]
+  },
+  "climate": {
+    "status": "ok",
+    "source": "NASA POWER (MERRA-2), centroide comunal (respaldo por límite de Open-Meteo)",
+    "comunas_total": 36,
+    "comunas_ok": 36,
+    "comunas_error": 0,
+    "coverage_fraction": 1.0,
+    "errors": {},
+    "cache_dir": "ml/cache/climate_nasa",
+    "openmeteo_429_errors": 25,
+    "fallback_reason": "Open-Meteo devolvió HTTP 429 (límite horario) y no alcanzó 80% de cobertura.",
+    "excluded_from_model": false,
+    "requested_period": "1991-01-01..2025-12-31",
+    "climatology_period": "1991_1992..2019_2020"
+  },
+  "coverage": {
+    "zones_used": 560,
+    "zones_area_km2": 613.681,
+    "coverage_region_pct": 3.74,
+    "regional_points_valid": 10508,
+    "regional_points_assigned": 4638,
+    "regional_assignment_rate": 0.4414
+  },
+  "missing": {
+    "fuel_native": 0,
+    "fuel_plantation": 0,
+    "fuel_shrub": 0,
+    "fuel_grass": 0,
+    "fuel_agriculture": 0,
+    "fuel_urban": 0,
+    "vegetation": 0,
+    "slope": 0,
+    "area_km2": 0,
+    "log_area_km2": 0,
+    "population_log": 0,
+    "elev_mean_m": 0,
+    "elev_range_m": 0,
+    "centroid_lon": 0,
+    "centroid_lat": 0,
+    "prior_fires_last1_log": 0,
+    "prior_fires_last3_log": 0,
+    "prior_fires_last5_log": 0,
+    "prior_fires_total_log": 0,
+    "prior_burned_seasons": 0,
+    "prior_burn_rate": 0,
+    "seasons_since_last_fire": 0,
+    "prior_fire_area_last3_log": 0,
+    "prior_fire_area_total_log": 0,
+    "comuna_prior_fires_last1_log": 0,
+    "comuna_prior_fire_rate_last1": 0,
+    "comuna_prior_burn_rate": 0,
+    "prior_tmean_c": 0,
+    "prior_tmean_anom_c": 0,
+    "prior_precip_mm": 0,
+    "prior_precip_anom_mm": 0,
+    "prior_precip_ratio": 0,
+    "prior_dry_days": 0,
+    "prior_max_dry_spell": 0,
+    "prior_rh_mean": 0,
+    "prior_wind_mean": 0,
+    "prior3_precip_anom_mm": 0,
+    "comuna": 0,
+    "provincia": 0,
+    "dominant_fuel": 0,
+    "zone_type": 0
+  },
+  "leakage_guards": [
+    "history features use only seasons strictly before the target season",
+    "no historical_fires, incendios_temporadas, incendios_ultima_temporada or incendios_ultimos_5 from the zone layer",
+    "climate features are from the immediately previous season and 1991-2020 climatology, never the target season",
+    "cause, extinction date and burned area of the target season are excluded",
+    "season is an identifier for temporal CV, not a model feature",
+    "target count n_fires_target is kept only for EDA, not as a feature"
+  ],
+  "class_balance": {
+    "positives": 1500,
+    "negatives": 6340,
+    "prevalence": 0.191327
+  },
+  "limitations": [
+    "La capa de zonas cubre ~3.7% del área regional y sesga hacia interfaces urbano-forestales.",
+    "La etiqueta es ocurrencia de punto de ignición, no área quemada, severidad ni impacto.",
+    "Los polígonos no son unidades homogéneas de combustible.",
+    "El clima es de escala comunal (Open-Meteo o NASA POWER) y no resuelve microclima de ladera.",
+    "La temporada 2010_2011 solo aporta historia; no se evalúa como objetivo.",
+    "Isla de Pascua y Juan Fernández quedan fuera del modelo continental.",
+    "El combustible/vegetación es un corte 2019 y la población es censo 2017; en temporadas previas son información futura, un supuesto estático fuerte."
+  ],
+  "hash_sha256": "7445d4648c4db153fcbe293e1d52da3adfb93cd9495baec7aef9cc0689af4bd2",
+  "path": "ml/real_dataset.csv"
+}

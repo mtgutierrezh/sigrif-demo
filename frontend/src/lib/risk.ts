@@ -30,9 +30,9 @@ export function riskRank(level: RiskLevel | null | undefined): number {
 
 export function riskRange(level: RiskLevel): string {
   return {
-    Bajo: "0,00 – 0,39",
-    Medio: "0,40 – 0,69",
-    Alto: "0,70 – 1,00",
+    Bajo: "Señal baja del modelo",
+    Medio: "Señal media del modelo",
+    Alto: "Señal alta del modelo",
     "Sin dato": "Sin lectura",
   }[level];
 }

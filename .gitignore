@@ -39,3 +39,5 @@ artifacts/*.pkl
 
 ACCESOS.local.md
 ml/cache/
+
+ml/real_model.joblib

@@ -9,6 +9,8 @@ import { PageLoader } from "../components/PageLoader";
 import { RiskSummary } from "../components/RiskSummary";
 import { TelemetryStrip } from "../components/TelemetryStrip";
 import { ZonePanel } from "../components/ZonePanel";
+import { CELL_MIN_ZOOM, useCells, type MapViewport } from "../features/zones/useCells";
+import type { Zone } from "../features/zones/types";
 import { useHistory, useStatus, useZone, useZones } from "../features/zones/useZones";
 import { useSimulate } from "../features/zones/useSimulate";
 import { FUEL_COLORS } from "../lib/fuel";
@@ -19,20 +21,24 @@ export default function MapPage() {
   const [colorMode, setColorMode] = useState<"risk" | "fuel">(
     params.get("capa") === "combustible" ? "fuel" : "risk",
   );
+  const [showCells, setShowCells] = useState(true);
+  const [viewport, setViewport] = useState<MapViewport | null>(null);
   const raw = params.get("zona");
   const selectedId = raw && !Number.isNaN(Number(raw)) ? Number(raw) : null;
+  const cellsVisible = showCells && (viewport?.zoom ?? 0) >= CELL_MIN_ZOOM;
 
   const zonesQuery = useZones();
   const statusQuery = useStatus();
   const zoneQuery = useZone(selectedId);
   const historyQuery = useHistory(selectedId);
   const simulate = useSimulate();
+  const cellsQuery = useCells(viewport?.bbox ?? null, cellsVisible);
 
   const selectedZone =
     zoneQuery.data ?? zonesQuery.data?.find((zone) => zone.id === selectedId) ?? null;
 
   const groupedZones = useMemo(() => {
-    const groups = new Map<string, typeof zonesQuery.data>();
+    const groups = new Map<string, Zone[]>();
     for (const zone of zonesQuery.data ?? []) {
       const key = `${zone.provincia} · ${zone.comuna}`;
       const current = groups.get(key) ?? [];
@@ -54,6 +60,18 @@ export default function MapPage() {
             : simulate.stage === "error"
               ? "No pudimos actualizar el riesgo. Intenta nuevamente."
               : null;
+
+  const cellStatus = !showCells
+    ? "Malla H3 oculta"
+    : (viewport?.zoom ?? 0) < CELL_MIN_ZOOM
+      ? `Acércate a zoom ${CELL_MIN_ZOOM} para ver la malla`
+      : cellsQuery.isLoading
+        ? "Cargando malla H3…"
+        : cellsQuery.isError
+          ? "No se pudo cargar la malla H3"
+          : `${(cellsQuery.data?.meta?.count ?? cellsQuery.data?.features.length ?? 0).toLocaleString("es-CL")} celdas res 8${
+              cellsQuery.data?.meta?.truncated ? " · vista parcial" : ""
+            }`;
 
   const selectZone = (zoneId: number) => {
     setParams({ zona: String(zoneId) }, { replace: true });
@@ -93,6 +111,9 @@ export default function MapPage() {
           selectedId={selectedId}
           onSelect={selectZone}
           colorMode={colorMode}
+          cells={cellsQuery.data ?? null}
+          showCells={cellsVisible}
+          onViewportChange={setViewport}
         />
 
         <div className="pointer-events-auto absolute left-4 top-4 z-[1000] w-[260px] rounded-[3.6px] border border-iron bg-obsidian/90 p-3 backdrop-blur-sm">
@@ -122,6 +143,22 @@ export default function MapPage() {
               ))}
             </div>
           ) : null}
+          <div className="mb-3 border-t border-iron pt-3">
+            <label
+              htmlFor="cells-toggle"
+              className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-bone"
+            >
+              <input
+                id="cells-toggle"
+                type="checkbox"
+                checked={showCells}
+                onChange={(event) => setShowCells(event.target.checked)}
+                className="size-3 accent-[#ebfc72]"
+              />
+              Malla H3 res 8
+            </label>
+            <p className="mt-1 font-mono text-[9px] leading-relaxed text-ash">{cellStatus}</p>
+          </div>
           <label
             htmlFor="zone-select"
             className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash"

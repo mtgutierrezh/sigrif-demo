@@ -5,9 +5,11 @@ import L, { type Path, type PathOptions } from "leaflet";
 import { useEffect, useMemo } from "react";
 import { CircleMarker, GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, useMap } from "react-leaflet";
 
+import { CellLayer } from "./CellLayer";
 import { RiskSurface } from "./RiskSurface";
 import { ZoomControl } from "./ZoomControl";
 
+import type { CellCollection, MapViewport } from "../features/zones/useCells";
 import type { Zone } from "../features/zones/types";
 import { formatScore } from "../lib/format";
 import { zoneLabel } from "../lib/names";
@@ -20,6 +22,9 @@ interface MapViewProps {
   selectedId: number | null;
   onSelect: (zoneId: number) => void;
   colorMode?: "risk" | "fuel";
+  cells?: CellCollection | null;
+  showCells?: boolean;
+  onViewportChange?: (viewport: MapViewport) => void;
 }
 
 const WORLD_RING: [number, number][] = [
@@ -78,7 +83,50 @@ function MapFocus({ zone }: { zone: Zone | null }) {
   return null;
 }
 
-export function MapView({ zones, selectedId, onSelect, colorMode = "risk" }: MapViewProps) {
+function MapViewportTracker({
+  onChange,
+}: {
+  onChange?: (viewport: MapViewport) => void;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!onChange) {
+      return;
+    }
+    const update = () => {
+      const bounds = map.getBounds().pad(0.08);
+      onChange({
+        bbox: {
+          minLon: bounds.getWest(),
+          minLat: bounds.getSouth(),
+          maxLon: bounds.getEast(),
+          maxLat: bounds.getNorth(),
+        },
+        zoom: map.getZoom(),
+      });
+    };
+    update();
+    map.on("moveend", update);
+    map.on("zoomend", update);
+    return () => {
+      map.off("moveend", update);
+      map.off("zoomend", update);
+    };
+  }, [map, onChange]);
+
+  return null;
+}
+
+export function MapView({
+  zones,
+  selectedId,
+  onSelect,
+  colorMode = "risk",
+  cells = null,
+  showCells = true,
+  onViewportChange,
+}: MapViewProps) {
   const collection = useMemo(() => zonesToFeatureCollection(zones), [zones]);
   const layerKey = useMemo(
     () => `${selectedId ?? "none"}-${zones.map((zone) => `${zone.id}:${zone.risk_score}`).join("|")}`,
@@ -141,6 +189,7 @@ export function MapView({ zones, selectedId, onSelect, colorMode = "risk" }: Map
           }}
         />
         <RiskSurface />
+        <CellLayer data={showCells ? cells : null} colorMode={colorMode} />
 
         <GeoJSON
           key={layerKey}
@@ -182,6 +231,7 @@ export function MapView({ zones, selectedId, onSelect, colorMode = "risk" }: Map
         })}
         <MapFit hasSelection={selectedId !== null} />
         <MapFocus zone={selectedZone} />
+        <MapViewportTracker onChange={onViewportChange} />
       </MapContainer>
     </div>
   );

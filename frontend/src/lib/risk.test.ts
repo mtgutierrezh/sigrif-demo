@@ -26,8 +26,8 @@ describe("risk tokens", () => {
     expect(riskRank("Sin dato")).toBe(-1);
   });
 
-  it("exposes the score bands", () => {
-    expect(riskRange("Bajo")).toBe("0,00 – 0,39");
-    expect(riskRange("Alto")).toBe("0,70 – 1,00");
+  it("exposes the score guidance", () => {
+    expect(riskRange("Bajo")).toBe("Señal baja del modelo");
+    expect(riskRange("Alto")).toBe("Señal alta del modelo");
   });
 });

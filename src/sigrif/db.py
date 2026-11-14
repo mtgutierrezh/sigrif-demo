@@ -127,6 +127,29 @@ def init_db() -> None:
                 "BOOLEAN NOT NULL DEFAULT false"
             )
         )
+        for column, definition in (
+            ("zone_id", "INTEGER"),
+            ("comuna", "VARCHAR(80)"),
+            ("provincia", "VARCHAR(80)"),
+            ("zone_name", "VARCHAR(120)"),
+            ("slope", "DOUBLE PRECISION NOT NULL DEFAULT 15"),
+            ("historical_fires", "INTEGER NOT NULL DEFAULT 0"),
+        ):
+            connection.execute(
+                text(f"ALTER TABLE risk_cells ADD COLUMN IF NOT EXISTS {column} {definition}")
+            )
+        connection.execute(
+            text("CREATE INDEX IF NOT EXISTS ix_risk_cells_zone_id ON risk_cells (zone_id)")
+        )
+        connection.execute(
+            text("CREATE INDEX IF NOT EXISTS ix_risk_cells_comuna ON risk_cells (comuna)")
+        )
+        connection.execute(
+            text(
+                "CREATE INDEX IF NOT EXISTS idx_risk_cells_geometry "
+                "ON risk_cells USING GIST (geometry)"
+            )
+        )
         connection.execute(
             text("CREATE INDEX IF NOT EXISTS ix_alerts_zone_status ON alerts (zone_id, status)")
         )

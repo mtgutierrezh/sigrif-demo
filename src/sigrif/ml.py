@@ -208,9 +208,12 @@ class RiskModel:
         vector = feature_vector(values)
         probabilities = self._probabilities(vector)
         risk_level = self._label(probabilities)
+        severity = 0.5 * probabilities["Medio"] + probabilities["Alto"]
         return {
             "risk_level": risk_level,
             "risk_score": round(probabilities["Alto"], 4),
+            "alto_probability": round(probabilities["Alto"], 4),
+            "severity_score": round(severity, 4),
             "probabilities": {label: round(value, 4) for label, value in probabilities.items()},
             "model_version": self.model_version,
             "factors": self._factors(vector, probabilities),

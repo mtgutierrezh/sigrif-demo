@@ -14,7 +14,9 @@ ZONES_OFFICIAL_FILE = DATA_DIR / "cerros_sectores_valparaiso_region_oficial.geoj
 
 
 ZONES_FILE = ZONES_OFFICIAL_FILE if ZONES_OFFICIAL_FILE.exists() else ZONES_BASE_FILE
-CELLS_FILE = DATA_DIR / "risk_cells.geojson"
+REGIONAL_CELLS_FILE = DATA_DIR / "h3_valparaiso_region_res8.geojson"
+LEGACY_CELLS_FILE = DATA_DIR / "risk_cells.geojson"
+CELLS_FILE = REGIONAL_CELLS_FILE if REGIONAL_CELLS_FILE.exists() else LEGACY_CELLS_FILE
 
 
 def _multipolygon_wkt(geometry: dict[str, Any]) -> str:
@@ -114,6 +116,7 @@ def seed_zones() -> None:
             return
         if count:
             session.execute(delete(Reading))
+            session.execute(delete(RiskCell))
             session.execute(delete(Zone))
             session.commit()
         for zone_data in zones:
@@ -160,22 +163,33 @@ def seed_cells() -> None:
         if count:
             session.execute(delete(RiskCell))
             session.commit()
+        zone_ids = {zone.name: zone.id for zone in session.scalars(select(Zone)).all()}
         for feature in features:
             properties = feature["properties"]
+            zone_name = properties.get("zone_name")
+            zone_id = zone_ids.get(zone_name) if zone_name else None
+            if zone_id is None:
+                zone_id = properties.get("zone_id")
             session.add(
                 RiskCell(
                     h3=properties["h3"],
                     geometry=WKTElement(_polygon_wkt(feature["geometry"]), srid=4326),
-                    dominant_fuel=properties["dominant_fuel"],
-                    fuel_native=properties["fuel_native"],
-                    fuel_plantation=properties["fuel_plantation"],
-                    fuel_shrub=properties["fuel_shrub"],
-                    fuel_grass=properties["fuel_grass"],
-                    fuel_agriculture=properties["fuel_agriculture"],
-                    fuel_urban=properties["fuel_urban"],
-                    wui_distance_m=properties["wui_distance_m"],
-                    risk_level=properties["risk_level"],
-                    risk_score=properties["risk_score"],
+                    zone_id=zone_id,
+                    comuna=properties.get("comuna"),
+                    provincia=properties.get("provincia"),
+                    zone_name=zone_name,
+                    dominant_fuel=properties.get("dominant_fuel", "Sin dato"),
+                    fuel_native=float(properties.get("fuel_native", 0.0) or 0.0),
+                    fuel_plantation=float(properties.get("fuel_plantation", 0.0) or 0.0),
+                    fuel_shrub=float(properties.get("fuel_shrub", 0.0) or 0.0),
+                    fuel_grass=float(properties.get("fuel_grass", 0.0) or 0.0),
+                    fuel_agriculture=float(properties.get("fuel_agriculture", 0.0) or 0.0),
+                    fuel_urban=float(properties.get("fuel_urban", 0.0) or 0.0),
+                    slope=float(properties.get("slope", 15.0) or 0.0),
+                    historical_fires=int(properties.get("historical_fires", 0) or 0),
+                    wui_distance_m=float(properties.get("wui_distance_m", 0.0) or 0.0),
+                    risk_level=properties.get("risk_level", "Bajo"),
+                    risk_score=float(properties.get("risk_score", 0.0) or 0.0),
                 )
             )
         session.commit()

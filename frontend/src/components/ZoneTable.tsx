@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import type { Zone } from "../features/zones/types";
-import { formatDateTime, formatScore } from "../lib/format";
+import { formatDateTime, formatNumber } from "../lib/format";
 import { zoneLabel } from "../lib/names";
 import { RiskBadge } from "./RiskBadge";
 
@@ -25,7 +25,7 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
                 { label: "Zona", className: "py-3" },
                 { label: "Comuna", className: "py-3" },
                 { label: "Nivel", className: "py-3" },
-                { label: "Score", className: "py-3 pr-6 text-right" },
+                { label: "P(Alto)", className: "py-3 pr-6 text-right" },
                 { label: "Combustible", className: "py-3" },
                 { label: "Actualizado", className: "py-3 pl-6" },
               ].map((header) => (
@@ -55,7 +55,7 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
                   <RiskBadge level={zone.risk_level} />
                 </td>
                 <td className="whitespace-nowrap py-3 pr-6 text-right font-mono text-[13px] tabular-nums text-bone">
-                  {formatScore(zone.risk_score)}
+                  {formatNumber(zone.risk_score * 100, 0)} %
                 </td>
                 <td className="truncate py-3 font-mono text-[11px] text-ash">
                   {zone.dominant_fuel}
@@ -84,7 +84,7 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
                 <RiskBadge level={zone.risk_level} />
               </div>
               <div className="mt-4 flex items-center justify-between font-mono text-[11px] text-ash">
-                <span>score {formatScore(zone.risk_score)}</span>
+                <span>score {formatNumber(zone.risk_score * 100, 0)} %</span>
                 <span>{zone.dominant_fuel}</span>
                 <span>{formatDateTime(zone.updated_at)}</span>
               </div>

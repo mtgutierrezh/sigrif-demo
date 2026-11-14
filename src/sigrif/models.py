@@ -120,6 +120,10 @@ class RiskCell(Base):
 
     h3: Mapped[str] = mapped_column(String(20), primary_key=True)
     geometry: Mapped[Any] = mapped_column(Geometry("POLYGON", srid=4326))
+    zone_id: Mapped[int | None] = mapped_column(Integer, nullable=True, index=True)
+    comuna: Mapped[str | None] = mapped_column(String(80), nullable=True, index=True)
+    provincia: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    zone_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
     dominant_fuel: Mapped[str] = mapped_column(String(20))
     fuel_native: Mapped[float] = mapped_column(Float, default=0.0)
     fuel_plantation: Mapped[float] = mapped_column(Float, default=0.0)
@@ -127,6 +131,10 @@ class RiskCell(Base):
     fuel_grass: Mapped[float] = mapped_column(Float, default=0.0)
     fuel_agriculture: Mapped[float] = mapped_column(Float, default=0.0)
     fuel_urban: Mapped[float] = mapped_column(Float, default=0.0)
+    slope: Mapped[float] = mapped_column(Float, default=15.0, server_default="15")
+    historical_fires: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
     wui_distance_m: Mapped[float] = mapped_column(Float, default=0.0)
     risk_level: Mapped[str] = mapped_column(String(10), default="Bajo")
     risk_score: Mapped[float] = mapped_column(Float, default=0.0)

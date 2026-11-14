@@ -134,7 +134,8 @@ Solo para la demo. Cambiar en un despliegue real.
 | GET | `/api/v1/zones` | Lista de sectores con riesgo |
 | GET | `/api/v1/zones/{id}` | Detalle de un sector |
 | GET | `/api/v1/zones/{id}/history` | Historial de riesgo |
-| GET | `/api/v1/cells` | Celdas H3 de combustible |
+| GET | `/api/v1/cells` | Celdas H3 de combustible (límite configurable) |
+| GET | `/api/v1/cells/bbox?min_lon=&min_lat=&max_lon=&max_lat=&limit=` | Malla H3 dentro del visor |
 | GET | `/api/v1/status` | Estado operativo |
 | GET | `/api/v1/version` | Versión de API, modelo y color activo |
 | GET | `/api/v1/model` | Model card en vivo (operadores) |
@@ -223,7 +224,7 @@ Censo 2017. Cada zona declara `zone_type`, `name_source` y `name_official`; los
 nombres no oficiales se muestran como referencia y no como límites oficiales.
 
 - 54 sectores urbanos de Valparaíso, 506 zonas censales de 35 comunas continentales, 2 zonas de Isla de Pascua y 1 polígono de Juan Fernández (563 zonas, 38/38 comunas).
-- 467 celdas H3 con combustible derivado de CONAF para la capa urbana de Valparaíso.
+- 24.596 celdas H3 res 8 para la Región de Valparaíso continental, con combustible calculado desde CONAF 2019 y recorte al territorio comunal.
 - 1.978 polígonos forestales: bosque nativo, plantación, matorral y pradera.
 - Variables estáticas por zona: CONAF 2019 (uso de suelo y vegetación), incendios históricos 2010–2025 y pendiente SRTM 30 m.
 - Variables meteorológicas reales de la Red EMA de la DMC, actualizadas cada 15 minutos; Open-Meteo queda como respaldo.
@@ -321,3 +322,30 @@ nativo, plantación, matorral, pradera, agrícola y urbano. El panel de zona
 muestra las fracciones y el mapa permite alternar entre **Riesgo** y
 **Combustible**; el color representa el combustible dominante. La capa cubre
 las 563 zonas y no reemplaza la validación de terreno.
+
+## Malla H3 regional
+
+La malla se regenera con:
+
+```bash
+uv run python scripts/build_h3_region.py
+```
+
+El alcance por defecto es la Región de Valparaíso continental (36 comunas,
+sin Isla de Pascua ni Juan Fernández). Genera 24.596 celdas H3 res 8, recorta
+cada celda al polígono comunal DPA 2022 y calcula las fracciones de combustible
+intersecando el catastro CONAF 2019. Las celdas sin intersección directa con
+una de las 563 zonas oficiales se asocian a la zona más cercana de la misma
+comuna; el detalle queda en `metadata` del GeoJSON. Las 560 zonas continentales
+quedan cubiertas geométricamente por la malla.
+
+Para generar solo el recorte de las 563 zonas (945 celdas) usa:
+
+```bash
+uv run python scripts/build_h3_region.py --scope zones
+```
+
+El visor pide únicamente el bbox visible a `/api/v1/cells/bbox` y activa la
+malla desde zoom 12, con un máximo de 4.000 celdas por respuesta. Así no se
+descargan las 24.596 celdas al abrir el mapa. La capa se colorea por riesgo o
+por combustible y se puede ocultar desde el panel izquierdo.

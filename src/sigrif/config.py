@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     cognito_user_pool_id: str | None = None
     cognito_client_id: str | None = None
     cors_origins: str = "http://localhost:5173"
+    cells_default_limit: int = 5000
+    cells_max_limit: int = 50000
+    cells_bbox_max_limit: int = 10000
 
     @field_validator("aws_endpoint_url", mode="before")
     @classmethod

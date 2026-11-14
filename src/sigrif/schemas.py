@@ -109,6 +109,8 @@ class ScenarioOut(BaseModel):
 class PredictionOut(BaseModel):
     risk_level: str
     risk_score: float
+    alto_probability: float = 0.0
+    severity_score: float = 0.0
     probabilities: dict[str, float]
     model_version: str
     factors: list[FactorOut]
@@ -129,6 +131,8 @@ class EvaluationOut(BaseModel):
     zone_id: int
     risk_level: str
     risk_score: float
+    alto_probability: float = 0.0
+    severity_score: float = 0.0
     probabilities: dict[str, float]
     model_version: str
     factors: list[FactorOut]

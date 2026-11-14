@@ -60,7 +60,12 @@ function Evidence({ evaluation }: { evaluation: Evaluation }) {
         <span className="font-mono text-[28px] leading-none text-bone">
           {formatScore(evaluation.risk_score)}
         </span>
-        <span className="font-mono text-[10px] text-ash">score de riesgo</span>
+        <span className="font-mono text-[10px] text-ash">probabilidad de Alto</span>
+        {evaluation.severity_score !== undefined ? (
+          <span className="ml-3 font-mono text-[10px] text-ash">
+            severidad {evaluation.severity_score.toFixed(2)}
+          </span>
+        ) : null}
       </div>
       <p className="font-mono text-[10px] text-ash">
         {evaluation.model_version} · {formatDateTime(evaluation.evaluated_at)}

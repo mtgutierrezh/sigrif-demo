@@ -55,6 +55,8 @@ export interface Evaluation {
   zone_id: number;
   risk_level: RiskLevel;
   risk_score: number;
+  alto_probability?: number;
+  severity_score?: number;
   probabilities: Record<string, number>;
   model_version: string;
   factors: Factor[];

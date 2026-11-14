@@ -115,7 +115,7 @@ export function ZonePanel({
         <>
           <div className="mt-6 flex items-center gap-3">
             <RiskBadge level={zone.risk_level} />
-            <span className="font-mono text-[12px] text-ash">score de riesgo</span>
+            <span className="font-mono text-[12px] text-ash">probabilidad de Alto</span>
           </div>
           <p className="mt-2 font-mono text-[65px] font-light leading-none text-bone">
             {formatScore(zone.risk_score)}

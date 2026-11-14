@@ -1,0 +1,976 @@
+{
+  "generated_at": "2026-11-14T02:07:38.847110+00:00",
+  "sources": {
+    "fires": "2010_2011",
+    "fire_years": "2010_2011..2024_2025",
+    "zones": "/mnt/NeuralVault/ava_blackboard/ARQUITECTURA_DE_SISTEMAS_001D/EA2/sigrif-demo/src/sigrif/data/cerros_sectores_valparaiso_region_oficial.geojson",
+    "zone_documentation": "CONAF ocurrencia 2010-2025; IDE Minagri; DPA 2022; censo 2017",
+    "region_area_km2": 16396.0
+  },
+  "zones": {
+    "used": 560,
+    "features_total": 563,
+    "skipped": 3,
+    "include_islands": false,
+    "total_area_km2": 613.681,
+    "coverage_region_pct": 3.74,
+    "dominant_fuel_counts": {
+      "Urbano": 496,
+      "Plantación": 4,
+      "Agrícola": 40,
+      "Bosque nativo": 16,
+      "Pradera": 2,
+      "Matorral": 2
+    },
+    "comunas": 36,
+    "provincias": 7
+  },
+  "fires": {
+    "seasons": [
+      {
+        "season": "2010_2011",
+        "raw_records": 4872,
+        "region5_records": 819,
+        "valid_points": 818,
+        "outside_bbox": 0,
+        "duplicates": 1,
+        "assigned": 424,
+        "unassigned": 394,
+        "assignment_rate": 0.5183,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2011_2012",
+        "raw_records": 5439,
+        "region5_records": 890,
+        "valid_points": 889,
+        "outside_bbox": 0,
+        "duplicates": 1,
+        "assigned": 449,
+        "unassigned": 440,
+        "assignment_rate": 0.5051,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2012_2013",
+        "raw_records": 5563,
+        "region5_records": 936,
+        "valid_points": 935,
+        "outside_bbox": 0,
+        "duplicates": 1,
+        "assigned": 480,
+        "unassigned": 455,
+        "assignment_rate": 0.5134,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2013_2014",
+        "raw_records": 6297,
+        "region5_records": 804,
+        "valid_points": 796,
+        "outside_bbox": 0,
+        "duplicates": 8,
+        "assigned": 401,
+        "unassigned": 395,
+        "assignment_rate": 0.5038,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2014_2015",
+        "raw_records": 8008,
+        "region5_records": 829,
+        "valid_points": 828,
+        "outside_bbox": 0,
+        "duplicates": 1,
+        "assigned": 460,
+        "unassigned": 368,
+        "assignment_rate": 0.5556,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2015_2016",
+        "raw_records": 6765,
+        "region5_records": 744,
+        "valid_points": 744,
+        "outside_bbox": 0,
+        "duplicates": 0,
+        "assigned": 417,
+        "unassigned": 327,
+        "assignment_rate": 0.5605,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2016_2017",
+        "raw_records": 5234,
+        "region5_records": 929,
+        "valid_points": 929,
+        "outside_bbox": 0,
+        "duplicates": 0,
+        "assigned": 405,
+        "unassigned": 524,
+        "assignment_rate": 0.436,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2017_2018",
+        "raw_records": 6048,
+        "region5_records": 953,
+        "valid_points": 951,
+        "outside_bbox": 0,
+        "duplicates": 2,
+        "assigned": 416,
+        "unassigned": 535,
+        "assignment_rate": 0.4374,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2018_2019",
+        "raw_records": 7201,
+        "region5_records": 887,
+        "valid_points": 887,
+        "outside_bbox": 0,
+        "duplicates": 0,
+        "assigned": 345,
+        "unassigned": 542,
+        "assignment_rate": 0.389,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2019_2020",
+        "raw_records": 8106,
+        "region5_records": 608,
+        "valid_points": 607,
+        "outside_bbox": 0,
+        "duplicates": 1,
+        "assigned": 229,
+        "unassigned": 378,
+        "assignment_rate": 0.3773,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2020_2021",
+        "raw_records": 7030,
+        "region5_records": 349,
+        "valid_points": 349,
+        "outside_bbox": 0,
+        "duplicates": 0,
+        "assigned": 91,
+        "unassigned": 258,
+        "assignment_rate": 0.2607,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2021_2022",
+        "raw_records": 6884,
+        "region5_records": 381,
+        "valid_points": 381,
+        "outside_bbox": 0,
+        "duplicates": 0,
+        "assigned": 115,
+        "unassigned": 266,
+        "assignment_rate": 0.3018,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2022_2023",
+        "raw_records": 6944,
+        "region5_records": 362,
+        "valid_points": 362,
+        "outside_bbox": 0,
+        "duplicates": 0,
+        "assigned": 108,
+        "unassigned": 254,
+        "assignment_rate": 0.2983,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2023_2024",
+        "raw_records": 4972,
+        "region5_records": 498,
+        "valid_points": 496,
+        "outside_bbox": 0,
+        "duplicates": 2,
+        "assigned": 151,
+        "unassigned": 345,
+        "assignment_rate": 0.3044,
+        "utc": false,
+        "utm_zone": 19
+      },
+      {
+        "season": "2024_2025",
+        "raw_records": 6262,
+        "region5_records": 536,
+        "valid_points": 536,
+        "outside_bbox": 0,
+        "duplicates": 0,
+        "assigned": 147,
+        "unassigned": 389,
+        "assignment_rate": 0.2743,
+        "utc": true,
+        "utm_zone": null
+      }
+    ],
+    "total_region5_valid_points": 10508,
+    "assigned": 4638,
+    "unassigned": 5870,
+    "assignment_rate": 0.4414,
+    "multi_zone_assignments": 1,
+    "unassigned_distance_to_zone_km": {
+      "n": 5870,
+      "p10_km": 0.109,
+      "median_km": 1.825,
+      "p90_km": 11.439,
+      "max_km": 90.549,
+      "within_0_5_km": 0.2785,
+      "within_1_km": 0.3884,
+      "within_2_km": 0.5182
+    },
+    "by_comuna": [
+      {
+        "comuna": "Algarrobo",
+        "zones": 11,
+        "area_km2": 16.546,
+        "assigned_fires_2010_2025": 59,
+        "positive_zone_seasons": 34,
+        "prevalence": 0.2208
+      },
+      {
+        "comuna": "Cabildo",
+        "zones": 4,
+        "area_km2": 4.16,
+        "assigned_fires_2010_2025": 0,
+        "positive_zone_seasons": 0,
+        "prevalence": 0.0
+      },
+      {
+        "comuna": "Calera",
+        "zones": 17,
+        "area_km2": 13.868,
+        "assigned_fires_2010_2025": 121,
+        "positive_zone_seasons": 68,
+        "prevalence": 0.2857
+      },
+      {
+        "comuna": "Calle Larga",
+        "zones": 8,
+        "area_km2": 5.945,
+        "assigned_fires_2010_2025": 9,
+        "positive_zone_seasons": 6,
+        "prevalence": 0.0536
+      },
+      {
+        "comuna": "Cartagena",
+        "zones": 11,
+        "area_km2": 11.492,
+        "assigned_fires_2010_2025": 155,
+        "positive_zone_seasons": 47,
+        "prevalence": 0.3052
+      },
+      {
+        "comuna": "Casablanca",
+        "zones": 7,
+        "area_km2": 8.446,
+        "assigned_fires_2010_2025": 14,
+        "positive_zone_seasons": 12,
+        "prevalence": 0.1224
+      },
+      {
+        "comuna": "Catemu",
+        "zones": 2,
+        "area_km2": 4.53,
+        "assigned_fires_2010_2025": 2,
+        "positive_zone_seasons": 2,
+        "prevalence": 0.0714
+      },
+      {
+        "comuna": "Concón",
+        "zones": 15,
+        "area_km2": 20.354,
+        "assigned_fires_2010_2025": 67,
+        "positive_zone_seasons": 30,
+        "prevalence": 0.1429
+      },
+      {
+        "comuna": "El Quisco",
+        "zones": 11,
+        "area_km2": 15.025,
+        "assigned_fires_2010_2025": 36,
+        "positive_zone_seasons": 23,
+        "prevalence": 0.1494
+      },
+      {
+        "comuna": "El Tabo",
+        "zones": 13,
+        "area_km2": 21.766,
+        "assigned_fires_2010_2025": 72,
+        "positive_zone_seasons": 39,
+        "prevalence": 0.2143
+      },
+      {
+        "comuna": "Hijuelas",
+        "zones": 4,
+        "area_km2": 10.372,
+        "assigned_fires_2010_2025": 26,
+        "positive_zone_seasons": 19,
+        "prevalence": 0.3393
+      },
+      {
+        "comuna": "La Cruz",
+        "zones": 5,
+        "area_km2": 9.301,
+        "assigned_fires_2010_2025": 102,
+        "positive_zone_seasons": 42,
+        "prevalence": 0.6
+      },
+      {
+        "comuna": "La Ligua",
+        "zones": 10,
+        "area_km2": 9.624,
+        "assigned_fires_2010_2025": 38,
+        "positive_zone_seasons": 20,
+        "prevalence": 0.1429
+      },
+      {
+        "comuna": "Limache",
+        "zones": 13,
+        "area_km2": 16.987,
+        "assigned_fires_2010_2025": 122,
+        "positive_zone_seasons": 67,
+        "prevalence": 0.3681
+      },
+      {
+        "comuna": "Llaillay",
+        "zones": 7,
+        "area_km2": 6.79,
+        "assigned_fires_2010_2025": 16,
+        "positive_zone_seasons": 13,
+        "prevalence": 0.1327
+      },
+      {
+        "comuna": "Los Andes",
+        "zones": 20,
+        "area_km2": 12.538,
+        "assigned_fires_2010_2025": 3,
+        "positive_zone_seasons": 3,
+        "prevalence": 0.0107
+      },
+      {
+        "comuna": "Nogales",
+        "zones": 6,
+        "area_km2": 7.19,
+        "assigned_fires_2010_2025": 31,
+        "positive_zone_seasons": 23,
+        "prevalence": 0.2738
+      },
+      {
+        "comuna": "Olmué",
+        "zones": 4,
+        "area_km2": 14.324,
+        "assigned_fires_2010_2025": 37,
+        "positive_zone_seasons": 24,
+        "prevalence": 0.4286
+      },
+      {
+        "comuna": "Panquehue",
+        "zones": 3,
+        "area_km2": 4.225,
+        "assigned_fires_2010_2025": 36,
+        "positive_zone_seasons": 17,
+        "prevalence": 0.4048
+      },
+      {
+        "comuna": "Papudo",
+        "zones": 4,
+        "area_km2": 6.184,
+        "assigned_fires_2010_2025": 0,
+        "positive_zone_seasons": 0,
+        "prevalence": 0.0
+      },
+      {
+        "comuna": "Petorca",
+        "zones": 3,
+        "area_km2": 3.736,
+        "assigned_fires_2010_2025": 1,
+        "positive_zone_seasons": 1,
+        "prevalence": 0.0238
+      },
+      {
+        "comuna": "Puchuncaví",
+        "zones": 14,
+        "area_km2": 27.454,
+        "assigned_fires_2010_2025": 59,
+        "positive_zone_seasons": 32,
+        "prevalence": 0.1633
+      },
+      {
+        "comuna": "Putaendo",
+        "zones": 2,
+        "area_km2": 4.633,
+        "assigned_fires_2010_2025": 0,
+        "positive_zone_seasons": 0,
+        "prevalence": 0.0
+      },
+      {
+        "comuna": "Quillota",
+        "zones": 24,
+        "area_km2": 16.384,
+        "assigned_fires_2010_2025": 286,
+        "positive_zone_seasons": 96,
+        "prevalence": 0.2857
+      },
+      {
+        "comuna": "Quilpué",
+        "zones": 42,
+        "area_km2": 39.353,
+        "assigned_fires_2010_2025": 420,
+        "positive_zone_seasons": 160,
+        "prevalence": 0.2721
+      },
+      {
+        "comuna": "Quintero",
+        "zones": 13,
+        "area_km2": 12.328,
+        "assigned_fires_2010_2025": 20,
+        "positive_zone_seasons": 17,
+        "prevalence": 0.0934
+      },
+      {
+        "comuna": "Rinconada",
+        "zones": 5,
+        "area_km2": 5.635,
+        "assigned_fires_2010_2025": 2,
+        "positive_zone_seasons": 2,
+        "prevalence": 0.0286
+      },
+      {
+        "comuna": "San Antonio",
+        "zones": 26,
+        "area_km2": 22.225,
+        "assigned_fires_2010_2025": 322,
+        "positive_zone_seasons": 99,
+        "prevalence": 0.272
+      },
+      {
+        "comuna": "San Esteban",
+        "zones": 5,
+        "area_km2": 3.739,
+        "assigned_fires_2010_2025": 16,
+        "positive_zone_seasons": 12,
+        "prevalence": 0.1714
+      },
+      {
+        "comuna": "San Felipe",
+        "zones": 32,
+        "area_km2": 19.304,
+        "assigned_fires_2010_2025": 435,
+        "positive_zone_seasons": 32,
+        "prevalence": 0.0714
+      },
+      {
+        "comuna": "Santa María",
+        "zones": 8,
+        "area_km2": 7.114,
+        "assigned_fires_2010_2025": 26,
+        "positive_zone_seasons": 16,
+        "prevalence": 0.1429
+      },
+      {
+        "comuna": "Santo Domingo",
+        "zones": 5,
+        "area_km2": 8.646,
+        "assigned_fires_2010_2025": 11,
+        "positive_zone_seasons": 8,
+        "prevalence": 0.1143
+      },
+      {
+        "comuna": "Valparaíso",
+        "zones": 54,
+        "area_km2": 61.439,
+        "assigned_fires_2010_2025": 917,
+        "positive_zone_seasons": 127,
+        "prevalence": 0.168
+      },
+      {
+        "comuna": "Villa Alemana",
+        "zones": 33,
+        "area_km2": 28.415,
+        "assigned_fires_2010_2025": 452,
+        "positive_zone_seasons": 118,
+        "prevalence": 0.2554
+      },
+      {
+        "comuna": "Viña del Mar",
+        "zones": 114,
+        "area_km2": 120.022,
+        "assigned_fires_2010_2025": 711,
+        "positive_zone_seasons": 287,
+        "prevalence": 0.1798
+      },
+      {
+        "comuna": "Zapallar",
+        "zones": 5,
+        "area_km2": 13.588,
+        "assigned_fires_2010_2025": 4,
+        "positive_zone_seasons": 4,
+        "prevalence": 0.0571
+      }
+    ],
+    "by_province": [
+      {
+        "provincia": "Los Andes",
+        "zones": 38,
+        "positive_zone_seasons": 23,
+        "prevalence": 0.0432
+      },
+      {
+        "provincia": "Marga Marga",
+        "zones": 92,
+        "positive_zone_seasons": 369,
+        "prevalence": 0.2865
+      },
+      {
+        "provincia": "Petorca",
+        "zones": 26,
+        "positive_zone_seasons": 25,
+        "prevalence": 0.0687
+      },
+      {
+        "provincia": "Quillota",
+        "zones": 56,
+        "positive_zone_seasons": 248,
+        "prevalence": 0.3163
+      },
+      {
+        "provincia": "San Antonio",
+        "zones": 77,
+        "positive_zone_seasons": 250,
+        "prevalence": 0.2319
+      },
+      {
+        "provincia": "San Felipe de Aconcagua",
+        "zones": 54,
+        "positive_zone_seasons": 80,
+        "prevalence": 0.1058
+      },
+      {
+        "provincia": "Valparaíso",
+        "zones": 217,
+        "positive_zone_seasons": 505,
+        "prevalence": 0.1662
+      }
+    ],
+    "top_zones": [
+      {
+        "zone_id": "Z0050",
+        "zone_name": "SECTOR TRANQUE DE LA LUZ",
+        "comuna": "Valparaíso",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Plantación",
+        "area_km2": 21.707,
+        "assigned_fires_2010_2025": 332,
+        "seasons_with_fire": 15,
+        "positive_target_seasons": 14
+      },
+      {
+        "zone_id": "Z0051",
+        "zone_name": "SECTOR PLACILLA DE PEÑUELAS",
+        "comuna": "Valparaíso",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Urbano",
+        "area_km2": 8.3816,
+        "assigned_fires_2010_2025": 332,
+        "seasons_with_fire": 15,
+        "positive_target_seasons": 14
+      },
+      {
+        "zone_id": "Z0522",
+        "zone_name": "Tocornal",
+        "comuna": "San Felipe",
+        "provincia": "San Felipe de Aconcagua",
+        "dominant_fuel": "Urbano",
+        "area_km2": 0.0682,
+        "assigned_fires_2010_2025": 268,
+        "seasons_with_fire": 11,
+        "positive_target_seasons": 10
+      },
+      {
+        "zone_id": "Z0523",
+        "zone_name": "Almendral · D2-Z8",
+        "comuna": "San Felipe",
+        "provincia": "San Felipe de Aconcagua",
+        "dominant_fuel": "Urbano",
+        "area_km2": 0.8029,
+        "assigned_fires_2010_2025": 152,
+        "seasons_with_fire": 14,
+        "positive_target_seasons": 13
+      },
+      {
+        "zone_id": "Z0402",
+        "zone_name": "Alta Las Vegas",
+        "comuna": "Villa Alemana",
+        "provincia": "Marga Marga",
+        "dominant_fuel": "Matorral",
+        "area_km2": 2.1372,
+        "assigned_fires_2010_2025": 114,
+        "seasons_with_fire": 11,
+        "positive_target_seasons": 11
+      },
+      {
+        "zone_id": "Z0219",
+        "zone_name": "Viña Del Mar · D7-Z5",
+        "comuna": "Viña del Mar",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Bosque nativo",
+        "area_km2": 32.4479,
+        "assigned_fires_2010_2025": 108,
+        "seasons_with_fire": 15,
+        "positive_target_seasons": 14
+      },
+      {
+        "zone_id": "Z0526",
+        "zone_name": "Vista Hermosa",
+        "comuna": "San Antonio",
+        "provincia": "San Antonio",
+        "dominant_fuel": "Urbano",
+        "area_km2": 0.6056,
+        "assigned_fires_2010_2025": 100,
+        "seasons_with_fire": 11,
+        "positive_target_seasons": 10
+      },
+      {
+        "zone_id": "Z0400",
+        "zone_name": "Condominio Independiente Lo López · D8-Z3",
+        "comuna": "Quillota",
+        "provincia": "Quillota",
+        "dominant_fuel": "Urbano",
+        "area_km2": 1.0162,
+        "assigned_fires_2010_2025": 77,
+        "seasons_with_fire": 13,
+        "positive_target_seasons": 12
+      },
+      {
+        "zone_id": "Z0013",
+        "zone_name": "SECTOR RODELILLO",
+        "comuna": "Valparaíso",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Urbano",
+        "area_km2": 2.7245,
+        "assigned_fires_2010_2025": 74,
+        "seasons_with_fire": 15,
+        "positive_target_seasons": 14
+      },
+      {
+        "zone_id": "Z0206",
+        "zone_name": "Viña Del Mar · D6-Z3",
+        "comuna": "Viña del Mar",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Plantación",
+        "area_km2": 4.3338,
+        "assigned_fires_2010_2025": 71,
+        "seasons_with_fire": 13,
+        "positive_target_seasons": 12
+      },
+      {
+        "zone_id": "Z0412",
+        "zone_name": "Población Benito Juárez",
+        "comuna": "Villa Alemana",
+        "provincia": "Marga Marga",
+        "dominant_fuel": "Urbano",
+        "area_km2": 0.3952,
+        "assigned_fires_2010_2025": 67,
+        "seasons_with_fire": 12,
+        "positive_target_seasons": 11
+      },
+      {
+        "zone_id": "Z0401",
+        "zone_name": "Boco Sur · D2-Z7",
+        "comuna": "Quillota",
+        "provincia": "Quillota",
+        "dominant_fuel": "Bosque nativo",
+        "area_km2": 0.6413,
+        "assigned_fires_2010_2025": 65,
+        "seasons_with_fire": 14,
+        "positive_target_seasons": 13
+      },
+      {
+        "zone_id": "Z0433",
+        "zone_name": "Peñablanca · D3-Z2",
+        "comuna": "Villa Alemana",
+        "provincia": "Marga Marga",
+        "dominant_fuel": "Urbano",
+        "area_km2": 0.9451,
+        "assigned_fires_2010_2025": 65,
+        "seasons_with_fire": 13,
+        "positive_target_seasons": 12
+      },
+      {
+        "zone_id": "Z0042",
+        "zone_name": "SECTOR POBLACION QUEBRADA VERDE",
+        "comuna": "Valparaíso",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Urbano",
+        "area_km2": 1.9932,
+        "assigned_fires_2010_2025": 64,
+        "seasons_with_fire": 12,
+        "positive_target_seasons": 11
+      },
+      {
+        "zone_id": "Z0130",
+        "zone_name": "Torquemada",
+        "comuna": "Viña del Mar",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Urbano",
+        "area_km2": 3.5819,
+        "assigned_fires_2010_2025": 58,
+        "seasons_with_fire": 12,
+        "positive_target_seasons": 11
+      },
+      {
+        "zone_id": "Z0467",
+        "zone_name": "Bosques de Marga-Marga",
+        "comuna": "Quilpué",
+        "provincia": "Marga Marga",
+        "dominant_fuel": "Urbano",
+        "area_km2": 0.6224,
+        "assigned_fires_2010_2025": 55,
+        "seasons_with_fire": 12,
+        "positive_target_seasons": 11
+      },
+      {
+        "zone_id": "Z0113",
+        "zone_name": "Cartagena · D1-Z2",
+        "comuna": "Cartagena",
+        "provincia": "San Antonio",
+        "dominant_fuel": "Urbano",
+        "area_km2": 1.8346,
+        "assigned_fires_2010_2025": 52,
+        "seasons_with_fire": 11,
+        "positive_target_seasons": 10
+      },
+      {
+        "zone_id": "Z0375",
+        "zone_name": "Condominio Campanario",
+        "comuna": "La Cruz",
+        "provincia": "Quillota",
+        "dominant_fuel": "Agrícola",
+        "area_km2": 2.4411,
+        "assigned_fires_2010_2025": 52,
+        "seasons_with_fire": 14,
+        "positive_target_seasons": 13
+      },
+      {
+        "zone_id": "Z0420",
+        "zone_name": "Villa Alemana",
+        "comuna": "Villa Alemana",
+        "provincia": "Marga Marga",
+        "dominant_fuel": "Urbano",
+        "area_km2": 0.2406,
+        "assigned_fires_2010_2025": 46,
+        "seasons_with_fire": 10,
+        "positive_target_seasons": 9
+      },
+      {
+        "zone_id": "Z0135",
+        "zone_name": "Reñaca Alto",
+        "comuna": "Viña del Mar",
+        "provincia": "Valparaíso",
+        "dominant_fuel": "Bosque nativo",
+        "area_km2": 5.4425,
+        "assigned_fires_2010_2025": 43,
+        "seasons_with_fire": 9,
+        "positive_target_seasons": 8
+      }
+    ]
+  },
+  "labels": {
+    "target": "fire_next_season",
+    "rows": 7840,
+    "positives": 1500,
+    "negatives": 6340,
+    "prevalence": 0.1913,
+    "by_season": [
+      {
+        "season": "2011_2012",
+        "rows": 560,
+        "positives": 136,
+        "negatives": 424,
+        "prevalence": 0.2429
+      },
+      {
+        "season": "2012_2013",
+        "rows": 560,
+        "positives": 148,
+        "negatives": 412,
+        "prevalence": 0.2643
+      },
+      {
+        "season": "2013_2014",
+        "rows": 560,
+        "positives": 131,
+        "negatives": 429,
+        "prevalence": 0.2339
+      },
+      {
+        "season": "2014_2015",
+        "rows": 560,
+        "positives": 127,
+        "negatives": 433,
+        "prevalence": 0.2268
+      },
+      {
+        "season": "2015_2016",
+        "rows": 560,
+        "positives": 114,
+        "negatives": 446,
+        "prevalence": 0.2036
+      },
+      {
+        "season": "2016_2017",
+        "rows": 560,
+        "positives": 124,
+        "negatives": 436,
+        "prevalence": 0.2214
+      },
+      {
+        "season": "2017_2018",
+        "rows": 560,
+        "positives": 121,
+        "negatives": 439,
+        "prevalence": 0.2161
+      },
+      {
+        "season": "2018_2019",
+        "rows": 560,
+        "positives": 130,
+        "negatives": 430,
+        "prevalence": 0.2321
+      },
+      {
+        "season": "2019_2020",
+        "rows": 560,
+        "positives": 107,
+        "negatives": 453,
+        "prevalence": 0.1911
+      },
+      {
+        "season": "2020_2021",
+        "rows": 560,
+        "positives": 55,
+        "negatives": 505,
+        "prevalence": 0.0982
+      },
+      {
+        "season": "2021_2022",
+        "rows": 560,
+        "positives": 59,
+        "negatives": 501,
+        "prevalence": 0.1054
+      },
+      {
+        "season": "2022_2023",
+        "rows": 560,
+        "positives": 59,
+        "negatives": 501,
+        "prevalence": 0.1054
+      },
+      {
+        "season": "2023_2024",
+        "rows": 560,
+        "positives": 91,
+        "negatives": 469,
+        "prevalence": 0.1625
+      },
+      {
+        "season": "2024_2025",
+        "rows": 560,
+        "positives": 98,
+        "negatives": 462,
+        "prevalence": 0.175
+      }
+    ],
+    "by_province": [
+      {
+        "provincia": "Los Andes",
+        "zones": 38,
+        "positive_zone_seasons": 23,
+        "prevalence": 0.0432
+      },
+      {
+        "provincia": "Marga Marga",
+        "zones": 92,
+        "positive_zone_seasons": 369,
+        "prevalence": 0.2865
+      },
+      {
+        "provincia": "Petorca",
+        "zones": 26,
+        "positive_zone_seasons": 25,
+        "prevalence": 0.0687
+      },
+      {
+        "provincia": "Quillota",
+        "zones": 56,
+        "positive_zone_seasons": 248,
+        "prevalence": 0.3163
+      },
+      {
+        "provincia": "San Antonio",
+        "zones": 77,
+        "positive_zone_seasons": 250,
+        "prevalence": 0.2319
+      },
+      {
+        "provincia": "San Felipe de Aconcagua",
+        "zones": 54,
+        "positive_zone_seasons": 80,
+        "prevalence": 0.1058
+      },
+      {
+        "provincia": "Valparaíso",
+        "zones": 217,
+        "positive_zone_seasons": 505,
+        "prevalence": 0.1662
+      }
+    ]
+  },
+  "missing": {
+    "static_fields": {
+      "fuel_native": 0,
+      "fuel_plantation": 0,
+      "fuel_shrub": 0,
+      "fuel_grass": 0,
+      "fuel_agriculture": 0,
+      "fuel_urban": 0,
+      "vegetation": 0,
+      "slope": 0,
+      "dem_elev_media_m": 0,
+      "Población": 0,
+      "dominant_fuel": 0
+    }
+  },
+  "artifacts": {
+    "map": "ml/real_eda_map.svg",
+    "season_chart": "ml/real_eda_seasons.svg"
+  },
+  "limitations": [
+    "Las 560 zonas continentales cubren solo ~3.7% del área regional; la mayoría de los puntos CONAF quedan fuera de toda zona.",
+    "La etiqueta es ocurrencia de al menos un punto de ignición dentro del polígono, no área quemada ni riesgo operativo.",
+    "Los polígonos son zonas censales o sectores municipales, no unidades homogéneas de combustible.",
+    "La temporada 2010_2011 se usa solo como historia; las etiquetas evaluadas son 2011_2012..2024_2025.",
+    "Los puntos CONAF pueden subreportar incendios pequeños y tener precisión de coordenadas heterogénea.",
+    "Isla de Pascua y Juan Fernández se excluyen del modelado continental."
+  ]
+}

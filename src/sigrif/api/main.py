@@ -292,34 +292,77 @@ def list_zones(
     return [_zone_out(session, zone) for zone in zones]
 
 
+def _cell_feature(cell: RiskCell) -> dict:
+    return {
+        "type": "Feature",
+        "geometry": mapping(to_shape(cell.geometry)),
+        "properties": {
+            "h3": cell.h3,
+            "zone_id": cell.zone_id,
+            "comuna": cell.comuna,
+            "provincia": cell.provincia,
+            "zone_name": cell.zone_name,
+            "dominant_fuel": cell.dominant_fuel,
+            "fuel_native": cell.fuel_native,
+            "fuel_plantation": cell.fuel_plantation,
+            "fuel_shrub": cell.fuel_shrub,
+            "fuel_grass": cell.fuel_grass,
+            "fuel_agriculture": cell.fuel_agriculture,
+            "fuel_urban": cell.fuel_urban,
+            "slope": cell.slope,
+            "historical_fires": cell.historical_fires,
+            "wui_distance_m": cell.wui_distance_m,
+            "risk_level": cell.risk_level,
+            "risk_score": cell.risk_score,
+            "updated_at": cell.updated_at.isoformat() if cell.updated_at else None,
+        },
+    }
+
+
+@app.get("/api/v1/cells/bbox")
+def list_cells_bbox(
+    session: Annotated[Session, Depends(get_session)],
+    min_lon: Annotated[float, Query(ge=-180, le=180)],
+    min_lat: Annotated[float, Query(ge=-90, le=90)],
+    max_lon: Annotated[float, Query(ge=-180, le=180)],
+    max_lat: Annotated[float, Query(ge=-90, le=90)],
+    limit: Annotated[int, Query(ge=1, le=settings.cells_bbox_max_limit)] = 4000,
+    comuna: Annotated[str | None, Query(max_length=80)] = None,
+) -> dict:
+    if min_lon >= max_lon or min_lat >= max_lat:
+        raise HTTPException(
+            status_code=422,
+            detail="bbox inválida: min_lon debe ser menor que max_lon y min_lat menor que max_lat",
+        )
+    envelope = func.ST_MakeEnvelope(min_lon, min_lat, max_lon, max_lat, 4326)
+    statement = select(RiskCell).where(func.ST_Intersects(RiskCell.geometry, envelope))
+    if comuna:
+        statement = statement.where(RiskCell.comuna == comuna)
+    statement = statement.order_by(RiskCell.risk_score.desc(), RiskCell.h3).limit(limit)
+    cells = session.scalars(statement).all()
+    features = [_cell_feature(cell) for cell in cells]
+    return {
+        "type": "FeatureCollection",
+        "features": features,
+        "meta": {
+            "count": len(features),
+            "limit": limit,
+            "truncated": len(features) >= limit,
+            "bbox": [min_lon, min_lat, max_lon, max_lat],
+        },
+    }
+
+
 @app.get("/api/v1/cells")
 def list_cells(
     session: Annotated[Session, Depends(get_session)],
+    limit: Annotated[int, Query(ge=1, le=settings.cells_max_limit)] = settings.cells_default_limit,
 ) -> dict:
-    cells = session.scalars(select(RiskCell).order_by(RiskCell.h3)).all()
-    features = []
-    for cell in cells:
-        features.append(
-            {
-                "type": "Feature",
-                "geometry": mapping(to_shape(cell.geometry)),
-                "properties": {
-                    "h3": cell.h3,
-                    "dominant_fuel": cell.dominant_fuel,
-                    "fuel_native": cell.fuel_native,
-                    "fuel_plantation": cell.fuel_plantation,
-                    "fuel_shrub": cell.fuel_shrub,
-                    "fuel_grass": cell.fuel_grass,
-                    "fuel_agriculture": cell.fuel_agriculture,
-                    "fuel_urban": cell.fuel_urban,
-                    "wui_distance_m": cell.wui_distance_m,
-                    "risk_level": cell.risk_level,
-                    "risk_score": cell.risk_score,
-                    "updated_at": cell.updated_at.isoformat(),
-                },
-            }
-        )
-    return {"type": "FeatureCollection", "features": features}
+    cells = session.scalars(select(RiskCell).order_by(RiskCell.h3).limit(limit)).all()
+    return {
+        "type": "FeatureCollection",
+        "features": [_cell_feature(cell) for cell in cells],
+    }
 
 
 @app.get("/api/v1/zones/{zone_id}", response_model=ZoneOut)
@@ -755,6 +798,12 @@ def evaluate_zone(
         zone_id=evaluation.zone_id,
         risk_level=evaluation.risk_level,
         risk_score=evaluation.risk_score,
+        alto_probability=evaluation.risk_score,
+        severity_score=round(
+            0.5 * float(evaluation.probabilities.get("Medio", 0.0))
+            + float(evaluation.probabilities.get("Alto", 0.0)),
+            4,
+        ),
         probabilities=evaluation.probabilities,
         model_version=evaluation.model_version,
         factors=[FactorOut(**item) for item in evaluation.factors],

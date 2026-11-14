@@ -2,41 +2,35 @@ import type { Feature, Geometry } from "geojson";
 import type { PathOptions } from "leaflet";
 import { GeoJSON } from "react-leaflet";
 
-import { useCells } from "../features/zones/useCells";
-import { riskColor } from "../lib/risk";
+import type { CellCollection, CellProperties } from "../features/zones/useCells";
+import { cellStyle, type CellColorMode } from "../lib/cells";
 
-export function CellLayer() {
-  const { data } = useCells();
+interface CellLayerProps {
+  data: CellCollection | null | undefined;
+  colorMode: CellColorMode;
+}
 
-  if (!data) {
+export function CellLayer({ data, colorMode }: CellLayerProps) {
+  if (!data?.features.length) {
     return null;
   }
 
+  const first = data.features[0]?.properties.h3 ?? "none";
+  const last = data.features[data.features.length - 1]?.properties.h3 ?? "none";
   const style = (feature?: Feature<Geometry>): PathOptions => {
-    const level = (feature?.properties?.risk_level ?? "Sin dato") as Parameters<
-      typeof riskColor
-    >[0];
-    const color = riskColor(level);
-    return {
-      color,
-      weight: 0.5,
-      opacity: 0.75,
-      fillColor: color,
-      fillOpacity: 0.32,
-    };
+    const properties = feature?.properties as CellProperties | undefined;
+    if (!properties) {
+      return { color: "#4b4b45", weight: 0.25, fillColor: "#4b4b45", fillOpacity: 0.2 };
+    }
+    return cellStyle(properties, colorMode);
   };
 
-  const features = data.features.filter((feature) => {
-    const properties = feature.properties;
-    const fuel =
-      properties.fuel_native +
-      properties.fuel_plantation +
-      properties.fuel_shrub +
-      properties.fuel_grass +
-      properties.fuel_agriculture;
-    return fuel >= 0.1;
-  });
-  const filtered = { ...data, features };
-
-  return <GeoJSON data={filtered} style={style} interactive={false} />;
+  return (
+    <GeoJSON
+      key={`${colorMode}-${first}-${last}-${data.features.length}`}
+      data={data}
+      style={style}
+      interactive={false}
+    />
+  );
 }
