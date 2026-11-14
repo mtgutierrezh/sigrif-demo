@@ -92,6 +92,24 @@ def init_db() -> None:
             )
         )
         connection.execute(
+            text(
+                "ALTER TABLE risk_cells ADD COLUMN IF NOT EXISTS fire_probability "
+                "DOUBLE PRECISION NOT NULL DEFAULT 0"
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE risk_cells ADD COLUMN IF NOT EXISTS fire_risk_level "
+                "VARCHAR(10) NOT NULL DEFAULT 'Bajo'"
+            )
+        )
+        connection.execute(
+            text("ALTER TABLE risk_cells ADD COLUMN IF NOT EXISTS fire_model_version VARCHAR(60)")
+        )
+        connection.execute(
+            text("ALTER TABLE risk_cells ADD COLUMN IF NOT EXISTS fire_scored_at TIMESTAMPTZ")
+        )
+        connection.execute(
             text("ALTER TABLE zones ADD COLUMN IF NOT EXISTS last_source VARCHAR(20)")
         )
         connection.execute(

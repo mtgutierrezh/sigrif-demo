@@ -314,6 +314,10 @@ def _cell_feature(cell: RiskCell) -> dict:
             "wui_distance_m": cell.wui_distance_m,
             "risk_level": cell.risk_level,
             "risk_score": cell.risk_score,
+            "fire_probability": cell.fire_probability,
+            "fire_risk_level": cell.fire_risk_level,
+            "fire_model_version": cell.fire_model_version,
+            "fire_scored_at": cell.fire_scored_at.isoformat() if cell.fire_scored_at else None,
             "updated_at": cell.updated_at.isoformat() if cell.updated_at else None,
         },
     }

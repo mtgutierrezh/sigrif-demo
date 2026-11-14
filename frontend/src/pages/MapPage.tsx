@@ -18,8 +18,8 @@ import { zoneLabel } from "../lib/names";
 
 export default function MapPage() {
   const [params, setParams] = useSearchParams();
-  const [colorMode, setColorMode] = useState<"risk" | "fuel">(
-    params.get("capa") === "combustible" ? "fuel" : "risk",
+  const [colorMode, setColorMode] = useState<"risk" | "fuel" | "fire">(
+    params.get("capa") === "combustible" ? "fuel" : params.get("capa") === "fuego" ? "fire" : "risk",
   );
   const [showCells, setShowCells] = useState(true);
   const [viewport, setViewport] = useState<MapViewport | null>(null);
@@ -132,6 +132,13 @@ export default function MapPage() {
             >
               Combustible
             </button>
+            <button
+              type="button"
+              className={`btn ${colorMode === "fire" ? "btn-primary" : "btn-ghost"} flex-1`}
+              onClick={() => setColorMode("fire")}
+            >
+              Prob. histórica
+            </button>
           </div>
           {colorMode === "fuel" ? (
             <div className="mb-3 grid grid-cols-2 gap-1 font-mono text-[9px] text-ash">
@@ -142,6 +149,11 @@ export default function MapPage() {
                 </span>
               ))}
             </div>
+          ) : null}
+          {colorMode === "fire" ? (
+            <p className="mb-3 font-mono text-[9px] leading-relaxed text-ash">
+              Probabilidad histórica experimental · no operativa. Bajo &lt; 0,278 · Medio 0,278–0,556 · Alto &gt; 0,556.
+            </p>
           ) : null}
           <div className="mb-3 border-t border-iron pt-3">
             <label

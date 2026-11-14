@@ -24,6 +24,10 @@ export interface CellProperties {
   wui_distance_m: number;
   risk_level: string;
   risk_score: number;
+  fire_probability: number;
+  fire_risk_level: string;
+  fire_model_version: string | null;
+  fire_scored_at: string | null;
   updated_at: string | null;
 }
 

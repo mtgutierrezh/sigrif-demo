@@ -21,7 +21,7 @@ interface MapViewProps {
   zones: Zone[];
   selectedId: number | null;
   onSelect: (zoneId: number) => void;
-  colorMode?: "risk" | "fuel";
+  colorMode?: "risk" | "fuel" | "fire";
   cells?: CellCollection | null;
   showCells?: boolean;
   onViewportChange?: (viewport: MapViewport) => void;

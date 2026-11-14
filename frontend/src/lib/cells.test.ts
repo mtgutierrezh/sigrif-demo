@@ -22,6 +22,10 @@ const CELL: CellProperties = {
   wui_distance_m: 120,
   risk_level: "Alto",
   risk_score: 0.78,
+  fire_probability: 0.61,
+  fire_risk_level: "Alto",
+  fire_model_version: "crispdm-rf-1.0",
+  fire_scored_at: "2026-11-14T00:00:00+00:00",
   updated_at: "2026-11-14T00:00:00+00:00",
 };
 
@@ -39,6 +43,7 @@ describe("cells helpers", () => {
   it("colors cells by fuel or risk", () => {
     expect(cellColor(CELL, "fuel")).toBe("#b58b2a");
     expect(cellColor(CELL, "risk")).toBe("#e2664a");
+    expect(cellColor(CELL, "fire")).toBe("#e2664a");
   });
 
   it("sums wildland fuel fractions and styles the mesh", () => {

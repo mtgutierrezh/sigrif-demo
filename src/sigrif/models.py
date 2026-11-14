@@ -138,6 +138,10 @@ class RiskCell(Base):
     wui_distance_m: Mapped[float] = mapped_column(Float, default=0.0)
     risk_level: Mapped[str] = mapped_column(String(10), default="Bajo")
     risk_score: Mapped[float] = mapped_column(Float, default=0.0)
+    fire_probability: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    fire_risk_level: Mapped[str] = mapped_column(String(10), default="Bajo", server_default="Bajo")
+    fire_model_version: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    fire_scored_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
