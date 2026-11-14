@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 from typing import Any
 
@@ -45,7 +44,7 @@ class Zone(Base):
 
     @property
     def display_name(self) -> str:
-        return re.sub(r" · D\d+-Z\d+$", "", self.name)
+        return self.name
 
     risk_score: Mapped[float] = mapped_column(Float, default=0.0)
     vegetation: Mapped[float] = mapped_column(Float, default=0.3, server_default="0.3")
@@ -53,6 +52,15 @@ class Zone(Base):
         Integer, default=0, server_default="0", nullable=False
     )
     slope: Mapped[float] = mapped_column(Float, default=15.0, server_default="15")
+    fuel_native: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    fuel_plantation: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    fuel_shrub: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    fuel_grass: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    fuel_agriculture: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    fuel_urban: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    dominant_fuel: Mapped[str] = mapped_column(
+        String(30), default="Sin dato", server_default="Sin dato"
+    )
     last_source: Mapped[str | None] = mapped_column(String(20), nullable=True)
     last_alert_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(

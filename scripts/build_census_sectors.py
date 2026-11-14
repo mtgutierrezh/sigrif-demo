@@ -62,11 +62,11 @@ def main() -> None:
         if candidate not in used:
             used.add(candidate)
             return candidate
-        candidate = f"{base} · {comuna}"
+        candidate = f"{base} · {suffix}"
         if candidate not in used:
             used.add(candidate)
             return candidate
-        candidate = f"{base} · {suffix}"
+        candidate = f"{base} · {comuna} · {suffix}"
         used.add(candidate)
         return candidate
 

@@ -67,6 +67,13 @@ def load_zones(path: Path = ZONES_FILE) -> list[dict[str, Any]]:
                 "vegetation": float(properties.get("vegetation", 0.3)),
                 "historical_fires": int(properties.get("historical_fires", 0)),
                 "slope": float(properties.get("slope", 15.0)),
+                "fuel_native": float(properties.get("fuel_native", 0.0)),
+                "fuel_plantation": float(properties.get("fuel_plantation", 0.0)),
+                "fuel_shrub": float(properties.get("fuel_shrub", 0.0)),
+                "fuel_grass": float(properties.get("fuel_grass", 0.0)),
+                "fuel_agriculture": float(properties.get("fuel_agriculture", 0.0)),
+                "fuel_urban": float(properties.get("fuel_urban", 0.0)),
+                "dominant_fuel": str(properties.get("dominant_fuel") or "Sin dato"),
                 "wkt": _multipolygon_wkt(feature["geometry"]),
             }
         )
@@ -84,6 +91,7 @@ def seed_zones() -> None:
                 current = existing.get(zone_data["name"])
                 if current is None:
                     continue
+                current.name = zone_data["name"]
                 current.comuna = zone_data["comuna"]
                 current.provincia = zone_data["provincia"]
                 current.region = zone_data["region"]
@@ -93,6 +101,13 @@ def seed_zones() -> None:
                 current.vegetation = zone_data["vegetation"]
                 current.historical_fires = zone_data["historical_fires"]
                 current.slope = zone_data["slope"]
+                current.fuel_native = zone_data["fuel_native"]
+                current.fuel_plantation = zone_data["fuel_plantation"]
+                current.fuel_shrub = zone_data["fuel_shrub"]
+                current.fuel_grass = zone_data["fuel_grass"]
+                current.fuel_agriculture = zone_data["fuel_agriculture"]
+                current.fuel_urban = zone_data["fuel_urban"]
+                current.dominant_fuel = zone_data["dominant_fuel"]
                 updated += 1
             session.commit()
             print(f"Zonas actualizadas: {updated}")
@@ -117,6 +132,13 @@ def seed_zones() -> None:
                     vegetation=zone_data["vegetation"],
                     historical_fires=zone_data["historical_fires"],
                     slope=zone_data["slope"],
+                    fuel_native=zone_data["fuel_native"],
+                    fuel_plantation=zone_data["fuel_plantation"],
+                    fuel_shrub=zone_data["fuel_shrub"],
+                    fuel_grass=zone_data["fuel_grass"],
+                    fuel_agriculture=zone_data["fuel_agriculture"],
+                    fuel_urban=zone_data["fuel_urban"],
+                    dominant_fuel=zone_data["dominant_fuel"],
                 )
             )
         session.commit()

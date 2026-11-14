@@ -71,6 +71,26 @@ def init_db() -> None:
                 "DOUBLE PRECISION NOT NULL DEFAULT 15"
             )
         )
+        for column in (
+            "fuel_native",
+            "fuel_plantation",
+            "fuel_shrub",
+            "fuel_grass",
+            "fuel_agriculture",
+            "fuel_urban",
+        ):
+            connection.execute(
+                text(
+                    f"ALTER TABLE zones ADD COLUMN IF NOT EXISTS {column} "
+                    "DOUBLE PRECISION NOT NULL DEFAULT 0"
+                )
+            )
+        connection.execute(
+            text(
+                "ALTER TABLE zones ADD COLUMN IF NOT EXISTS dominant_fuel "
+                "VARCHAR(30) NOT NULL DEFAULT 'Sin dato'"
+            )
+        )
         connection.execute(
             text("ALTER TABLE zones ADD COLUMN IF NOT EXISTS last_source VARCHAR(20)")
         )

@@ -37,6 +37,13 @@ class ZoneOut(BaseModel):
     vegetation: float = 0.3
     historical_fires: int = 0
     slope: float = 15.0
+    fuel_native: float = 0
+    fuel_plantation: float = 0
+    fuel_shrub: float = 0
+    fuel_grass: float = 0
+    fuel_agriculture: float = 0
+    fuel_urban: float = 0
+    dominant_fuel: str = "Sin dato"
     last_source: str | None = None
     last_alert_at: datetime | None = None
     updated_at: datetime

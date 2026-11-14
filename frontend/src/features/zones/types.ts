@@ -111,6 +111,13 @@ export interface Zone {
   vegetation: number;
   historical_fires: number;
   slope: number;
+  fuel_native: number;
+  fuel_plantation: number;
+  fuel_shrub: number;
+  fuel_grass: number;
+  fuel_agriculture: number;
+  fuel_urban: number;
+  dominant_fuel: string;
   last_source: string | null;
   last_alert_at: string | null;
   updated_at: string;

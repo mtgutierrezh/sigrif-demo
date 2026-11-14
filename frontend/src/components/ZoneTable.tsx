@@ -15,8 +15,9 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
             <col className="w-[26%]" />
             <col className="w-[18%]" />
             <col className="w-[12%]" />
-            <col className="w-[12%]" />
-            <col className="w-[32%]" />
+            <col className="w-[14%]" />
+            <col className="w-[10%]" />
+            <col className="w-[20%]" />
           </colgroup>
           <thead>
             <tr className="border-b border-iron">
@@ -25,6 +26,7 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
                 { label: "Comuna", className: "py-3" },
                 { label: "Nivel", className: "py-3" },
                 { label: "Score", className: "py-3 pr-6 text-right" },
+                { label: "Combustible", className: "py-3" },
                 { label: "Actualizado", className: "py-3 pl-6" },
               ].map((header) => (
                 <th
@@ -55,6 +57,9 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
                 <td className="whitespace-nowrap py-3 pr-6 text-right font-mono text-[13px] tabular-nums text-bone">
                   {formatScore(zone.risk_score)}
                 </td>
+                <td className="truncate py-3 font-mono text-[11px] text-ash">
+                  {zone.dominant_fuel}
+                </td>
                 <td className="whitespace-nowrap py-3 pl-6 font-mono text-[11px] text-ash">
                   {formatDateTime(zone.updated_at)}
                 </td>
@@ -80,6 +85,7 @@ export function ZoneTable({ zones }: { zones: Zone[] }) {
               </div>
               <div className="mt-4 flex items-center justify-between font-mono text-[11px] text-ash">
                 <span>score {formatScore(zone.risk_score)}</span>
+                <span>{zone.dominant_fuel}</span>
                 <span>{formatDateTime(zone.updated_at)}</span>
               </div>
             </Link>

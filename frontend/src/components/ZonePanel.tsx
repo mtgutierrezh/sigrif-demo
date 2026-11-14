@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import type { SimulationStage } from "../features/zones/useSimulate";
 import type { HistoryPoint, Zone } from "../features/zones/types";
 import { downloadFile } from "../lib/api";
-import { formatDateTime, formatScore } from "../lib/format";
+import { formatDateTime, formatNumber, formatScore } from "../lib/format";
 import { zoneLabel } from "../lib/names";
 import { FieldReportOCR } from "./FieldReportOCR";
 import { RiskBadge } from "./RiskBadge";
@@ -133,6 +133,40 @@ export function ZonePanel({
               Variables de la última lectura
             </p>
             <VariableList reading={zone.latest_reading} />
+          </div>
+
+          <div className="mt-5">
+            <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-ash">
+              Combustible dominante: {zone.dominant_fuel}
+            </p>
+            <div className="mt-2 space-y-2">
+              {[
+                ["Bosque nativo", zone.fuel_native, "#3f8f5a"],
+                ["Plantación", zone.fuel_plantation, "#8b5a2b"],
+                ["Matorral", zone.fuel_shrub, "#d89b2b"],
+                ["Pradera", zone.fuel_grass, "#c9c34a"],
+                ["Agrícola", zone.fuel_agriculture, "#9a7b4f"],
+                ["Urbano", zone.fuel_urban, "#777777"],
+              ]
+                .filter(([, value]) => Number(value) > 0)
+                .map(([label, value, color]) => (
+                  <div key={String(label)}>
+                    <div className="flex justify-between font-mono text-[10px] text-ash">
+                      <span>{label}</span>
+                      <span>{formatNumber(Number(value) * 100, 1)} %</span>
+                    </div>
+                    <div className="mt-1 h-1.5 bg-iron">
+                      <div
+                        className="h-full"
+                        style={{
+                          width: `${Math.min(100, Number(value) * 100)}%`,
+                          backgroundColor: String(color),
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
 
           <p className="mt-4 font-mono text-[11px] text-ash">

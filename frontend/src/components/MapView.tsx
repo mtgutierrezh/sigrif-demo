@@ -12,12 +12,14 @@ import type { Zone } from "../features/zones/types";
 import { formatScore } from "../lib/format";
 import { zoneLabel } from "../lib/names";
 import { zonesToFeatureCollection } from "../lib/geo";
+import { fuelColor } from "../lib/fuel";
 import { riskColor } from "../lib/risk";
 
 interface MapViewProps {
   zones: Zone[];
   selectedId: number | null;
   onSelect: (zoneId: number) => void;
+  colorMode?: "risk" | "fuel";
 }
 
 const WORLD_RING: [number, number][] = [
@@ -76,7 +78,7 @@ function MapFocus({ zone }: { zone: Zone | null }) {
   return null;
 }
 
-export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
+export function MapView({ zones, selectedId, onSelect, colorMode = "risk" }: MapViewProps) {
   const collection = useMemo(() => zonesToFeatureCollection(zones), [zones]);
   const layerKey = useMemo(
     () => `${selectedId ?? "none"}-${zones.map((zone) => `${zone.id}:${zone.risk_score}`).join("|")}`,
@@ -90,7 +92,8 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
   const style = (feature?: Feature<Geometry, unknown>): PathOptions => {
     const id = featureId(feature);
     const zone = zones.find((item) => item.id === id);
-    const color = riskColor(zone?.risk_level);
+    const color =
+      colorMode === "fuel" ? fuelColor(zone?.dominant_fuel) : riskColor(zone?.risk_level);
     return {
       color: id === selectedId ? "#ebfc72" : "#404040",
       weight: id === selectedId ? 2.5 : 0.8,
@@ -150,7 +153,7 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
             }
             const path = layer as Path;
             path.bindTooltip(
-              `${zoneLabel(zone.name, zone.display_name)} · ${zone.risk_level} · ${formatScore(zone.risk_score)}`,
+              `${zoneLabel(zone.name, zone.display_name)} · ${zone.risk_level} · ${formatScore(zone.risk_score)} · ${zone.dominant_fuel}`,
               { sticky: true, direction: "top", className: "sigrif-tooltip" },
             );
             path.on("click", () => onSelect(zone.id));
@@ -169,7 +172,8 @@ export function MapView({ zones, selectedId, onSelect }: MapViewProps) {
               pathOptions={{
                 color: zone.id === selectedId ? "#ebfc72" : "#13140e",
                 weight: zone.id === selectedId ? 2 : 0.5,
-                fillColor: riskColor(zone.risk_level),
+                fillColor:
+                  colorMode === "fuel" ? fuelColor(zone.dominant_fuel) : riskColor(zone.risk_level),
                 fillOpacity: 0.9,
               }}
               eventHandlers={{ click: () => onSelect(zone.id) }}

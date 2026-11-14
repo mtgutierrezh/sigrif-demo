@@ -58,6 +58,34 @@ def main() -> None:
             merged["Fuente_Incendios"] = "pendiente"
             merged["Fuente_Pendiente"] = "pendiente"
             pending += 1
+        native = float(merged.get("veg_bosque_nativo_frac") or 0) + float(
+            merged.get("veg_bosque_mixto_frac") or 0
+        )
+        plantation = float(merged.get("veg_plantacion_frac") or 0)
+        shrub = float(merged.get("veg_matorral_frac") or 0)
+        grass = float(merged.get("veg_pradera_frac") or 0)
+        agriculture = float(merged.get("veg_agricola_frac") or 0)
+        urban = float(merged.get("veg_urbano_frac") or 0)
+        merged.update(
+            {
+                "fuel_native": round(native, 6),
+                "fuel_plantation": round(plantation, 6),
+                "fuel_shrub": round(shrub, 6),
+                "fuel_grass": round(grass, 6),
+                "fuel_agriculture": round(agriculture, 6),
+                "fuel_urban": round(urban, 6),
+            }
+        )
+        fuels = {
+            "Bosque nativo": native,
+            "Plantación": plantation,
+            "Matorral": shrub,
+            "Pradera": grass,
+            "Agrícola": agriculture,
+            "Urbano": urban,
+        }
+        dominant = max(fuels, key=fuels.get)
+        merged["dominant_fuel"] = dominant if fuels[dominant] > 0 else "Sin dato"
         result.append({"type": "Feature", "geometry": feature["geometry"], "properties": merged})
 
     OFFICIAL.write_text(
