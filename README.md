@@ -313,3 +313,11 @@ tests/            Pruebas del backend
 - **401 en la API**: `AUTH_ENABLED` y las variables `VITE_COGNITO_*` deben corresponder al mismo user pool. Inicia sesión y recarga.
 - **No levanta por red bridge**: usa `make demo-local` o `make up-host`.
 - **Puerto 5432 ocupado**: el compose host usa 55432; no cambies ese valor.
+
+## Combustible regional
+
+Cada zona expone el desglose de combustible derivado de CONAF 2019: bosque
+nativo, plantación, matorral, pradera, agrícola y urbano. El panel de zona
+muestra las fracciones y el mapa permite alternar entre **Riesgo** y
+**Combustible**; el color representa el combustible dominante. La capa cubre
+las 563 zonas y no reemplaza la validación de terreno.
