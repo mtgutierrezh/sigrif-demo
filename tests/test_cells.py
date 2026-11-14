@@ -28,6 +28,10 @@ CELL = SimpleNamespace(
     wui_distance_m=0.0,
     risk_level="Bajo",
     risk_score=0.3,
+    fire_probability=0.4,
+    fire_risk_level="Medio",
+    fire_model_version="crispdm-rf-1.0",
+    fire_scored_at=datetime.now(UTC),
     updated_at=datetime.now(UTC),
 )
 
@@ -68,6 +72,8 @@ def test_risk_cell_has_regional_columns():
         "historical_fires",
         "risk_level",
         "risk_score",
+        "fire_probability",
+        "fire_risk_level",
     }
     assert expected <= columns
 
