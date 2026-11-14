@@ -5,7 +5,7 @@ import { fuelColor } from "./fuel";
 import { riskColor } from "./risk";
 import type { RiskLevel } from "../features/zones/types";
 
-export type CellColorMode = "risk" | "fuel" | "fire";
+export type CellColorMode = "fuel" | "fire";
 
 export function cellFuelSum(properties: CellProperties): number {
   return (
@@ -21,10 +21,7 @@ export function cellColor(properties: CellProperties, mode: CellColorMode): stri
   if (mode === "fuel") {
     return fuelColor(properties.dominant_fuel);
   }
-  if (mode === "fire") {
-    return riskColor(properties.fire_risk_level as RiskLevel);
-  }
-  return riskColor(properties.risk_level as RiskLevel);
+  return riskColor(properties.fire_risk_level as RiskLevel);
 }
 
 export function cellStyle(properties: CellProperties, mode: CellColorMode): PathOptions {

@@ -25,7 +25,8 @@ export default function MapPage() {
   const [viewport, setViewport] = useState<MapViewport | null>(null);
   const raw = params.get("zona");
   const selectedId = raw && !Number.isNaN(Number(raw)) ? Number(raw) : null;
-  const cellsVisible = showCells && (viewport?.zoom ?? 0) >= CELL_MIN_ZOOM;
+  const cellsVisible =
+    showCells && colorMode !== "risk" && (viewport?.zoom ?? 0) >= CELL_MIN_ZOOM;
 
   const zonesQuery = useZones();
   const statusQuery = useStatus();
@@ -63,7 +64,9 @@ export default function MapPage() {
 
   const cellStatus = !showCells
     ? "Malla H3 oculta"
-    : (viewport?.zoom ?? 0) < CELL_MIN_ZOOM
+    : colorMode === "risk"
+      ? "La malla H3 se muestra solo en Combustible o Prob. histórica"
+      : (viewport?.zoom ?? 0) < CELL_MIN_ZOOM
       ? `Acércate a zoom ${CELL_MIN_ZOOM} para ver la malla`
       : cellsQuery.isLoading
         ? "Cargando malla H3…"
@@ -205,7 +208,7 @@ export default function MapPage() {
           </select>
         </div>
 
-        <MapLegend />
+        {colorMode === "risk" ? <MapLegend /> : null}
 
         <ZonePanel
           zone={selectedZone}

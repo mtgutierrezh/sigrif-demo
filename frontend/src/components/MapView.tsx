@@ -189,7 +189,10 @@ export function MapView({
           }}
         />
         <RiskSurface />
-        <CellLayer data={showCells ? cells : null} colorMode={colorMode} />
+        <CellLayer
+          data={showCells && colorMode !== "risk" ? cells : null}
+          colorMode={colorMode === "fire" ? "fire" : "fuel"}
+        />
 
         <GeoJSON
           key={layerKey}

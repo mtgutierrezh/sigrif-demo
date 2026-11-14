@@ -22,8 +22,6 @@ export interface CellProperties {
   slope: number;
   historical_fires: number;
   wui_distance_m: number;
-  risk_level: string;
-  risk_score: number;
   fire_probability: number;
   fire_risk_level: string;
   fire_model_version: string | null;
