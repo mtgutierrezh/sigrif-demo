@@ -34,7 +34,11 @@ def key(feature: dict) -> str:
 
 def main() -> None:
     base = json.loads(BASE.read_text(encoding="utf-8"))
-    old = json.loads(OFFICIAL.read_text(encoding="utf-8")) if OFFICIAL.exists() else {"features": []}
+    old = (
+        json.loads(OFFICIAL.read_text(encoding="utf-8"))
+        if OFFICIAL.exists()
+        else {"features": []}
+    )
     previous = {key(feature): feature for feature in old.get("features", [])}
 
     result = []

@@ -36,7 +36,9 @@ def main() -> None:
     args = parser.parse_args()
 
     data = json.loads(INPUT.read_text(encoding="utf-8"))
-    cache: dict[str, Any] = json.loads(OUTPUT.read_text(encoding="utf-8")) if OUTPUT.exists() else {}
+    cache: dict[str, Any] = (
+        json.loads(OUTPUT.read_text(encoding="utf-8")) if OUTPUT.exists() else {}
+    )
     pending = []
     for feature in data["features"]:
         properties = feature["properties"]
