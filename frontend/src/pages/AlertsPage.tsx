@@ -193,10 +193,9 @@ export default function AlertsPage() {
           ["En revisión", counts?.en_revision ?? 0, "Con responsable"],
           ["Cerradas", counts?.cerrada ?? 0, "Con historial"],
         ].map(([label, value, hint]) => (
-          <div key={String(label)} className="bg-obsidian px-4 py-5">
+          <div key={String(label)} className="bg-obsidian px-4 py-5" title={String(hint)}>
             <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">{label}</p>
             <p className="mt-2 font-mono text-[24px] leading-none text-bone">{value}</p>
-            <p className="mt-2 font-mono text-[10px] text-ash">{hint}</p>
           </div>
         ))}
       </section>
@@ -229,13 +228,21 @@ export default function AlertsPage() {
           </div>
 
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full text-left font-mono text-[11px]">
+            <table className="w-full min-w-[680px] table-fixed text-left font-mono text-[11px]">
+              <caption className="sr-only">Alertas operativas por zona</caption>
+              <colgroup>
+                <col className="w-[30%]" />
+                <col className="w-[10%]" />
+                <col className="w-[10%]" />
+                <col className="w-[14%]" />
+                <col className="w-[18%]" />
+                <col className="w-[18%]" />
+              </colgroup>
               <thead className="text-ash">
                 <tr>
                   <th className="pb-2 font-normal">Zona</th>
-                  <th className="pb-2 font-normal">Comuna</th>
                   <th className="pb-2 font-normal">Nivel</th>
-                  <th className="pb-2 font-normal">Score</th>
+                  <th className="pb-2 font-normal">P(Alto)</th>
                   <th className="pb-2 font-normal">Estado</th>
                   <th className="pb-2 font-normal">Responsable</th>
                   <th className="pb-2 font-normal">Creada</th>
@@ -249,7 +256,7 @@ export default function AlertsPage() {
                       selectedId === alert.id ? "bg-iron/20" : ""
                     }`}
                   >
-                    <td className="py-2">
+                    <td className="py-3 pr-3">
                       <button
                         type="button"
                         className="text-left text-bone hover:text-surveyor"
@@ -257,17 +264,17 @@ export default function AlertsPage() {
                       >
                         {zoneLabel(alert.zone_name)}
                       </button>
+                      <p className="mt-1 text-[10px] text-ash">{alert.comuna}</p>
                     </td>
-                    <td className="py-2 text-ash">{alert.comuna}</td>
-                    <td className="py-2">
+                    <td className="py-3">
                       <RiskBadge level={alert.risk_level ?? "Sin dato"} />
                     </td>
-                    <td className="py-2 text-bone">{formatScore(alert.risk_score)}</td>
-                    <td className="py-2">
+                    <td className="py-3 text-bone">{formatScore(alert.risk_score)}</td>
+                    <td className="py-3">
                       <StatusBadge status={alert.status} />
                     </td>
-                    <td className="py-2 text-ash">{alert.assigned_to ?? "Sin asignar"}</td>
-                    <td className="py-2 text-ash">{formatDateTime(alert.created_at)}</td>
+                    <td className="truncate py-3 pr-3 text-ash">{alert.assigned_to ?? "Sin asignar"}</td>
+                    <td className="whitespace-nowrap py-3 text-ash">{formatDateTime(alert.created_at)}</td>
                   </tr>
                 ))}
               </tbody>

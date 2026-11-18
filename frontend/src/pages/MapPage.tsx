@@ -14,6 +14,7 @@ import type { Zone } from "../features/zones/types";
 import { useHistory, useStatus, useZone, useZones } from "../features/zones/useZones";
 import { useSimulate } from "../features/zones/useSimulate";
 import { FUEL_COLORS } from "../lib/fuel";
+import { InfoTip } from "../components/InfoTip";
 import { zoneLabel } from "../lib/names";
 
 export default function MapPage() {
@@ -174,8 +175,13 @@ export default function MapPage() {
                 className="size-3 accent-[#ebfc72]"
               />
               Malla H3 res 8
+              <InfoTip label="Cómo funciona la malla H3">
+                La malla se muestra en las capas Combustible y Prob. histórica. Necesita zoom 12 o superior.
+              </InfoTip>
             </label>
-            <p className="mt-1 font-mono text-[9px] leading-relaxed text-ash">{cellStatus}</p>
+            {colorMode !== "risk" ? (
+              <p className="mt-1 font-mono text-[9px] leading-relaxed text-ash">{cellStatus}</p>
+            ) : null}
           </div>
           <label
             htmlFor="zone-select"
