@@ -3,10 +3,10 @@ import type { RiskLevel } from "../features/zones/types";
 export const RISK_LEVELS: RiskLevel[] = ["Bajo", "Medio", "Alto", "Sin dato"];
 
 export const RISK_COLORS: Record<RiskLevel, string> = {
-  Bajo: "#ebfc72",
-  Medio: "#bacd31",
-  Alto: "#e2664a",
-  "Sin dato": "#84837b",
+  Bajo: "#2E86AB",
+  Medio: "#F4A261",
+  Alto: "#D62828",
+  "Sin dato": "#8D99AE",
 };
 
 export const RISK_CLASSES: Record<RiskLevel, string> = {

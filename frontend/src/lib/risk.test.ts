@@ -15,8 +15,8 @@ describe("risk tokens", () => {
   });
 
   it("maps levels to colors", () => {
-    expect(riskColor("Bajo")).toBe("#ebfc72");
-    expect(riskColor("Alto")).toBe("#e2664a");
+    expect(riskColor("Bajo")).toBe("#2E86AB");
+    expect(riskColor("Alto")).toBe("#D62828");
   });
 
   it("orders levels by severity", () => {

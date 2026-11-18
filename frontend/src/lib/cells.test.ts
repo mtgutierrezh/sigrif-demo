@@ -39,14 +39,14 @@ describe("cells helpers", () => {
   });
 
   it("colors cells by fuel or fire probability", () => {
-    expect(cellColor(CELL, "fuel")).toBe("#b58b2a");
-    expect(cellColor(CELL, "fire")).toBe("#e2664a");
+    expect(cellColor(CELL, "fuel")).toBe("#C98A1B");
+    expect(cellColor(CELL, "fire")).toBe("#D62828");
   });
 
   it("sums wildland fuel fractions and styles the mesh", () => {
     expect(cellFuelSum(CELL)).toBeCloseTo(0.75);
     const style = cellStyle(CELL, "fuel");
-    expect(style.fillColor).toBe("#b58b2a");
+    expect(style.fillColor).toBe("#C98A1B");
     expect(style.fillOpacity).toBeLessThan(0.5);
     expect(style.weight).toBeLessThan(1);
   });

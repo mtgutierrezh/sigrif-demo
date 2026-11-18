@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useEvaluate } from "../features/zones/useEvaluate";
 import type { Evaluation, RiskFeatures, Zone } from "../features/zones/types";
+import { playHighRiskAlert } from "../lib/alertSound";
 import { formatDateTime, formatNumber, formatScore } from "../lib/format";
 import { RiskBadge } from "./RiskBadge";
 
@@ -20,6 +21,12 @@ const FIELDS: Array<{
   { key: "historical_fires", label: "Incendios históricos", unit: "eventos", min: 0, max: 500, step: 1 },
   { key: "slope", label: "Pendiente", unit: "°", min: 0, max: 60, step: 1 },
 ];
+
+const PRESETS: Record<"Bajo" | "Medio" | "Alto", RiskFeatures> = {
+  Bajo: { temperature: 18, humidity: 70, wind_speed: 8, vegetation: 0.2, historical_fires: 0, slope: 8 },
+  Medio: { temperature: 28, humidity: 40, wind_speed: 30, vegetation: 0.55, historical_fires: 8, slope: 20 },
+  Alto: { temperature: 36, humidity: 18, wind_speed: 65, vegetation: 0.9, historical_fires: 80, slope: 38 },
+};
 
 const DEFAULTS: RiskFeatures = {
   temperature: 28,
@@ -155,6 +162,12 @@ export function RiskEvaluator({ zone }: { zone: Zone }) {
   const [form, setForm] = useState<RiskFeatures>(() => initialFeatures(zone));
   const evaluate = useEvaluate();
 
+  useEffect(() => {
+    if (evaluate.data?.risk_level === "Alto") {
+      playHighRiskAlert();
+    }
+  }, [evaluate.data?.id, evaluate.data?.risk_level]);
+
   const update = (key: keyof RiskFeatures, value: number) => {
     setForm((current) => ({ ...current, [key]: value }));
   };
@@ -174,6 +187,21 @@ export function RiskEvaluator({ zone }: { zone: Zone }) {
         <p className="text-[11px] leading-snug text-bone-muted">
           Ajusta las variables y obtén una estimación explicada con acciones operativas. La
           evaluación queda registrada en el historial de la zona.
+        </p>
+        <div className="mt-3 flex gap-1.5">
+          {(["Bajo", "Medio", "Alto"] as const).map((preset) => (
+            <button
+              key={preset}
+              type="button"
+              className="btn btn-ghost flex-1 px-1 py-1.5 font-mono text-[9px]"
+              onClick={() => setForm(PRESETS[preset])}
+            >
+              {preset}
+            </button>
+          ))}
+        </div>
+        <p className="mt-1 font-mono text-[9px] text-ash">
+          Presets de prueba. El nivel Alto activa una alerta sonora suave al evaluar.
         </p>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {FIELDS.map((field) => (

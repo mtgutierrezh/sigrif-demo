@@ -15,9 +15,9 @@
 
 :root {
   color-scheme: dark;
-  --risk-low: #ebfc72;
-  --risk-medium: #bacd31;
-  --risk-high: #e2664a;
+  --risk-low: #2E86AB;
+  --risk-medium: #F4A261;
+  --risk-high: #D62828;
   --risk-none: #84837b;
   --panel-width: 380px;
 }
@@ -187,17 +187,17 @@ button {
 
 .risk-low {
   background: var(--risk-low);
-  color: var(--color-obsidian);
+  color: #ffffff;
 }
 
 .risk-medium {
   background: var(--risk-medium);
-  color: var(--color-obsidian);
+  color: #111111;
 }
 
 .risk-high {
   background: var(--risk-high);
-  color: var(--color-obsidian);
+  color: #ffffff;
 }
 
 .risk-none {
