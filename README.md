@@ -80,7 +80,7 @@ API debe tener `AUTH_ENABLED=false`.
 | Grafana | `http://localhost:3000` |
 | Prometheus | `http://localhost:9090` |
 
-Grafana usa `admin` y la contraseña definida en `GRAFANA_ADMIN_PASSWORD` (por defecto `admin`). El dashboard se llama **SIGRIF · Operación**.
+Las credenciales de Grafana y de los usuarios demo están en `EA3/EP3/ACCESOS_SISTEMA.txt`, fuera del repositorio. El dashboard se llama **SIGRIF · Operación**.
 
 ## Autenticación con Cognito
 
@@ -116,14 +116,7 @@ Grupos:
 - `usuarios`: consulta de zonas, riesgo e historial.
 - `operadores`: además puede simular lecturas, evaluar escenarios y digitalizar fichas de terreno.
 
-Credenciales de prueba:
-
-| Usuario | Contraseña | Grupo |
-|---|---|---|
-| `usuario@demo.sigrif.cl` | `SigrifDemo2026` | `usuarios` |
-| `operador@demo.sigrif.cl` | `SigrifDemo2026` | `operadores` |
-
-Solo para la demo. Cambiar en un despliegue real.
+Las credenciales de prueba están en `EA3/EP3/ACCESOS_SISTEMA.txt`, fuera del repositorio. No se versionan en Git.
 
 ## Endpoints
 
