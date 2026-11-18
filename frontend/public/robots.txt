@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /operaciones
+Disallow: /alertas
+Disallow: /auth/
+Sitemap: https://sigrif-valparaiso.duckdns.org/sitemap.xml

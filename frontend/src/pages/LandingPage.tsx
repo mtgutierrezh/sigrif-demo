@@ -33,6 +33,12 @@ export default function LandingPage() {
               <BookOpen size={16} strokeWidth={1.5} aria-hidden="true" />
               Ver metodología
             </Link>
+            <Link to="/sobre" className="btn btn-ghost">
+              Sobre SIGRIF
+            </Link>
+            <Link to="/guia" className="btn btn-ghost">
+              Guía formativa
+            </Link>
           </div>
           <div className="mt-10 flex flex-wrap gap-x-8 gap-y-2 font-mono text-[12px] text-ash">
             <span className="inline-flex items-center gap-2">

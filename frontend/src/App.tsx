@@ -11,6 +11,8 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const MapPage = lazy(() => import("./pages/MapPage"));
 const ZonesPage = lazy(() => import("./pages/ZonesPage"));
 const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const GuidePage = lazy(() => import("./pages/GuidePage"));
 const OperationsPage = lazy(() => import("./pages/OperationsPage"));
 const AlertsPage = lazy(() => import("./pages/AlertsPage"));
 const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));
@@ -28,6 +30,8 @@ export function App() {
                 <Route path="/mapa" element={<MapPage />} />
                 <Route path="/zonas" element={<ZonesPage />} />
                 <Route path="/metodologia" element={<MethodologyPage />} />
+                <Route path="/sobre" element={<AboutPage />} />
+                <Route path="/guia" element={<GuidePage />} />
                 <Route path="/operaciones" element={<OperationsPage />} />
                 <Route path="/alertas" element={<AlertsPage />} />
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />

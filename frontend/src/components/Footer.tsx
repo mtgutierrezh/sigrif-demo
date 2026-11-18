@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const SOURCES = [
   { label: "IDE Chile", href: "https://www.ide.cl/" },
@@ -36,8 +37,13 @@ export function Footer() {
           <p>Datos sintéticos para demo. No reemplaza las alertas oficiales de CONAF ni SENAPRED.</p>
         </div>
         <div>
-          <p className="mb-2 text-bone">Versión</p>
-          <p>SIGRIF · v0.2.2 · {new Date().getFullYear()}</p>
+          <p className="mb-2 text-bone">Proyecto</p>
+          <ul className="space-y-1">
+            <li><Link to="/sobre" className="transition-colors hover:text-bone">Sobre SIGRIF</Link></li>
+            <li><Link to="/guia" className="transition-colors hover:text-bone">Guía formativa</Link></li>
+            <li><Link to="/metodologia" className="transition-colors hover:text-bone">Metodología</Link></li>
+          </ul>
+          <p className="mt-4">SIGRIF · v0.2.2 · {new Date().getFullYear()}</p>
         </div>
       </div>
     </footer>
