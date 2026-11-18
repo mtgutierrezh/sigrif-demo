@@ -6,7 +6,6 @@ import { useEffect, useMemo } from "react";
 import { CircleMarker, GeoJSON, MapContainer, Polygon, Rectangle, TileLayer, useMap } from "react-leaflet";
 
 import { CellLayer } from "./CellLayer";
-import { RiskSurface } from "./RiskSurface";
 import { ZoomControl } from "./ZoomControl";
 
 import type { CellCollection, MapViewport } from "../features/zones/useCells";
@@ -188,7 +187,6 @@ export function MapView({
             interactive: false,
           }}
         />
-        <RiskSurface />
         <CellLayer
           data={showCells && colorMode !== "risk" ? cells : null}
           colorMode={colorMode === "fire" ? "fire" : "fuel"}
