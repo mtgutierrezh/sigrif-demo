@@ -242,7 +242,7 @@ export default function ActionsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1200px] px-5 py-12 md:px-8 md:py-16">
+    <div className="mx-auto max-w-[1320px] px-5 py-12 md:px-8 md:py-16">
       <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-surveyor">
         Gestión preventiva
       </p>
@@ -387,7 +387,7 @@ export default function ActionsPage() {
                     {action.due_date ?? "Sin plazo"}
                     {action.overdue ? " · vencida" : ""}
                   </td>
-                  <td className="py-3 pr-3">
+                  <td className="whitespace-nowrap py-3 pr-3">
                     <StatusBadge status={action.status} />
                   </td>
                   <td className="whitespace-nowrap py-3">
