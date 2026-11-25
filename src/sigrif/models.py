@@ -1,10 +1,11 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 from geoalchemy2 import Geometry
 from sqlalchemy import (
     JSON,
     Boolean,
+    Date,
     DateTime,
     Float,
     ForeignKey,
@@ -243,6 +244,45 @@ class Notification(Base):
         ),
         Index("ix_notifications_created_at", "created_at"),
         Index("ix_notifications_read_at", "read_at"),
+    )
+
+
+class PreventiveAction(Base):
+    __tablename__ = "preventive_actions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    zone_id: Mapped[int] = mapped_column(ForeignKey("zones.id", ondelete="CASCADE"))
+    alert_id: Mapped[int | None] = mapped_column(
+        ForeignKey("alerts.id", ondelete="SET NULL"), nullable=True
+    )
+    kind: Mapped[str] = mapped_column(
+        String(20), default="accion", server_default="accion", nullable=False
+    )
+    category: Mapped[str] = mapped_column(String(40))
+    title: Mapped[str] = mapped_column(String(160))
+    detail: Mapped[str | None] = mapped_column(Text, nullable=True)
+    status: Mapped[str] = mapped_column(
+        String(20), default="pendiente", server_default="pendiente", nullable=False
+    )
+    priority: Mapped[str] = mapped_column(
+        String(10), default="media", server_default="media", nullable=False
+    )
+    assigned_to: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    due_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    created_by: Mapped[str] = mapped_column(
+        String(120), default="local", server_default="local", nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    closed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    zone: Mapped[Zone] = relationship()
+    __table_args__ = (
+        Index("ix_preventive_actions_zone_id", "zone_id"),
+        Index("ix_preventive_actions_alert_id", "alert_id"),
+        Index("ix_preventive_actions_status", "status"),
+        Index("ix_preventive_actions_due_date", "due_date"),
     )
 
 

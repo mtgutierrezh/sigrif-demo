@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -336,6 +336,102 @@ class ServicesOut(BaseModel):
     last_ingest: datetime | None = None
     freshness_minutes: float | None = None
     stale: bool = False
+
+
+class PriorityComponentOut(BaseModel):
+    key: str
+    label: str
+    value: float | None = None
+    normalized: float | None = None
+    weight: float
+    contribution: float
+
+
+class PriorityZoneOut(BaseModel):
+    position: int
+    zone_id: int
+    zone_name: str
+    comuna: str
+    risk_level: str
+    priority_level: Literal["Alta", "Media", "Baja"]
+    alto_probability: float
+    historical_fires: int
+    population: float | None = None
+    population_available: bool
+    density_available: bool
+    population_density: float | None = None
+    area_ha: float | None = None
+    score: float
+    components: list[PriorityComponentOut]
+
+
+class PopulationCoverageOut(BaseModel):
+    known: int
+    total: int
+
+
+class PriorityRankingOut(BaseModel):
+    generated_at: datetime
+    limit: int
+    total_zones: int
+    population_coverage: PopulationCoverageOut
+    weights: dict[str, float]
+    fires_p95: float
+    density_p95_log: float
+    thresholds: dict[str, float]
+    methodology_note: str
+    items: list[PriorityZoneOut]
+
+
+class PreventiveActionCreate(BaseModel):
+    zone_id: int
+    alert_id: int | None = None
+    kind: Literal["accion", "incidente"] = "accion"
+    category: str = Field(min_length=1, max_length=40)
+    title: str = Field(min_length=1, max_length=160)
+    detail: str | None = Field(default=None, max_length=5000)
+    priority: Literal["baja", "media", "alta"] = "media"
+    assigned_to: str | None = Field(default=None, max_length=120)
+    due_date: date | None = None
+
+
+class PreventiveActionUpdate(BaseModel):
+    status: Literal["pendiente", "en_ejecucion", "completada", "cancelada"] | None = None
+    assigned_to: str | None = Field(default=None, max_length=120)
+    detail: str | None = Field(default=None, max_length=5000)
+    due_date: date | None = None
+    priority: Literal["baja", "media", "alta"] | None = None
+
+
+class PreventiveActionOut(BaseModel):
+    id: int
+    zone_id: int
+    zone_name: str
+    comuna: str
+    alert_id: int | None = None
+    kind: str
+    category: str
+    title: str
+    detail: str | None = None
+    status: str
+    priority: str
+    assigned_to: str | None = None
+    due_date: date | None = None
+    created_by: str
+    created_at: datetime
+    updated_at: datetime
+    closed_at: datetime | None = None
+    overdue: bool
+
+
+class PreventiveActionSummaryOut(BaseModel):
+    total: int
+    pendiente: int
+    en_ejecucion: int
+    completada: int
+    cancelada: int
+    overdue: int
+    open_incidents: int
 
 
 class NotificationOut(BaseModel):

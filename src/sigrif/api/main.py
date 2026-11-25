@@ -5,19 +5,28 @@ import uuid
 from collections import deque
 from collections.abc import Awaitable, Callable, Sequence
 from contextlib import asynccontextmanager
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
+from types import SimpleNamespace
 from typing import Annotated
 
 import numpy as np
 from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from geoalchemy2 import Geography
 from geoalchemy2.shape import to_shape
 from prometheus_client import Counter, Histogram, generate_latest
 from shapely.geometry import mapping
-from sqlalchemy import func, select, update
+from sqlalchemy import cast, func, select, update
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
+from ..actions import (
+    ACTION_KINDS,
+    ACTION_STATUSES,
+    build_action_summary,
+    is_overdue,
+    update_action,
+)
 from ..alerts import ALERT_STATUSES, add_event, update_alert
 from ..auth import OperatorUser
 from ..config import settings
@@ -35,6 +44,7 @@ from ..models import (
     FieldReport,
     IngestionRun,
     Notification,
+    PreventiveAction,
     Reading,
     RiskCell,
     Zone,
@@ -49,6 +59,7 @@ from ..monitoring import (
 from ..notifications import notification_payload
 from ..ops import build_executive_summary, build_service_status
 from ..prescription import build_prescription
+from ..priority import build_priority_ranking, official_population_by_name
 from ..reports import report_filename, zone_csv_bytes, zone_pdf_bytes, zones_summary_csv_bytes
 from ..schemas import (
     AlertDetailOut,
@@ -73,6 +84,11 @@ from ..schemas import (
     OcrOut,
     OpsOverviewOut,
     PrescriptionActionOut,
+    PreventiveActionCreate,
+    PreventiveActionOut,
+    PreventiveActionSummaryOut,
+    PreventiveActionUpdate,
+    PriorityRankingOut,
     ReadingOut,
     RiskFeaturesIn,
     ScenarioOut,
@@ -248,6 +264,36 @@ def _alert_detail(session: Session, alert: Alert) -> AlertDetailOut:
     return AlertDetailOut(
         **base.model_dump(),
         events=[AlertEventOut.model_validate(event) for event in events],
+    )
+
+
+def _zone_identity(session: Session, zone_id: int) -> tuple[str, str] | None:
+    row = session.execute(select(Zone.name, Zone.comuna).where(Zone.id == zone_id)).first()
+    if row is None:
+        return None
+    return str(row[0]), str(row[1])
+
+
+def _action_out(action: PreventiveAction, zone_name: str, comuna: str) -> PreventiveActionOut:
+    return PreventiveActionOut(
+        id=action.id,
+        zone_id=action.zone_id,
+        zone_name=zone_name,
+        comuna=comuna,
+        alert_id=action.alert_id,
+        kind=action.kind,
+        category=action.category,
+        title=action.title,
+        detail=action.detail,
+        status=action.status,
+        priority=action.priority,
+        assigned_to=action.assigned_to,
+        due_date=action.due_date,
+        created_by=action.created_by,
+        created_at=action.created_at,
+        updated_at=action.updated_at,
+        closed_at=action.closed_at,
+        overdue=is_overdue(action),
     )
 
 
@@ -444,6 +490,7 @@ def list_evaluations(
     _: OperatorUser,
     zone_id: int | None = None,
     risk_level: str | None = None,
+    since_hours: Annotated[int | None, Query(ge=1, le=720)] = None,
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
 ) -> list[EvaluationSummaryOut]:
     stmt = select(Evaluation, Zone.name, Zone.comuna).join(Zone, Evaluation.zone_id == Zone.id)
@@ -453,6 +500,8 @@ def list_evaluations(
         if risk_level not in LABELS:
             raise HTTPException(status_code=422, detail="Nivel de riesgo inválido")
         stmt = stmt.where(Evaluation.risk_level == risk_level)
+    if since_hours is not None:
+        stmt = stmt.where(Evaluation.created_at >= datetime.now(UTC) - timedelta(hours=since_hours))
     stmt = stmt.order_by(Evaluation.id.desc()).limit(limit)
     rows = session.execute(stmt).all()
     return [
@@ -551,6 +600,51 @@ def ops_executive(
         sources=summary["sources"],
         model_version=summary["model_version"],
     )
+
+
+@app.get("/api/v1/ops/priority", response_model=PriorityRankingOut)
+def ops_priority(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    limit: Annotated[int, Query(ge=1, le=1000)] = 20,
+) -> PriorityRankingOut:
+    """Ranking operativo explicable; no reemplaza el nivel de riesgo del modelo."""
+
+    area_ha = (func.ST_Area(cast(Zone.geometry, Geography)) / 10000.0).label("area_ha")
+    rows = session.execute(
+        select(
+            Zone.id.label("zone_id"),
+            Zone.name.label("zone_name"),
+            Zone.comuna.label("comuna"),
+            Zone.risk_level.label("risk_level"),
+            Zone.risk_score.label("risk_score"),
+            Zone.vegetation.label("vegetation"),
+            Zone.historical_fires.label("historical_fires"),
+            Zone.slope.label("slope"),
+            area_ha,
+        ).order_by(Zone.id)
+    ).all()
+    zones = [
+        SimpleNamespace(
+            id=row.zone_id,
+            name=row.zone_name,
+            comuna=row.comuna,
+            risk_level=row.risk_level,
+            risk_score=row.risk_score,
+            vegetation=row.vegetation,
+            historical_fires=row.historical_fires,
+            slope=row.slope,
+        )
+        for row in rows
+    ]
+    areas = {row.zone_id: (float(row.area_ha) if row.area_ha is not None else None) for row in rows}
+    payload = build_priority_ranking(
+        zones,
+        areas,
+        official_population_by_name(),
+        limit=limit,
+    )
+    return PriorityRankingOut(**payload)
 
 
 @app.get("/api/v1/ops/services", response_model=ServicesOut)
@@ -753,6 +847,122 @@ def create_alert_event(
     session.commit()
     session.refresh(event)
     return AlertEventOut.model_validate(event)
+
+
+@app.get("/api/v1/actions", response_model=list[PreventiveActionOut])
+def list_actions(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    status: str | None = None,
+    kind: str | None = None,
+    zone_id: int | None = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+) -> list[PreventiveActionOut]:
+    if status is not None and status not in ACTION_STATUSES:
+        raise HTTPException(status_code=422, detail="Estado de acción inválido")
+    if kind is not None and kind not in ACTION_KINDS:
+        raise HTTPException(status_code=422, detail="Tipo de acción inválido")
+
+    stmt = select(PreventiveAction)
+    if status is not None:
+        stmt = stmt.where(PreventiveAction.status == status)
+    if kind is not None:
+        stmt = stmt.where(PreventiveAction.kind == kind)
+    if zone_id is not None:
+        stmt = stmt.where(PreventiveAction.zone_id == zone_id)
+    stmt = stmt.order_by(PreventiveAction.created_at.desc(), PreventiveAction.id.desc())
+    actions = session.scalars(stmt.limit(limit)).all()
+
+    zone_ids = {action.zone_id for action in actions}
+    zone_map: dict[int, tuple[str, str]] = {}
+    if zone_ids:
+        rows = session.execute(
+            select(Zone.id, Zone.name, Zone.comuna).where(Zone.id.in_(zone_ids))
+        ).all()
+        zone_map = {int(row[0]): (str(row[1]), str(row[2])) for row in rows}
+
+    return [
+        _action_out(
+            action,
+            *zone_map.get(action.zone_id, (f"Zona {action.zone_id}", "")),
+        )
+        for action in actions
+    ]
+
+
+@app.get("/api/v1/actions/summary", response_model=PreventiveActionSummaryOut)
+def actions_summary(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> PreventiveActionSummaryOut:
+    return PreventiveActionSummaryOut(**build_action_summary(session))
+
+
+@app.post("/api/v1/actions", response_model=PreventiveActionOut, status_code=201)
+def create_action(
+    payload: PreventiveActionCreate,
+    session: Annotated[Session, Depends(get_session)],
+    user: OperatorUser,
+) -> PreventiveActionOut:
+    identity = _zone_identity(session, payload.zone_id)
+    if identity is None:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+
+    if payload.alert_id is not None:
+        alert_zone = session.scalar(select(Alert.zone_id).where(Alert.id == payload.alert_id))
+        if alert_zone is None:
+            raise HTTPException(status_code=422, detail="La alerta indicada no existe")
+        if int(alert_zone) != payload.zone_id:
+            raise HTTPException(status_code=422, detail="La alerta no pertenece a la zona")
+
+    category = payload.category.strip()
+    title = payload.title.strip()
+    if not category or not title:
+        raise HTTPException(status_code=422, detail="Categoría y título son obligatorios")
+
+    action = PreventiveAction(
+        zone_id=payload.zone_id,
+        alert_id=payload.alert_id,
+        kind=payload.kind,
+        category=category,
+        title=title,
+        detail=(payload.detail or "").strip() or None,
+        priority=payload.priority,
+        assigned_to=(payload.assigned_to or "").strip() or None,
+        due_date=payload.due_date,
+        created_by=str(user.get("sub", "local")),
+    )
+    session.add(action)
+    session.commit()
+    session.refresh(action)
+    return _action_out(action, *identity)
+
+
+@app.patch("/api/v1/actions/{action_id}", response_model=PreventiveActionOut)
+def patch_action(
+    action_id: int,
+    payload: PreventiveActionUpdate,
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> PreventiveActionOut:
+    action = session.get(PreventiveAction, action_id)
+    if action is None:
+        raise HTTPException(status_code=404, detail="Acción no encontrada")
+
+    changes = {field: getattr(payload, field) for field in payload.model_fields_set}
+    try:
+        update_action(action, changes)
+        session.commit()
+        session.refresh(action)
+    except ValueError as exc:
+        session.rollback()
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    name, comuna = _zone_identity(session, action.zone_id) or (
+        f"Zona {action.zone_id}",
+        "",
+    )
+    return _action_out(action, name, comuna)
 
 
 @app.get("/api/v1/zones/{zone_id}/report.csv")
