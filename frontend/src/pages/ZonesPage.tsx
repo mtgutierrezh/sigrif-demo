@@ -1,8 +1,10 @@
-import { AlertTriangle, RotateCcw } from "lucide-react";
+import { AlertTriangle, Columns3, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { PageLoader } from "../components/PageLoader";
 import { SearchBox } from "../components/SearchBox";
+import { useSession } from "../components/session";
 import { TelemetryStrip } from "../components/TelemetryStrip";
 import { ZoneTable } from "../components/ZoneTable";
 import { useStatus, useZones } from "../features/zones/useZones";
@@ -28,6 +30,7 @@ function sortZones(zones: Zone[], key: SortKey): Zone[] {
 }
 
 export default function ZonesPage() {
+  const { canSimulate } = useSession();
   const zonesQuery = useZones();
   const statusQuery = useStatus();
   const [search, setSearch] = useState("");
@@ -100,6 +103,11 @@ export default function ZonesPage() {
             variables y el historial.
           </p>
         </div>
+        {canSimulate ? (
+          <Link className="btn btn-ghost" to="/comparar">
+            <Columns3 size={16} strokeWidth={1.5} aria-hidden="true" /> Comparar zonas
+          </Link>
+        ) : null}
       </div>
 
       <div className="mt-10 grid gap-5 md:grid-cols-[1fr_220px] md:items-end">

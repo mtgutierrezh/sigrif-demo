@@ -17,6 +17,9 @@ const OperationsPage = lazy(() => import("./pages/OperationsPage"));
 const AlertsPage = lazy(() => import("./pages/AlertsPage"));
 const HistoryPage = lazy(() => import("./pages/HistoryPage"));
 const NotificationsPage = lazy(() => import("./pages/NotificationsPage"));
+const PriorityPage = lazy(() => import("./pages/PriorityPage"));
+const ActionsPage = lazy(() => import("./pages/ActionsPage"));
+const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -38,6 +41,9 @@ export function App() {
                 <Route path="/alertas" element={<AlertsPage />} />
                 <Route path="/historial" element={<HistoryPage />} />
                 <Route path="/notificaciones" element={<NotificationsPage />} />
+                <Route path="/prioridad" element={<PriorityPage />} />
+                <Route path="/acciones" element={<ActionsPage />} />
+                <Route path="/comparar" element={<ComparePage />} />
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

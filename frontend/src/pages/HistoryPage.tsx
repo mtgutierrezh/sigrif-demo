@@ -17,10 +17,12 @@ export default function HistoryPage() {
   const { canSimulate } = useSession();
   const [zoneId, setZoneId] = useState<number | null>(null);
   const [level, setLevel] = useState<RiskLevel | "todos">("todos");
+  const [sinceHours, setSinceHours] = useState<number | null>(null);
   const zones = useZones();
   const evaluations = useEvaluations({
     zoneId,
     riskLevel: level === "todos" ? null : level,
+    sinceHours,
   });
 
   const zoneById = useMemo(
@@ -91,7 +93,7 @@ export default function HistoryPage() {
         </button>
       </div>
 
-      <div className="mt-10 grid gap-5 md:grid-cols-2">
+      <div className="mt-10 grid gap-5 md:grid-cols-3">
         <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">
             Filtrar por zona
@@ -127,6 +129,23 @@ export default function HistoryPage() {
             ))}
           </select>
         </label>
+        <label className="flex flex-col gap-1">
+          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">
+            Ventana temporal
+          </span>
+          <select
+            className="input font-mono text-[12px] [color-scheme:dark]"
+            value={sinceHours ?? "todo"}
+            onChange={(event) =>
+              setSinceHours(event.target.value === "todo" ? null : Number(event.target.value))
+            }
+          >
+            <option value="24">Últimas 24 h</option>
+            <option value="168">Últimos 7 días</option>
+            <option value="720">Últimos 30 días</option>
+            <option value="todo">Todo el historial</option>
+          </select>
+        </label>
       </div>
 
       <p className="mt-4 font-mono text-[11px] text-ash" role="status" aria-live="polite">
@@ -143,7 +162,7 @@ export default function HistoryPage() {
         <div className="mt-4 overflow-x-auto">
           <table className="w-full min-w-[900px] text-left font-mono text-[11px]">
             <caption className="sr-only">
-              Historial de evaluaciones filtrado por zona y nivel de riesgo
+              Historial de evaluaciones filtrado por zona, nivel de riesgo y ventana temporal
             </caption>
             <thead className="text-ash">
               <tr>

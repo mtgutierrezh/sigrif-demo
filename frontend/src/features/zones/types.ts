@@ -358,3 +358,103 @@ export interface AlertEventPayload {
   event_type: string;
   detail: string;
 }
+
+export type PriorityLevel = "Alta" | "Media" | "Baja";
+
+export interface PriorityComponent {
+  key: string;
+  label: string;
+  value: number | null;
+  normalized: number | null;
+  weight: number;
+  contribution: number;
+}
+
+export interface PriorityZone {
+  position: number;
+  zone_id: number;
+  zone_name: string;
+  comuna: string;
+  risk_level: RiskLevel;
+  priority_level: PriorityLevel;
+  alto_probability: number;
+  historical_fires: number;
+  population: number | null;
+  population_available: boolean;
+  density_available: boolean;
+  population_density: number | null;
+  area_ha: number | null;
+  score: number;
+  components: PriorityComponent[];
+}
+
+export interface PriorityRanking {
+  generated_at: string;
+  limit: number;
+  total_zones: number;
+  population_coverage: {
+    known: number;
+    total: number;
+  };
+  weights: Record<string, number>;
+  fires_p95: number;
+  density_p95_log: number;
+  thresholds: Record<string, number>;
+  methodology_note: string;
+  items: PriorityZone[];
+}
+
+export type ActionKind = "accion" | "incidente";
+export type ActionStatus = "pendiente" | "en_ejecucion" | "completada" | "cancelada";
+export type ActionPriority = "baja" | "media" | "alta";
+
+export interface PreventiveAction {
+  id: number;
+  zone_id: number;
+  zone_name: string;
+  comuna: string;
+  alert_id: number | null;
+  kind: ActionKind;
+  category: string;
+  title: string;
+  detail: string | null;
+  status: ActionStatus;
+  priority: ActionPriority;
+  assigned_to: string | null;
+  due_date: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  closed_at: string | null;
+  overdue: boolean;
+}
+
+export interface PreventiveActionSummary {
+  total: number;
+  pendiente: number;
+  en_ejecucion: number;
+  completada: number;
+  cancelada: number;
+  overdue: number;
+  open_incidents: number;
+}
+
+export interface PreventiveActionCreatePayload {
+  zone_id: number;
+  alert_id?: number | null;
+  kind: ActionKind;
+  category: string;
+  title: string;
+  detail?: string | null;
+  priority: ActionPriority;
+  assigned_to?: string | null;
+  due_date?: string | null;
+}
+
+export interface PreventiveActionUpdatePayload {
+  status?: ActionStatus;
+  assigned_to?: string | null;
+  detail?: string | null;
+  due_date?: string | null;
+  priority?: ActionPriority;
+}

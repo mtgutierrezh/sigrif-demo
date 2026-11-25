@@ -1,6 +1,6 @@
 import { AlertTriangle, Bell, RefreshCw } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { PageLoader } from "../components/PageLoader";
 import { RiskBadge } from "../components/RiskBadge";
@@ -186,16 +186,21 @@ export default function AlertsPage() {
             cambio. Esta vista está reservada al grupo operadores.
           </p>
         </div>
-        <button
-          type="button"
-          className="btn btn-ghost"
-          onClick={() => {
-            void alerts.refetch();
-            void summary.refetch();
-          }}
-        >
-          <RefreshCw size={16} strokeWidth={1.5} aria-hidden="true" /> Actualizar
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <Link className="btn btn-ghost" to="/acciones">
+            Acciones preventivas
+          </Link>
+          <button
+            type="button"
+            className="btn btn-ghost"
+            onClick={() => {
+              void alerts.refetch();
+              void summary.refetch();
+            }}
+          >
+            <RefreshCw size={16} strokeWidth={1.5} aria-hidden="true" /> Actualizar
+          </button>
+        </div>
       </div>
 
       <section className="mt-10 grid gap-px bg-iron sm:grid-cols-2 lg:grid-cols-4">

@@ -1,9 +1,11 @@
 import {
   Activity,
   AlertTriangle,
+  ClipboardList,
   Database,
   Download,
   Gauge,
+  ListOrdered,
   RefreshCw,
   Server,
   Waves,
@@ -130,6 +132,12 @@ export default function OperationsPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <Link className="btn btn-ghost" to="/prioridad">
+            <ListOrdered size={16} strokeWidth={1.5} aria-hidden="true" /> Prioridad
+          </Link>
+          <Link className="btn btn-ghost" to="/acciones">
+            <ClipboardList size={16} strokeWidth={1.5} aria-hidden="true" /> Acciones
+          </Link>
           <button
             type="button"
             className="btn btn-ghost"
