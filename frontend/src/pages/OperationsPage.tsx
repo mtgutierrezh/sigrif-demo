@@ -190,7 +190,7 @@ export default function OperationsPage() {
           </p>
         ) : null}
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="mt-6 grid items-start gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <section className="min-w-0 border border-iron p-5" aria-labelledby="zonas-criticas-titulo">
             <h3 id="zonas-criticas-titulo" className="text-[22px] tracking-[-0.03em]">
               Zonas críticas · top 5
