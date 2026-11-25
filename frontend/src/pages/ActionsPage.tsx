@@ -16,7 +16,7 @@ import type {
   ActionStatus,
   PreventiveAction,
 } from "../features/zones/types";
-import { useZones } from "../features/zones/useZones";
+import { useZoneOptions } from "../features/zones/useZones";
 import { actorLabel } from "../lib/actor";
 import { formatNumber } from "../lib/format";
 import { zoneLabel } from "../lib/names";
@@ -139,7 +139,7 @@ export default function ActionsPage() {
 
   const actions = useActions({ status, kind });
   const summary = useActionSummary();
-  const zones = useZones();
+  const zones = useZoneOptions();
   const createAction = useCreateAction();
   const updateAction = useUpdateAction();
 

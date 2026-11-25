@@ -6,7 +6,7 @@ import { RiskBadge } from "../components/RiskBadge";
 import { useSession } from "../components/session";
 import type { RiskLevel } from "../features/zones/types";
 import { useEvaluations } from "../features/zones/useEvaluations";
-import { useZones } from "../features/zones/useZones";
+import { useZoneOptions } from "../features/zones/useZones";
 import { actorLabel } from "../lib/actor";
 import { formatDateTime, formatScore } from "../lib/format";
 import { zoneLabel } from "../lib/names";
@@ -18,7 +18,7 @@ export default function HistoryPage() {
   const [zoneId, setZoneId] = useState<number | null>(null);
   const [level, setLevel] = useState<RiskLevel | "todos">("todos");
   const [sinceHours, setSinceHours] = useState<number | null>(null);
-  const zones = useZones();
+  const zones = useZoneOptions();
   const evaluations = useEvaluations({
     zoneId,
     riskLevel: level === "todos" ? null : level,

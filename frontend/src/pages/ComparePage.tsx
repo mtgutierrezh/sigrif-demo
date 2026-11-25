@@ -7,13 +7,13 @@ import { RiskBadge } from "../components/RiskBadge";
 import { useSession } from "../components/session";
 import { useZoneEvaluations } from "../features/zones/useEvaluations";
 import { usePriority } from "../features/zones/usePriority";
-import type { EvaluationSummary, Zone } from "../features/zones/types";
-import { useZones } from "../features/zones/useZones";
+import type { EvaluationSummary, ZoneOption } from "../features/zones/types";
+import { useZoneOptions } from "../features/zones/useZones";
 import { formatDateTime, formatNumber } from "../lib/format";
 import { zoneLabel } from "../lib/names";
 import { riskColor } from "../lib/risk";
 
-function Sparkline({ zone, points }: { zone: Zone; points: EvaluationSummary[] }) {
+function Sparkline({ zone, points }: { zone: ZoneOption; points: EvaluationSummary[] }) {
   const ordered = [...points].reverse();
   const scores = ordered
     .map((item) => item.risk_score)
@@ -67,7 +67,7 @@ function ZoneSelect({
 }: {
   index: number;
   value: number | null;
-  zones: Zone[];
+  zones: ZoneOption[];
   selected: Array<number | null>;
   onChange: (value: number | null) => void;
 }) {
@@ -97,7 +97,7 @@ function ZoneSelect({
 
 export default function ComparePage() {
   const { canSimulate } = useSession();
-  const zonesQuery = useZones();
+  const zonesQuery = useZoneOptions();
   const priority = usePriority(1000);
   const [selectedIds, setSelectedIds] = useState<Array<number | null>>([null, null, null]);
 
@@ -153,7 +153,7 @@ export default function ComparePage() {
   const zones = zonesQuery.data ?? [];
   const selected = selectedIds
     .map((id) => (id === null ? null : zoneById.get(id) ?? null))
-    .filter((zone): zone is Zone => zone !== null);
+    .filter((zone): zone is ZoneOption => zone !== null);
   const histories = [historyA.data ?? [], historyB.data ?? [], historyC.data ?? []];
   const historyByZoneId = new Map<number, EvaluationSummary[]>();
   selectedIds.forEach((id, index) => {

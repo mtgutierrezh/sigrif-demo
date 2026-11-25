@@ -127,6 +127,20 @@ export interface Zone {
   latest_reading: Reading | null;
 }
 
+export interface ZoneOption {
+  id: number;
+  name: string;
+  display_name: string;
+  comuna: string;
+  risk_level: RiskLevel;
+  risk_score: number;
+  vegetation: number;
+  historical_fires: number;
+  slope: number;
+  dominant_fuel: string;
+  population: number | null;
+}
+
 export interface HistoryPoint {
   risk_level: RiskLevel | null;
   risk_score: number | null;

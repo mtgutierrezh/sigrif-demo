@@ -1,13 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchJson } from "../../lib/api";
-import type { HistoryPoint, Status, Zone } from "./types";
+import type { HistoryPoint, Status, Zone, ZoneOption } from "./types";
 
 export function useZones() {
   return useQuery({
     queryKey: ["zones"],
     queryFn: () => fetchJson<Zone[]>("/api/v1/zones"),
     refetchInterval: 15 * 60 * 1000,
+  });
+}
+
+export function useZoneOptions() {
+  return useQuery({
+    queryKey: ["zone-options"],
+    queryFn: () => fetchJson<ZoneOption[]>("/api/v1/zones/options"),
+    staleTime: 5 * 60 * 1000,
   });
 }
 
