@@ -96,7 +96,7 @@ function ActionButtons({
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex gap-2">
       {action.status === "pendiente" ? (
         <button
           type="button"
@@ -256,7 +256,7 @@ export default function ActionsPage() {
             responsable y la fecha de cierre. Esta vista está reservada al grupo operadores.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2">
           <Link className="btn btn-ghost" to="/prioridad">
             <ClipboardList size={16} strokeWidth={1.5} aria-hidden="true" /> Prioridad
           </Link>
@@ -338,20 +338,20 @@ export default function ActionsPage() {
         </div>
 
         <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[1040px] text-left font-mono text-[11px]">
+          <table className="w-full min-w-[1180px] text-left font-mono text-[11px]">
             <caption className="sr-only">
               Acciones preventivas e incidentes por zona, con responsable, vencimiento y estado
             </caption>
             <thead className="text-ash">
               <tr>
-                <th className="pb-2 font-normal">Zona</th>
-                <th className="pb-2 font-normal">Tipo</th>
-                <th className="pb-2 font-normal">Categoría</th>
-                <th className="pb-2 font-normal">Título</th>
-                <th className="pb-2 font-normal">Responsable</th>
-                <th className="pb-2 font-normal">Vencimiento</th>
-                <th className="pb-2 font-normal">Estado</th>
-                <th className="pb-2 font-normal">Acciones</th>
+                <th className="pb-2 pr-3 font-normal">Zona</th>
+                <th className="pb-2 pr-3 font-normal">Tipo</th>
+                <th className="pb-2 pr-3 font-normal">Categoría</th>
+                <th className="pb-2 pr-3 font-normal">Título</th>
+                <th className="pb-2 pr-3 font-normal">Responsable</th>
+                <th className="pb-2 pr-3 font-normal">Vencimiento</th>
+                <th className="pb-2 pr-3 font-normal">Estado</th>
+                <th className="pb-2 pr-3 font-normal">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -390,7 +390,7 @@ export default function ActionsPage() {
                   <td className="py-3 pr-3">
                     <StatusBadge status={action.status} />
                   </td>
-                  <td className="py-3">
+                  <td className="whitespace-nowrap py-3">
                     <ActionButtons
                       action={action}
                       pending={updateAction.isPending}
