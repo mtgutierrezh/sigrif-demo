@@ -51,6 +51,20 @@ class ZoneOut(BaseModel):
     latest_reading: ReadingOut | None = None
 
 
+class ZoneOptionOut(BaseModel):
+    id: int
+    name: str
+    display_name: str
+    comuna: str
+    risk_level: str
+    risk_score: float
+    vegetation: float
+    historical_fires: int
+    slope: float
+    dominant_fuel: str
+    population: float | None = None
+
+
 class RiskFeaturesIn(BaseModel):
     """Variables de entrada del modelo, con los mismos rangos del dataset."""
 

@@ -96,6 +96,7 @@ from ..schemas import (
     SimulationOut,
     StatusOut,
     ZoneAlertOut,
+    ZoneOptionOut,
     ZoneOut,
 )
 
@@ -353,6 +354,44 @@ def list_zones(
 ) -> list[ZoneOut]:
     zones = session.scalars(select(Zone).order_by(Zone.id)).all()
     return [_zone_out(session, zone) for zone in zones]
+
+
+@app.get("/api/v1/zones/options", response_model=list[ZoneOptionOut])
+def zone_options(
+    session: Annotated[Session, Depends(get_session)],
+) -> list[ZoneOptionOut]:
+    """Listado liviano para selectores: sin geometría ni última lectura."""
+
+    rows = session.execute(
+        select(
+            Zone.id,
+            Zone.name,
+            Zone.comuna,
+            Zone.risk_level,
+            Zone.risk_score,
+            Zone.vegetation,
+            Zone.historical_fires,
+            Zone.slope,
+            Zone.dominant_fuel,
+        ).order_by(Zone.name)
+    ).all()
+    population = official_population_by_name()
+    return [
+        ZoneOptionOut(
+            id=row.id,
+            name=row.name,
+            display_name=row.name,
+            comuna=row.comuna,
+            risk_level=row.risk_level,
+            risk_score=row.risk_score,
+            vegetation=row.vegetation,
+            historical_fires=row.historical_fires,
+            slope=row.slope,
+            dominant_fuel=row.dominant_fuel,
+            population=population.get(row.name) or None,
+        )
+        for row in rows
+    ]
 
 
 def _cell_feature(cell: RiskCell) -> dict:
