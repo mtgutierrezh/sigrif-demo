@@ -9,15 +9,19 @@ import {
   Waves,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { PageLoader } from "../components/PageLoader";
 import { RiskBadge } from "../components/RiskBadge";
+import { ServiceStatusPanel } from "../components/ServiceStatusPanel";
 import { useSession } from "../components/session";
 import {
   useModelInfo,
   useOpsAlerts,
+  useOpsExecutive,
   useOpsIngestion,
   useOpsOverview,
+  useOpsServices,
   useRunIngestion,
 } from "../features/zones/useOps";
 import { downloadFile } from "../lib/api";
@@ -40,9 +44,17 @@ function sourceLabel(source: string | null | undefined): string {
   }[source] ?? source;
 }
 
+function deltaLabel(value: number | null | undefined): string {
+  if (value === null || value === undefined) return "Sin comparación";
+  const formatted = formatNumber(value, 0);
+  return value > 0 ? `+${formatted} vs. 24 h previas` : `${formatted} vs. 24 h previas`;
+}
+
 export default function OperationsPage() {
   const { canSimulate, token } = useSession();
   const overview = useOpsOverview();
+  const executive = useOpsExecutive();
+  const services = useOpsServices();
   const alerts = useOpsAlerts();
   const ingestion = useOpsIngestion();
   const model = useModelInfo();
@@ -96,6 +108,9 @@ export default function OperationsPage() {
   }
 
   const data = overview.data;
+  const executiveData = executive.data;
+  const riskCounts = executiveData?.risk_counts ?? {};
+  const variation = executiveData?.variation;
   const freshness =
     data.freshness_minutes === null ? "Sin dato" : `${formatNumber(data.freshness_minutes, 0)} min`;
   const metrics = model.data?.metrics ?? {};
@@ -132,6 +147,161 @@ export default function OperationsPage() {
       <p className="mt-2 min-h-5 font-mono text-[11px] text-ember" aria-live="polite">
         {exportError}
       </p>
+
+      <section className="mt-10" aria-labelledby="panel-ejecutivo">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 id="panel-ejecutivo" className="text-[28px] tracking-[-0.03em]">
+              Panel ejecutivo de riesgo
+            </h2>
+            <p className="mt-2 max-w-2xl text-bone-muted">
+              Distribución actual, zonas críticas y variación de las últimas 24 horas.
+            </p>
+          </div>
+          <p className="font-mono text-[10px] text-ash">
+            Actualizado {formatDateTime(executiveData?.generated_at)}
+          </p>
+        </div>
+
+        <div className="mt-5 grid gap-px bg-iron sm:grid-cols-2 lg:grid-cols-6">
+          {[
+            ["Bajo", riskCounts.Bajo ?? "—", "Zonas en nivel bajo"],
+            ["Medio", riskCounts.Medio ?? "—", "Zonas en nivel medio"],
+            ["Alto", riskCounts.Alto ?? "—", "Zonas críticas"],
+            ["Alertas activas", executiveData?.active_alerts ?? "—", "Alertas abiertas"],
+            [
+              "Evaluaciones 24 h",
+              variation?.evaluations_24h ?? "—",
+              deltaLabel(variation?.evaluations_delta),
+            ],
+            ["Alertas 24 h", variation?.alerts_24h ?? "—", deltaLabel(variation?.alerts_delta)],
+          ].map(([label, value, hint]) => (
+            <div key={label} className="bg-obsidian px-4 py-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">{label}</p>
+              <p className="mt-2 font-mono text-[24px] leading-none text-bone">{value}</p>
+              <p className="mt-2 font-mono text-[10px] text-ash">{hint}</p>
+            </div>
+          ))}
+        </div>
+
+        {executive.isError ? (
+          <p className="mt-4 border border-iron p-3 font-mono text-[11px] text-ember" role="status">
+            No pudimos cargar el panel ejecutivo. Se muestran los datos operativos disponibles.
+          </p>
+        ) : null}
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+          <section className="border border-iron p-5" aria-labelledby="zonas-criticas-titulo">
+            <h3 id="zonas-criticas-titulo" className="text-[22px] tracking-[-0.03em]">
+              Zonas críticas · top 5
+            </h3>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full text-left font-mono text-[11px]">
+                <caption className="sr-only">
+                  Zonas en nivel Alto ordenadas por probabilidad de riesgo Alto
+                </caption>
+                <thead className="text-ash">
+                  <tr>
+                    <th className="pb-2 font-normal">Zona</th>
+                    <th className="pb-2 font-normal">Comuna</th>
+                    <th className="pb-2 font-normal">Nivel</th>
+                    <th className="pb-2 font-normal">P(Alto)</th>
+                    <th className="pb-2 font-normal">Actualizada</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(executiveData?.critical_zones ?? []).map((zone) => (
+                    <tr key={zone.id} className="border-t border-iron">
+                      <td className="py-2 pr-3">
+                        <Link
+                          to={`/mapa?zona=${zone.id}`}
+                          className="text-bone hover:text-surveyor"
+                        >
+                          {zoneLabel(zone.name, zone.display_name)}
+                        </Link>
+                      </td>
+                      <td className="py-2 pr-3 text-ash">{zone.comuna}</td>
+                      <td className="py-2 pr-3">
+                        <RiskBadge level={zone.risk_level} />
+                      </td>
+                      <td className="py-2 pr-3 text-bone">{formatScore(zone.risk_score)}</td>
+                      <td className="whitespace-nowrap py-2 text-ash">
+                        {formatDateTime(zone.updated_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {executiveData && executiveData.critical_zones.length === 0 ? (
+                <p className="mt-3 font-mono text-[11px] text-ash">
+                  No hay zonas en nivel Alto en este momento.
+                </p>
+              ) : null}
+              {!executiveData ? (
+                <p className="mt-3 font-mono text-[11px] text-ash">Cargando zonas críticas…</p>
+              ) : null}
+            </div>
+          </section>
+
+          <section className="border border-iron p-5" aria-labelledby="variables-titulo">
+            <h3 id="variables-titulo" className="text-[22px] tracking-[-0.03em]">
+              Variables predominantes
+            </h3>
+            <div className="mt-4 space-y-2">
+              {(executiveData?.predominant_variables ?? []).map((item) => (
+                <div key={item.feature} className="grid grid-cols-[1fr_auto] gap-3 font-mono text-[11px]">
+                  <div className="flex items-center gap-2">
+                    <span className="text-bone">{item.label}</span>
+                    <span className="h-1 flex-1 bg-iron" aria-hidden="true">
+                      <span
+                        className="block h-full bg-surveyor"
+                        style={{ width: `${Math.min(100, item.importance * 250)}%` }}
+                      />
+                    </span>
+                  </div>
+                  <span className="text-ash">{formatNumber(item.importance, 3)}</span>
+                </div>
+              ))}
+              {executiveData && executiveData.predominant_variables.length === 0 ? (
+                <p className="font-mono text-[11px] text-ash">Sin metadatos de variables.</p>
+              ) : null}
+            </div>
+            <p className="mt-3 font-mono text-[10px] text-ash">
+              {executiveData?.predominant_variables[0]?.source === "modelo"
+                ? "Importancia del Random Forest en producción."
+                : "Pesos documentados de la regla académica."}
+            </p>
+
+            <div className="mt-5 border-t border-iron pt-4">
+              <h4 className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash">
+                Resumen de fuentes
+              </h4>
+              <ul className="mt-3 space-y-2 font-mono text-[11px]">
+                {(executiveData?.sources ?? []).map((source) => (
+                  <li key={source.source} className="flex flex-wrap justify-between gap-2">
+                    <span className="text-bone">
+                      {sourceLabel(source.source)} · {source.readings} lecturas
+                    </span>
+                    <span className="text-ash">{formatDateTime(source.last_at)}</span>
+                  </li>
+                ))}
+                {executiveData && executiveData.sources.length === 0 ? (
+                  <li className="text-ash">Sin lecturas registradas.</li>
+                ) : null}
+              </ul>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div className="mt-6">
+        <ServiceStatusPanel
+          data={services.data}
+          loading={services.isLoading}
+          error={services.isError}
+          onRetry={() => void services.refetch()}
+        />
+      </div>
 
       <section className="mt-10 grid gap-px bg-iron sm:grid-cols-2 lg:grid-cols-5">
         {[

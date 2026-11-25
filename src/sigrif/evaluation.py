@@ -4,10 +4,11 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from .alerts import ensure_alert
+from .alerts import ensure_alert, get_open_alert
 from .config import settings
 from .events import publish_alert
 from .models import Evaluation, Reading, Zone
+from .notifications import record_alert_opened, record_level_change
 from .prescription import build_prescription
 
 
@@ -43,6 +44,7 @@ def store_evaluation(
     evaluated_at = datetime.now(UTC)
     risk_level = str(prediction.get("risk_level", ""))
     risk_score = float(prediction.get("risk_score", 0.0))
+    previous_level = zone.risk_level
 
     reading: Reading | None = None
     if observed is not None:
@@ -108,7 +110,10 @@ def store_evaluation(
     zone.last_source = source
 
     if risk_level == "Alto":
-        ensure_alert(session, zone, evaluation)
+        open_alert = get_open_alert(session, zone.id)
+        alert = ensure_alert(session, zone, evaluation)
+        if open_alert is None:
+            record_alert_opened(session, zone, evaluation, alert, actor=created_by)
         cooldown = timedelta(hours=max(1, settings.alert_cooldown_hours))
         if zone.last_alert_at is None or zone.last_alert_at < evaluated_at - cooldown:
             delivered = publish_alert(
@@ -132,6 +137,8 @@ def store_evaluation(
             )
             if delivered:
                 zone.last_alert_at = evaluated_at
+
+    record_level_change(session, zone, evaluation, previous_level, actor=created_by)
 
     session.commit()
     session.refresh(evaluation)

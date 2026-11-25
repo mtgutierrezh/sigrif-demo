@@ -12,6 +12,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    UniqueConstraint,
     func,
     text,
 )
@@ -211,6 +212,38 @@ class AlertEvent(Base):
     actor: Mapped[str] = mapped_column(String(120), default="sistema")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     alert: Mapped[Alert] = relationship(back_populates="events")
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    zone_id: Mapped[int] = mapped_column(ForeignKey("zones.id", ondelete="CASCADE"), index=True)
+    alert_id: Mapped[int | None] = mapped_column(
+        ForeignKey("alerts.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    evaluation_id: Mapped[int | None] = mapped_column(
+        ForeignKey("evaluations.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    event_type: Mapped[str] = mapped_column(String(30))
+    level_from: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    level_to: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    title: Mapped[str] = mapped_column(String(160))
+    detail: Mapped[str | None] = mapped_column(Text, nullable=True)
+    actor: Mapped[str] = mapped_column(String(120), default="sistema", server_default="sistema")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    read_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    zone: Mapped[Zone] = relationship()
+    __table_args__ = (
+        UniqueConstraint(
+            "evaluation_id",
+            "event_type",
+            name="uq_notifications_evaluation_event",
+        ),
+        Index("ix_notifications_created_at", "created_at"),
+        Index("ix_notifications_read_at", "read_at"),
+    )
 
 
 class IngestionRun(Base):

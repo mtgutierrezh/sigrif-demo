@@ -3,8 +3,9 @@ import logging
 import time
 import uuid
 from collections import deque
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from contextlib import asynccontextmanager
+from datetime import UTC, datetime
 from typing import Annotated
 
 import numpy as np
@@ -13,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from geoalchemy2.shape import to_shape
 from prometheus_client import Counter, Histogram, generate_latest
 from shapely.geometry import mapping
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
@@ -33,6 +34,7 @@ from ..models import (
     Evaluation,
     FieldReport,
     IngestionRun,
+    Notification,
     Reading,
     RiskCell,
     Zone,
@@ -44,6 +46,8 @@ from ..monitoring import (
     refresh_metrics,
     risk_counts,
 )
+from ..notifications import notification_payload
+from ..ops import build_executive_summary, build_service_status
 from ..prescription import build_prescription
 from ..reports import report_filename, zone_csv_bytes, zone_pdf_bytes, zones_summary_csv_bytes
 from ..schemas import (
@@ -56,18 +60,23 @@ from ..schemas import (
     DriftFeatureOut,
     EvaluationOut,
     EvaluationSummaryOut,
+    ExecutiveOut,
+    ExecutiveZoneOut,
     FactorOut,
     FieldReportCreate,
     FieldReportOut,
     HistoryPoint,
     IngestionRunOut,
     ModelInfoOut,
+    NotificationOut,
+    NotificationSummaryOut,
     OcrOut,
     OpsOverviewOut,
     PrescriptionActionOut,
     ReadingOut,
     RiskFeaturesIn,
     ScenarioOut,
+    ServicesOut,
     SimulationOut,
     StatusOut,
     ZoneAlertOut,
@@ -176,15 +185,23 @@ def _zone_out(session: Session, zone: Zone) -> ZoneOut:
     )
 
 
-def _evaluation_summary(evaluation: Evaluation) -> EvaluationSummaryOut:
+def _evaluation_summary(
+    evaluation: Evaluation,
+    *,
+    zone_name: str = "",
+    comuna: str = "",
+) -> EvaluationSummaryOut:
     return EvaluationSummaryOut(
         id=evaluation.id,
         zone_id=evaluation.zone_id,
+        zone_name=zone_name,
+        comuna=comuna,
         risk_level=evaluation.risk_level,
         risk_score=evaluation.risk_score,
         model_version=evaluation.model_version,
         source=evaluation.source,
         created_at=evaluation.created_at,
+        created_by=getattr(evaluation, "created_by", "local"),
         prescription_count=len(evaluation.prescription or []),
     )
 
@@ -429,15 +446,23 @@ def list_evaluations(
     risk_level: str | None = None,
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
 ) -> list[EvaluationSummaryOut]:
-    stmt = select(Evaluation).order_by(Evaluation.id.desc()).limit(limit)
+    stmt = select(Evaluation, Zone.name, Zone.comuna).join(Zone, Evaluation.zone_id == Zone.id)
     if zone_id is not None:
         stmt = stmt.where(Evaluation.zone_id == zone_id)
     if risk_level is not None:
         if risk_level not in LABELS:
             raise HTTPException(status_code=422, detail="Nivel de riesgo inválido")
         stmt = stmt.where(Evaluation.risk_level == risk_level)
-    evaluations = session.scalars(stmt).all()
-    return [_evaluation_summary(evaluation) for evaluation in evaluations]
+    stmt = stmt.order_by(Evaluation.id.desc()).limit(limit)
+    rows = session.execute(stmt).all()
+    return [
+        _evaluation_summary(
+            evaluation,
+            zone_name=str(zone_name or ""),
+            comuna=str(comuna or ""),
+        )
+        for evaluation, zone_name, comuna in rows
+    ]
 
 
 @app.get(
@@ -459,7 +484,10 @@ def zone_evaluations(
         .order_by(Evaluation.id.desc())
         .limit(limit)
     ).all()
-    return [_evaluation_summary(evaluation) for evaluation in evaluations]
+    return [
+        _evaluation_summary(evaluation, zone_name=zone.name, comuna=zone.comuna)
+        for evaluation in evaluations
+    ]
 
 
 @app.get("/api/v1/ops/overview", response_model=OpsOverviewOut)
@@ -500,6 +528,41 @@ def ops_overview(
     )
 
 
+@app.get("/api/v1/ops/executive", response_model=ExecutiveOut)
+def ops_executive(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> ExecutiveOut:
+    """Panel ejecutivo de riesgo con variación de 24 h y fuentes."""
+
+    summary = build_executive_summary(session)
+    return ExecutiveOut(
+        generated_at=summary["generated_at"],
+        zones=summary["zones"],
+        risk_counts=summary["risk_counts"],
+        critical_zones=[
+            ExecutiveZoneOut.model_validate(zone) for zone in summary["critical_zones"]
+        ],
+        active_alerts=summary["active_alerts"],
+        high_risk_zones=summary["high_risk_zones"],
+        alerts_by_status=summary["alerts_by_status"],
+        variation=summary["variation"],
+        predominant_variables=summary["predominant_variables"],
+        sources=summary["sources"],
+        model_version=summary["model_version"],
+    )
+
+
+@app.get("/api/v1/ops/services", response_model=ServicesOut)
+def ops_services(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> ServicesOut:
+    """Estado agregado de API, IA, PostGIS, SQS, ingesta y frescura."""
+
+    return ServicesOut(**build_service_status(session, p95_ms=_p95()))
+
+
 @app.get("/api/v1/ops/alerts", response_model=list[ZoneAlertOut])
 def ops_alerts(
     session: Annotated[Session, Depends(get_session)],
@@ -525,6 +588,86 @@ def alerts_summary(
         en_revision=counts.get("en_revision", 0),
         cerrada=counts.get("cerrada", 0),
     )
+
+
+def _notification_summary(session: Session) -> NotificationSummaryOut:
+    total = session.scalar(select(func.count(Notification.id))) or 0
+    unread = (
+        session.scalar(select(func.count(Notification.id)).where(Notification.read_at.is_(None)))
+        or 0
+    )
+    return NotificationSummaryOut(total=int(total), unread=int(unread))
+
+
+def _zone_map(session: Session, notifications: Sequence[Notification]) -> dict[int, Zone]:
+    zone_ids = {notification.zone_id for notification in notifications}
+    if not zone_ids:
+        return {}
+    zones = session.scalars(select(Zone).where(Zone.id.in_(zone_ids))).all()
+    return {zone.id: zone for zone in zones}
+
+
+@app.get("/api/v1/notifications/summary", response_model=NotificationSummaryOut)
+def notifications_summary(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+) -> NotificationSummaryOut:
+    return _notification_summary(session)
+
+
+@app.get("/api/v1/notifications", response_model=list[NotificationOut])
+def list_notifications(
+    session: Annotated[Session, Depends(get_session)],
+    _: OperatorUser,
+    unread_only: bool = False,
+    zone_id: int | None = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+) -> list[NotificationOut]:
+    stmt = select(Notification)
+    if unread_only:
+        stmt = stmt.where(Notification.read_at.is_(None))
+    if zone_id is not None:
+        stmt = stmt.where(Notification.zone_id == zone_id)
+    stmt = stmt.order_by(Notification.created_at.desc(), Notification.id.desc()).limit(limit)
+    notifications = session.scalars(stmt).all()
+    zones = _zone_map(session, notifications)
+    return [
+        NotificationOut(**notification_payload(notification, zones.get(notification.zone_id)))
+        for notification in notifications
+    ]
+
+
+@app.patch("/api/v1/notifications/read-all", response_model=NotificationSummaryOut)
+def mark_all_notifications_read(
+    session: Annotated[Session, Depends(get_session)],
+    user: OperatorUser,
+) -> NotificationSummaryOut:
+    now = datetime.now(UTC)
+    session.execute(
+        update(Notification)
+        .where(Notification.read_at.is_(None))
+        .values(read_at=now, read_by=str(user.get("sub", "local")))
+    )
+    session.commit()
+    return _notification_summary(session)
+
+
+@app.patch("/api/v1/notifications/{notification_id}/read", response_model=NotificationOut)
+def mark_notification_read(
+    notification_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    user: OperatorUser,
+) -> NotificationOut:
+    notification = session.get(Notification, notification_id)
+    if notification is None:
+        raise HTTPException(status_code=404, detail="Notificación no encontrada")
+    if notification.read_at is None:
+        notification.read_at = datetime.now(UTC)
+        notification.read_by = str(user.get("sub", "local"))
+        session.commit()
+        session.refresh(notification)
+    zone = session.get(Zone, notification.zone_id)
+    return NotificationOut(**notification_payload(notification, zone))
 
 
 @app.get("/api/v1/alerts", response_model=list[AlertOut])

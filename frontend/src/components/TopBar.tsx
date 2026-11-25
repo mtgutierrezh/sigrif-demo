@@ -25,7 +25,9 @@ export function TopBar() {
     ? [
         ...links,
         { to: "/alertas", label: "Alertas" },
+        { to: "/historial", label: "Historial" },
         { to: "/operaciones", label: "Operaciones" },
+        { to: "/notificaciones", label: "Avisos" },
       ]
     : links;
 
@@ -40,7 +42,7 @@ export function TopBar() {
           <img src="/brand/logotype.svg" alt="SIGRIF" className="h-5 w-auto md:h-6" />
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Navegación principal">
+        <nav className="hidden items-center gap-5 md:flex xl:gap-7" aria-label="Navegación principal">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}

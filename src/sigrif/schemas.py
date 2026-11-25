@@ -149,11 +149,14 @@ class EvaluationSummaryOut(BaseModel):
 
     id: int
     zone_id: int
+    zone_name: str = ""
+    comuna: str = ""
     risk_level: str
     risk_score: float
     model_version: str
     source: str
     created_at: datetime
+    created_by: str = "local"
     prescription_count: int = 0
 
 
@@ -266,6 +269,96 @@ class OpsOverviewOut(BaseModel):
     p95_ms: float | None = None
     drift: list[DriftFeatureOut] = Field(default_factory=list)
     last_ingestion: IngestionRunOut | None = None
+
+
+class ExecutiveVariationOut(BaseModel):
+    evaluations_24h: int
+    evaluations_previous_24h: int
+    evaluations_delta: int
+    alerts_24h: int
+    alerts_previous_24h: int
+    alerts_delta: int
+
+
+class ExecutiveFeatureOut(BaseModel):
+    feature: str
+    label: str
+    importance: float
+    source: str
+
+
+class ExecutiveSourceOut(BaseModel):
+    source: str
+    readings: int
+    last_at: datetime | None = None
+
+
+class ExecutiveZoneOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    display_name: str = ""
+    comuna: str
+    risk_level: str
+    risk_score: float
+    last_source: str | None = None
+    last_alert_at: datetime | None = None
+    updated_at: datetime
+
+
+class ExecutiveOut(BaseModel):
+    generated_at: datetime
+    zones: int
+    risk_counts: dict[str, int]
+    critical_zones: list[ExecutiveZoneOut]
+    active_alerts: int
+    high_risk_zones: int
+    alerts_by_status: dict[str, int]
+    variation: ExecutiveVariationOut
+    predominant_variables: list[ExecutiveFeatureOut]
+    sources: list[ExecutiveSourceOut]
+    model_version: str
+
+
+class ServiceCheckOut(BaseModel):
+    key: str
+    label: str
+    status: str
+    detail: str
+
+
+class ServicesOut(BaseModel):
+    checked_at: datetime
+    status: str
+    services: list[ServiceCheckOut]
+    queue_depth: int | None = None
+    last_ingest: datetime | None = None
+    freshness_minutes: float | None = None
+    stale: bool = False
+
+
+class NotificationOut(BaseModel):
+    id: int
+    zone_id: int
+    zone_name: str
+    comuna: str
+    alert_id: int | None = None
+    evaluation_id: int | None = None
+    event_type: str
+    level_from: str | None = None
+    level_to: str | None = None
+    title: str
+    detail: str | None = None
+    actor: str
+    created_at: datetime
+    read_at: datetime | None = None
+    read_by: str | None = None
+
+
+class NotificationSummaryOut(BaseModel):
+    total: int
+    unread: int
 
 
 class ModelInfoOut(BaseModel):

@@ -1,5 +1,6 @@
 import { AlertTriangle, Bell, RefreshCw } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { PageLoader } from "../components/PageLoader";
 import { RiskBadge } from "../components/RiskBadge";
@@ -45,8 +46,19 @@ function StatusBadge({ status }: { status: AlertStatus }) {
 
 export default function AlertsPage() {
   const { canSimulate } = useSession();
+  const [params, setParams] = useSearchParams();
   const [status, setStatus] = useState<AlertStatus | "todas">("todas");
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const rawAlert = params.get("alerta");
+  const selectedId = rawAlert && !Number.isNaN(Number(rawAlert)) ? Number(rawAlert) : null;
+  const setSelectedId = (id: number | null) => {
+    const next = new URLSearchParams(params);
+    if (id === null) {
+      next.delete("alerta");
+    } else {
+      next.set("alerta", String(id));
+    }
+    setParams(next, { replace: true });
+  };
   const [form, setForm] = useState<{
     status: AlertStatus;
     assigned_to: string;

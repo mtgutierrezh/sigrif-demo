@@ -1,12 +1,35 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { fetchJson, postJson } from "../../lib/api";
-import type { IngestionRun, ModelInfo, OpsOverview, ZoneAlert } from "./types";
+import type {
+  ExecutiveSummary,
+  IngestionRun,
+  ModelInfo,
+  OpsOverview,
+  ServicesStatus,
+  ZoneAlert,
+} from "./types";
 
 export function useOpsOverview() {
   return useQuery({
     queryKey: ["ops", "overview"],
     queryFn: () => fetchJson<OpsOverview>("/api/v1/ops/overview"),
+    refetchInterval: 30_000,
+  });
+}
+
+export function useOpsExecutive() {
+  return useQuery({
+    queryKey: ["ops", "executive"],
+    queryFn: () => fetchJson<ExecutiveSummary>("/api/v1/ops/executive"),
+    refetchInterval: 30_000,
+  });
+}
+
+export function useOpsServices() {
+  return useQuery({
+    queryKey: ["ops", "services"],
+    queryFn: () => fetchJson<ServicesStatus>("/api/v1/ops/services"),
     refetchInterval: 30_000,
   });
 }

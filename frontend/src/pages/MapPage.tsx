@@ -1,4 +1,4 @@
-import { AlertTriangle, RotateCcw } from "lucide-react";
+import { AlertTriangle, LocateFixed, RotateCcw } from "lucide-react";
 import { useMemo } from "react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -14,6 +14,8 @@ import type { Zone } from "../features/zones/types";
 import { useHistory, useStatus, useZone, useZones } from "../features/zones/useZones";
 import { useSimulate } from "../features/zones/useSimulate";
 import { FUEL_COLORS } from "../lib/fuel";
+import { formatNumber } from "../lib/format";
+import { nearestZoneByCentroid } from "../lib/geo";
 import { InfoTip } from "../components/InfoTip";
 import { zoneLabel } from "../lib/names";
 
@@ -24,6 +26,8 @@ export default function MapPage() {
   );
   const [showCells, setShowCells] = useState(true);
   const [viewport, setViewport] = useState<MapViewport | null>(null);
+  const [locating, setLocating] = useState(false);
+  const [geoMessage, setGeoMessage] = useState<string | null>(null);
   const raw = params.get("zona");
   const selectedId = raw && !Number.isNaN(Number(raw)) ? Number(raw) : null;
   const cellsVisible =
@@ -83,6 +87,44 @@ export default function MapPage() {
 
   const closePanel = () => {
     setParams({}, { replace: true });
+  };
+
+  const locateNearestZone = () => {
+    if (!navigator.geolocation) {
+      setGeoMessage("Tu navegador no permite geolocalización. Elige una zona manualmente.");
+      return;
+    }
+    setLocating(true);
+    setGeoMessage("Buscando tu ubicación…");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const nearest = nearestZoneByCentroid(
+          zonesQuery.data ?? [],
+          position.coords.latitude,
+          position.coords.longitude,
+        );
+        setLocating(false);
+        if (!nearest) {
+          setGeoMessage("No encontramos una zona con geometría cercana.");
+          return;
+        }
+        selectZone(nearest.zone.id);
+        setGeoMessage(
+          `Zona más cercana: ${zoneLabel(nearest.zone.name, nearest.zone.display_name)} · ${formatNumber(nearest.distanceKm, 1)} km.`,
+        );
+      },
+      (error) => {
+        setLocating(false);
+        setGeoMessage(
+          error.code === error.PERMISSION_DENIED
+            ? "No autorizamos el acceso a tu ubicación. Puedes elegir una zona manualmente."
+            : error.code === error.TIMEOUT
+              ? "La ubicación tardó demasiado. Intenta nuevamente."
+              : "No pudimos obtener tu ubicación. Intenta nuevamente.",
+        );
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 },
+    );
   };
 
   if (zonesQuery.isLoading) {
@@ -212,6 +254,26 @@ export default function MapPage() {
               </optgroup>
             ))}
           </select>
+          <button
+            type="button"
+            className="btn btn-ghost mt-3 w-full"
+            style={{ minHeight: "44px", padding: "10px 10px", fontSize: "10px" }}
+            onClick={locateNearestZone}
+            disabled={locating}
+            aria-label="Buscar la zona más cercana usando mi ubicación"
+            aria-describedby="geo-message"
+          >
+            <LocateFixed size={14} strokeWidth={1.5} aria-hidden="true" />
+            {locating ? "Buscando…" : "Cerca de mí"}
+          </button>
+          <p
+            id="geo-message"
+            className="mt-2 min-h-8 font-mono text-[9px] leading-relaxed text-ash"
+            role="status"
+            aria-live="polite"
+          >
+            {geoMessage}
+          </p>
         </div>
 
         {colorMode === "risk" ? <MapLegend /> : null}

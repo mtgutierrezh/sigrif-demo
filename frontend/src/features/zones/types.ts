@@ -184,6 +184,94 @@ export interface OpsOverview {
   last_ingestion: IngestionRun | null;
 }
 
+export interface ExecutiveVariation {
+  evaluations_24h: number;
+  evaluations_previous_24h: number;
+  evaluations_delta: number;
+  alerts_24h: number;
+  alerts_previous_24h: number;
+  alerts_delta: number;
+}
+
+export interface ExecutiveFeature {
+  feature: string;
+  label: string;
+  importance: number;
+  source: string;
+}
+
+export interface ExecutiveSource {
+  source: string;
+  readings: number;
+  last_at: string | null;
+}
+
+export interface ExecutiveZone {
+  id: number;
+  name: string;
+  display_name: string;
+  comuna: string;
+  risk_level: RiskLevel;
+  risk_score: number;
+  last_source: string | null;
+  last_alert_at: string | null;
+  updated_at: string;
+}
+
+export interface ExecutiveSummary {
+  generated_at: string;
+  zones: number;
+  risk_counts: Record<string, number>;
+  critical_zones: ExecutiveZone[];
+  active_alerts: number;
+  high_risk_zones: number;
+  alerts_by_status: Record<string, number>;
+  variation: ExecutiveVariation;
+  predominant_variables: ExecutiveFeature[];
+  sources: ExecutiveSource[];
+  model_version: string;
+}
+
+export interface ServiceCheck {
+  key: string;
+  label: string;
+  status: string;
+  detail: string;
+}
+
+export interface ServicesStatus {
+  checked_at: string;
+  status: string;
+  services: ServiceCheck[];
+  queue_depth: number | null;
+  last_ingest: string | null;
+  freshness_minutes: number | null;
+  stale: boolean;
+}
+
+export interface NotificationEvent {
+  id: number;
+  zone_id: number;
+  zone_name: string;
+  comuna: string;
+  alert_id: number | null;
+  evaluation_id: number | null;
+  event_type: string;
+  level_from: RiskLevel | null;
+  level_to: RiskLevel | null;
+  title: string;
+  detail: string | null;
+  actor: string;
+  created_at: string;
+  read_at: string | null;
+  read_by: string | null;
+}
+
+export interface NotificationSummary {
+  total: number;
+  unread: number;
+}
+
 export interface ZoneAlert {
   id: number;
   name: string;
@@ -212,11 +300,14 @@ export type AlertStatus = "nueva" | "en_revision" | "cerrada";
 export interface EvaluationSummary {
   id: number;
   zone_id: number;
+  zone_name?: string;
+  comuna?: string;
   risk_level: RiskLevel;
   risk_score: number;
   model_version: string;
   source: string;
   created_at: string;
+  created_by?: string;
   prescription_count: number;
 }
 

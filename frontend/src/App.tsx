@@ -15,6 +15,8 @@ const AboutPage = lazy(() => import("./pages/AboutPage"));
 const GuidePage = lazy(() => import("./pages/GuidePage"));
 const OperationsPage = lazy(() => import("./pages/OperationsPage"));
 const AlertsPage = lazy(() => import("./pages/AlertsPage"));
+const HistoryPage = lazy(() => import("./pages/HistoryPage"));
+const NotificationsPage = lazy(() => import("./pages/NotificationsPage"));
 const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -34,6 +36,8 @@ export function App() {
                 <Route path="/guia" element={<GuidePage />} />
                 <Route path="/operaciones" element={<OperationsPage />} />
                 <Route path="/alertas" element={<AlertsPage />} />
+                <Route path="/historial" element={<HistoryPage />} />
+                <Route path="/notificaciones" element={<NotificationsPage />} />
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

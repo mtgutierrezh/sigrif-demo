@@ -45,6 +45,17 @@ def add_event(
     return event
 
 
+def get_open_alert(session: Session, zone_id: int) -> Alert | None:
+    """Devuelve la alerta abierta de la zona, si existe."""
+
+    return session.scalar(
+        select(Alert)
+        .where(Alert.zone_id == zone_id, Alert.status != "cerrada")
+        .order_by(Alert.id.desc())
+        .limit(1)
+    )
+
+
 def ensure_alert(session: Session, zone: Zone, evaluation: Evaluation) -> Alert:
     """Abre una alerta para la zona o registra una reclasificación.
 
@@ -53,12 +64,7 @@ def ensure_alert(session: Session, zone: Zone, evaluation: Evaluation) -> Alert:
     ``reclasificada`` con el nuevo nivel y score.
     """
 
-    alert = session.scalar(
-        select(Alert)
-        .where(Alert.zone_id == zone.id, Alert.status != "cerrada")
-        .order_by(Alert.id.desc())
-        .limit(1)
-    )
+    alert = get_open_alert(session, zone.id)
     detail = (
         f"Evaluación #{evaluation.id}: nivel {evaluation.risk_level} "
         f"con score {evaluation.risk_score:.2f}."
