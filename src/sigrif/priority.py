@@ -15,9 +15,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[2]
 OFFICIAL_ZONES_PATH = (
-    ROOT / "src" / "sigrif" / "data" / ("cerros_sectores_valparaiso_region_oficial.geojson")
+    Path(__file__).resolve().parent / "data" / ("cerros_sectores_valparaiso_region_oficial.geojson")
 )
 
 PRIORITY_WEIGHTS = {
