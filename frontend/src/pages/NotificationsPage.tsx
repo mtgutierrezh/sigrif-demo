@@ -11,6 +11,7 @@ import {
   useNotificationSummary,
   useNotifications,
 } from "../features/zones/useNotifications";
+import { actorLabel } from "../lib/actor";
 import { formatDateTime } from "../lib/format";
 import { zoneLabel } from "../lib/names";
 
@@ -218,7 +219,7 @@ export default function NotificationsPage() {
                 <span className="font-mono text-[10px] text-ash">
                   {notification.event_type === "cambio_nivel"
                     ? `Evaluación #${notification.evaluation_id ?? "—"}`
-                    : `Registrada por ${notification.actor}`}
+                    : `Registrada por ${actorLabel(notification.actor)}`}
                 </span>
               </div>
             </li>

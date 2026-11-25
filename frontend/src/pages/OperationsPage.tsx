@@ -191,7 +191,7 @@ export default function OperationsPage() {
         ) : null}
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <section className="border border-iron p-5" aria-labelledby="zonas-criticas-titulo">
+          <section className="min-w-0 border border-iron p-5" aria-labelledby="zonas-criticas-titulo">
             <h3 id="zonas-criticas-titulo" className="text-[22px] tracking-[-0.03em]">
               Zonas críticas · top 5
             </h3>
@@ -243,7 +243,7 @@ export default function OperationsPage() {
             </div>
           </section>
 
-          <section className="border border-iron p-5" aria-labelledby="variables-titulo">
+          <section className="min-w-0 border border-iron p-5" aria-labelledby="variables-titulo">
             <h3 id="variables-titulo" className="text-[22px] tracking-[-0.03em]">
               Variables predominantes
             </h3>

@@ -7,6 +7,7 @@ import { useSession } from "../components/session";
 import type { RiskLevel } from "../features/zones/types";
 import { useEvaluations } from "../features/zones/useEvaluations";
 import { useZones } from "../features/zones/useZones";
+import { actorLabel } from "../lib/actor";
 import { formatDateTime, formatScore } from "../lib/format";
 import { zoneLabel } from "../lib/names";
 
@@ -177,7 +178,7 @@ export default function HistoryPage() {
                     </td>
                     <td className="py-3 pr-3 text-bone">{formatScore(evaluation.risk_score)}</td>
                     <td className="py-3 pr-3 text-ash">{evaluation.model_version}</td>
-                    <td className="py-3 text-ash">{evaluation.created_by || "local"}</td>
+                    <td className="py-3 text-ash">{actorLabel(evaluation.created_by)}</td>
                   </tr>
                 );
               })}
