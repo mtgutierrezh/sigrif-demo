@@ -33,7 +33,7 @@ COMPONENT_LABELS = {
     "slope": "Pendiente",
     "population_density": "Densidad de población",
 }
-PRIORITY_THRESHOLDS = {"alta": 60.0, "media": 35.0}
+PRIORITY_THRESHOLDS = {"alta": 45.0, "media": 30.0}
 METHODOLOGY_NOTE = (
     "El índice ordena la revisión operativa y no reemplaza el nivel de riesgo del modelo. "
     "Todavía no incorpora viviendas, colegios ni infraestructura expuesta. "

@@ -180,3 +180,9 @@ def test_priority_endpoint_returns_components_and_coverage(monkeypatch) -> None:
     assert len(body["items"][0]["components"]) == 5
     assert "no reemplaza el nivel de riesgo" in body["methodology_note"]
     assert body["methodology_note"].find("viviendas") > 0
+
+
+def test_priority_level_thresholds() -> None:
+    assert priority_level(45.0) == "Alta"
+    assert priority_level(30.0) == "Media"
+    assert priority_level(29.9) == "Baja"
